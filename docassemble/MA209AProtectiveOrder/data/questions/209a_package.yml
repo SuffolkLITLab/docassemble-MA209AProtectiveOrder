@@ -1,5 +1,6 @@
 ---
 include:
+ - docassemble.MAVirtualCourt:basic-questions.yml
  - 209A_page_1.yml
  - 209A_page_2.yml
  - 209A_child-support.yml
@@ -20,7 +21,7 @@ metadata:
   back button label: Undo
 ---
 modules:
-  - .phone
+  - docassemble.AssemblyLineToolbox.misc
   - docassemble.AssemblyLineToolbox.ThreePartsDate # Not strictly necessary as long it's installed somewhere on the server
 ---
 features:
@@ -123,7 +124,7 @@ code: |
   # Attach evidence
   nav.set_section('review_exhibits')
   has_evidence
-  if has_evidence:
+  if has_evidence and has_evidence_ready_to_upload:
     review_exhibits
 
   nav.set_section('section_relief')

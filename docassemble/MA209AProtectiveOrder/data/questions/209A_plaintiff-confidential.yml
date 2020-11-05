@@ -1,93 +1,4 @@
 ---
-mandatory: True
-code: |
-  interview_metadata # make sure we initialize the object
-  if not defined("interview_metadata['A_Plaintiff_Confidential_Information0011']"):
-    interview_metadata.initializeObject('A_Plaintiff_Confidential_Information0011')
-  interview_metadata['A_Plaintiff_Confidential_Information0011'].update({
-    'title': 'Plaintiff Confidential Information Form',
-    'short title': 'Plaintiff Confidential Information Form',
-    'description': 'Use when filing for a 209A or 258E',
-    'original_form': 'https://www.mass.gov/files/documents/2016/08/rd/faha-6.pdf',
-    'allowed courts': [
-      'Boston Municipal Court',
-      'District Court',
-      'Probate and Family Court',
-      'Superior Court',
-    ],
-    'preferred court': 'District Court',
-    'categories': [
-      'Domestic Violence / Safety of self',
-      'Family Law',
-    ],
-    'logic block variable': 'A_Plaintiff_Confidential_Information0011',
-    'attachment block variable': 'A_Plaintiff_Confidential_Information0011_attachment',
-    'typical role': 'plaintiff',
-    'built_in_fields_used': [
-      {'variable': 'plaintiff_birthdate',
-       'transformed_variable': 'plaintiffs[0].birthdate.format()',
-      },
-      {'variable': 'plaintiff_name',
-       'transformed_variable': 'str(plaintiffs[0])',
-      },
-      {'variable': 'plaintiff_phone',
-       'transformed_variable': 'plaintiffs[0].phone_number',
-      },
-      {'variable': 'plaintiff_signature',
-       'transformed_variable': 'plaintiffs[0].signature',
-      },
-      {'variable': 'signature_date',
-       'transformed_variable': 'signature_date',
-      },
-      ],
-    'fields': [
-      {'variable': 'plainitff_address_residential',
-       'transformed_variable': 'plainitff_address_residential',
-      'field_type': 'text',
-      'field_data_type': 'text',
-      },
-      {'variable': 'plaintiff_apartment_yes',
-       'transformed_variable': 'plaintiffs[0].apartment_yes',
-      'field_type': 'yesno',
-      },
-      {'variable': 'plaintiff_address_former',
-       'transformed_variable': 'plaintiffs[0].address_former',
-      'field_type': 'text',
-      'field_data_type': 'text',
-      },
-      {'variable': 'plaintiff_workplace_name',
-       'transformed_variable': 'plaintiffs[0].workplace_name',
-      'field_type': 'text',
-      'field_data_type': 'text',
-      },
-      {'variable': 'plaintiff_workplace_address',
-       'transformed_variable': 'plaintiffs[0].workplace_address',
-      'field_type': 'text',
-      'field_data_type': 'text',
-      },
-      {'variable': 'plaintiff_workplace_phone',
-       'transformed_variable': 'plaintiffs[0].workplace_phone',
-      'field_type': 'text',
-      'field_data_type': 'text',
-      },
-      {'variable': 'plaintiff_school_name',
-       'transformed_variable': 'plaintiffs[0].school_name',
-      'field_type': 'text',
-      'field_data_type': 'text',
-      },
-      {'variable': 'plaintiff_school_address',
-       'transformed_variable': 'plaintiffs[0].school_address',
-      'field_type': 'text',
-      'field_data_type': 'text',
-      },
-      {'variable': 'persons_authorized_confidential_information',
-       'transformed_variable': 'persons_authorized_confidential_information',
-      'field_type': 'text',
-      'field_data_type': 'text',
-      },
-      ],
-  })
----
 objects:
   - users[0].workplaces: DAList.using(object_type=DAObject, ask_number=True, complete_attribute='name')
   - users[0].schools: DAList.using(object_type=DAObject, ask_number=True, complete_attribute='name')
@@ -444,10 +355,7 @@ code: |
   # This is a placeholder to control logic flow in this interview
   # It was generated from interview_generator.py as an 'interview order' type question.  basic_questions_intro_screen 
   A_Plaintiff_Confidential_Information0011_intro
-  # Set the preferred/allowed courts for this interview
-  # preferred_court = interview_metadata["A_Plaintiff_Confidential_Information0011"]["preferred court"]
-  # allowed_courts = interview_metadata["A_Plaintiff_Confidential_Information0011"]["allowed courts"]
-  #plainitff_address_residential
+
   str(users[0])
   if lives_in_domestic_violence_shelter:
     domestic_violence_shelter_warning
@@ -474,12 +382,7 @@ code: |
   
   # users[0].birthdate
   # signature_date
-  # By default, we'll mark any un-filled fields as DAEmpty(). This helps avoid errors if you intentionally hide a logic branch or mark a question not required
-  # Comment out the line below if you don't want this behavior. 
-  # mark_unfilled_fields_empty(interview_metadata["A_Plaintiff_Confidential_Information0011"])
-  # A_Plaintiff_Confidential_Information0011_preview_question # Pre-canned preview screen
-  # basic_questions_signature_flow
-  # users[0].signature
+
   A_Plaintiff_Confidential_Information0011 = True
 ---
 continue button field: A_Plaintiff_Confidential_Information0011_preview_question

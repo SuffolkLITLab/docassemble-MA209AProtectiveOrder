@@ -1,27 +1,3 @@
-mandatory: True
-code: |
-  interview_metadata # make sure we initialize the object
-  if not defined("interview_metadata['complaint_209A_labeled_page10003']"):
-    interview_metadata.initializeObject('complaint_209A_labeled_page10003')
-  interview_metadata['complaint_209A_labeled_page10003'].update({
-    'title': '209A Complaint Page 1',
-    'short title': '209A Complaint Page 1',
-    'description': '209A Complaint Page 1',
-    'original_form': 'https://www.mass.gov/doc/complaint-for-protection-from-abuse-gl-c-209a-page-1/download',
-    'allowed courts': [
-      'Boston Municipal Court',
-      'District Court',
-      'Probate and Family Court',
-      'Superior Court',
-    ],
-    'preferred court': 'Any court (no preferred court)',
-    'categories': [
-      'Domestic Violence / Safety of self',
-      'Family Law',
-    ],
-    'logic block variable': 'complaint_209A_labeled_page10003',
-    'attachment block variable': 'complaint_209A_labeled_page10003_attachment',
-    'typical role': 'plaintiff',  })
 ---
 objects:
   - other_cases: 
@@ -88,16 +64,6 @@ fields:
       - I need this order to protect me.: me
       - I need the order to protect me and my children.: me and children
       - I am helping someone else ask for this order.: someone else
----
-comment: |
-  Kate Barry, family law SME, has compiled a lot of bugs here: https://drive.google.com/drive/u/0/shared-with-me
-  
-  This form is being used to collect bug reports. Contact Matt on Slack or at mbrooks@gbls.org to request access to the
-  responses: https://docs.google.com/forms/d/e/1FAIpQLSeHwCqKxXLJVcmPyUOZceuj2iUTmvOLWIEbAkWxfJVfDHvytA/viewform
-  
-  As of April 15, 2020 at 5pm, the only real bug being reported on the above bug report form is one that produces this error. 
-  Unfortunately, the reporters did not provide links to their interview sessions: Error
-  There appears to be an infinite loop. Variables in stack are complaint_209A_labeled_page10003_attachment_preview, complaint_209A_labeled_page10003_preview_question, defendant_relationship_to_plaintiff_is.
 ---
 id: name of abuser
 question: |
