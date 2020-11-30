@@ -4,6 +4,6 @@ comment: |
   Will not be compatible with all browsers. JQuery doesn't offer that kind of support.
 ---
 features:
-  javascript: escape.js
-  css: escape.css
+  javascript: docassemble.MAVirtualCourt:escape.js
+  css: docassemble.MAVirtualCourt:escape.css
 ---
