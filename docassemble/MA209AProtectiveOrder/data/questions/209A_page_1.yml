@@ -217,23 +217,64 @@ buttons:
 include:
   - docassemble.MAVirtualCourt:basic-questions.yml
 ---
-id: helper relationship
+id: helper type when user is minor
+# if: who_protecting_screener == "me"
+question: |
+  Who will be filing these forms for you?
+subquestion: |
+  Since you are under 18, we can only help if your parent or guardian files for you.
+fields:
+  - no label: plaintiff_assistant_type
+    datatype: radio
+    choices:
+      - My parent is filing for me: parent
+      - My guardian is filing for me: guardian
+      - I am filing on my own, with no help: self
+---
+id: name of assistant
+question: |
+  What is your ${plaintiff_assistant_type}'s name?
+fields:
+  - ${plaintiff_assistant_type.capitalize()}'s full name: plaintiff_assistant_type_name   
+---
+code: |
+  plaintiff_assistant_name = plaintiff_assistant_type_name
+---
+id: helper type when user is helper
+if: who_protecting_screener == "someone else"
 question: |
   How are you related to ${users.familiar()}?
 fields:
-  - "I am  ${users.familiar()}'s": plaintiff_assistant_relationship_to_plaintiff
+  - "I am  ${users.familiar()}'s": plaintiff_assistant_type
     datatype: radio
     choices:
       - Parent: parent
       - Guardian: guardian
       - Advocate: advocate
       - Other: other
-  #- 'How are you related?': plaintiff_assistant_relationship_to_plaintiff
+  #- 'How are you related?': plaintiff_assistant_type
   #  show if:
   #    code: |
-  #      plaintiff_assistant_relationships_to_plaintiff == 'other'
+  #      plaintiff_assistant_type == 'other'
   - 'My name is': plaintiff_assistant_name
-    maxlength: 30  
+    maxlength: 30
+    js show if: |
+      val('plaintiff_assistant_type') == 'parent' || val('plaintiff_assistant_type') == 'guardian'
+---
+id: who advocate is filing obo
+question: |
+  Who are you helping to file this complaint?
+fields:
+  - I am helping: advocate_filing_obo
+    datatype: radio
+    choices:
+      - ${users.familiar()}'s parent.: parent
+      - ${users.familiar()}'s guardian.: guardian
+      - ${users.familiar()}'s' parent or guardian cannot file, so I am helping ${users.familiar()}. : minor
+  - What is their name?: plaintiff_assistant_name
+    maxlength: 30
+    js show if: |
+      val('advocate_filing_obo') == 'parent' || val('advocate_filing_obo') == 'guardian'      
 ---
 # code: |
 #  if plaintiff_is_major_no:
@@ -527,33 +568,6 @@ code: |
 #  - 'I am eighteen or older': plaintiff_is_major_yes
 #    datatype: yesnoradio # consensus seems to be that if plaintiff is under 18 AND ISN'T DOING THIS WITH A PARENT OR GUARDIAN, they should get kicked out and referred to an advocate. Wait to hear from KB after talking to CR and LG. doing these for minors is a whole other can of worms and there is a big risk that doing it wrong does more harm than good. Also, the consensus is that the population of kids trying to do 209As without their parents is small.
 ---
-id: form filing helper
-question: |
-  Who will be filing these forms with you?
-subquestion: |
-  Since you are under 18, we can only help you if you are filing your forms with the help of:
-  
-  * your parent,
-  * your guardian, or
-  * a domestic violence advocate.
-fields:
-  - no label: plaintiff_assistant_type
-    datatype: radio
-    choices:
-      - My parent is filing with me: parent
-      - My guardian is filing with me: guardian
-      - A domestic violence advocate is filing with me: advocate
-      - I am filing on my own, with no help: self
----
-id: name of assistant
-question: |
-  What is your ${plaintiff_assistant_type}'s name?
-fields:
-  - ${plaintiff_assistant_type.capitalize()}'s full name: plaintiff_assistant_type_name   
----
-code: |
-  plaintiff_assistant_name = plaintiff_assistant_type_name
----
 objects:
   - defendant_has_guns: DADict.using(auto_gather=False,gathered=True)
 ---
@@ -843,7 +857,7 @@ question: |
   you are not 18:
   % endif.
 subquestion: |
-  Our guide can only help if a parent, guardian, or advocate is helping 
+  Our guide can only help if a parent, or guardian is helping 
   % if who_protecting_screener == "someone else":
    ${users.familiar()} answer the questions we ask and files for ${users.familiar()}.
   % else:

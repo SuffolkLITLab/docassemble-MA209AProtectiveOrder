@@ -61,17 +61,21 @@ code: |
   nav.set_section('section_basic')  
   who_protecting_screener # We don't use this yet?  
   users[0].name.first
-  if who_protecting_screener == "someone else":
-    plaintiff_assistant_relationship_to_plaintiff
+  # if who_protecting_screener == "someone else":
+  #  plaintiff_assistant_relationship_to_plaintiff
   # plaintiff_is_major_yes # Ask for age
   if plaintiff_is_major_yes: # Plaintiff over 18
     plaintiff_is_major_no = False
     # plaintiff_assistant_name = DAEmpty()
-    plaintiff_assistant_relationship_to_plaintiff = DAEmpty()   
+    plaintiff_assistant_type = DAEmpty()   
   else: # if not over 18
     plaintiff_is_major_no = True
+    # place holder until plaintiff_assistant_relationship_to_plaintiff is removed
+    plaintiff_assistant_relationship_to_plaintiff = plaintiff_assistant_type
     if who_protecting_screener == 'someone else':
-      if plaintiff_assistant_relationship_to_plaintiff not in ('parent', 'guardian','advocate'):
+      if plaintiff_assistant_type == 'advocate':
+        advocate_filing_obo
+      elif plaintiff_assistant_type not in ('parent', 'guardian'):
         refer_to_advocate
       else:
         dcf_warning_given

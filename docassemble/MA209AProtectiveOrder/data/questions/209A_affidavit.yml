@@ -99,6 +99,8 @@ question: |
 subquestion: |
   Show the judge you need this restraining order to help you be safe.
   
+  "plaintiff_assistant_relationship_to_plaintiff": ${ plaintiff_assistant_relationship_to_plaintiff }
+  
   In your own words, give enough details about the abuse so the judge has a picture in their mind. Your description is your "affidavit."
   
   You should know that if the court does not "{impound}" your affidavit, your words will be public record. It is not easy, but if someone wants to go into court to find and read your affidavit, they can.
