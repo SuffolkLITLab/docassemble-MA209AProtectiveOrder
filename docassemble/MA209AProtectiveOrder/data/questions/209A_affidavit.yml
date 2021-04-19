@@ -97,11 +97,22 @@ continue button field: complaint_209A_Affidavit_intro
 question: |
   Your Affidavit
 subquestion: |
+
+  % if plaintiff_assistant_type_obo:
+  
+  Show the judge that ${users.familiar()} needs this restraining order to be safe.
+  
+  In **your own words**, give enough details about the abuse so the judge has a picture in their mind. Your description is your "affidavit."
+  
+  Talk about how the abuse affected ${users.familiar()}. 
+  
+  % else:
+
   Show the judge you need this restraining order to help you be safe.
   
-  "plaintiff_assistant_relationship_to_plaintiff": ${ plaintiff_assistant_relationship_to_plaintiff }
-  
   In your own words, give enough details about the abuse so the judge has a picture in their mind. Your description is your "affidavit."
+  
+  % endif
   
   You should know that if the court does not "{impound}" your affidavit, your words will be public record. It is not easy, but if someone wants to go into court to find and read your affidavit, they can.
   
