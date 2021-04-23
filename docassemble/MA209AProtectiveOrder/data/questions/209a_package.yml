@@ -249,9 +249,9 @@ fields:
 id: explain first person questions
 question: |
   % if plaintiff_assistant_type_obo:   
-  You are helping ${plaintiff_assistant_name} fill out this form for ${users.familiar()}
+  Because you are helping ${plaintiff_assistant_name} fill out this form for ${users.familiar()}
   % else:
-  You are helping ${users.familiar()} fill out this form
+  Because you are helping ${users.familiar()} fill out this form
   % endif
 subquestion: |
   % if plaintiff_assistant_type_obo:
