@@ -1,7 +1,7 @@
 ---
 objects:
   - other_care_custody_proceedings: OtherProceedingList
-  - signing_attorney: VCIndividual
+  - signing_attorney: ALIndividual
   # - children: PeopleList.using(complete_attribute='child_complete')
   - others_in_proceedings: PeopleList.using(auto_gather=False)
   - attorneys_for_children: PeopleList.using(auto_gather=False)
@@ -12,7 +12,7 @@ id: interview_order_A_affidavit_disclosing_care_or_custody_proceedings0009
 code: |
   # This is a placeholder to control logic flow in this interview
   # It was generated from interview_generator.py as an 'interview order' type question.  
-  basic_questions_intro_screen 
+  al_intro_screen 
   # A_affidavit_disclosing_care_or_custody_proceedings0009_intro # enable for 
 
   defendants.there_are_any = True  
@@ -77,7 +77,7 @@ code: |
 #   initialize_attorney_lists = True
 ---
 code: |
-  DCF = VCIndividual("DCF")
+  DCF = ALIndividual("DCF")
   DCF.address = DAEmpty()
   DCF.address_for_form = DAEmpty()
   DCF.name.first = "Department of Children and Families"
@@ -267,6 +267,9 @@ code: |
 code: |
   case_name = str(plaintiffs) + ' v ' + str(defendants)
 ---
+sets:
+  - other_parties[i].name.first
+  - other_parties[i].name.last
 id: name of other party
 question: |
   What is the name of the person on the other side of this case?
@@ -277,28 +280,19 @@ subquestion: |
   If you need to list more than one person on this form, you can click
   "Add another".
 fields:
-  - First name: other_parties[i].name.first
-  - Middle: other_parties[i].name.middle
-    required: False
-  - Last: other_parties[i].name.last
-    required: False
-  - Suffix: other_parties[i].name.suffix
-    code: |
-      name_suffix()
-    required: False      
-list collect: True      
+  - code: other_parties[i].name_fields()
 ---
 code: |
-  if 'District' in courts[0].name:
-    courts[0].division_district_court = courts[0].division
-  elif 'Superior' in courts[0].name:
-    courts[0].division_superior_court = courts[0].division
-  elif 'Juvenile' in courts[0].name:
-    courts[0].division_juvenile_court = courts[0].division
-  elif 'Probate' in courts[0].name:
-    courts[0].division_family_court = courts[0].division
-  elif 'Municipal' in courts[0].name: 
-    courts[0].division_bmc = courts[0].division
+  if 'District' in trial_court.name:
+    trial_court.division_district_court = trial_court.division
+  elif 'Superior' in trial_court.name:
+    trial_court.division_superior_court = trial_court.division
+  elif 'Juvenile' in trial_court.name:
+    trial_court.division_juvenile_court = trial_court.division
+  elif 'Probate' in trial_court.name:
+    trial_court.division_family_court = trial_court.division
+  elif 'Municipal' in trial_court.name: 
+    trial_court.division_bmc = trial_court.division
   fill_in_court_name = True
 ---
 code: |
@@ -557,7 +551,7 @@ fields:
     hide if: other_care_custody_proceedings[i].non_ma_court
     datatype: combobox
     code: |
-      sorted((set([str(y) for y in macourts.filter_courts(["District Court","Boston Municipal Court", "Probate and Family Court", "Superior Court", "Juvenile Court"])])))
+      sorted((set([str(y) for y in all_courts.filter_courts(["District Court","Boston Municipal Court", "Probate and Family Court", "Superior Court", "Juvenile Court"])])))
   - Docket number or case number: other_care_custody_proceedings[i].docket_number
     required: False
   - Which children were involved in this case?: other_care_custody_proceedings[i].children
@@ -1034,11 +1028,11 @@ attachment:
       - "child3_address_city_state_zip": ${ children_of_both.item(2).address.line_two() }
       - "user_address_on_one_line__2": ${ users[0].address.on_one_line(include_unit=True) }
       - "case_name": ${ case_name }
-      - "court_division_bmc": ${ showifdef('courts[0].division_bmc') }
-      - "court_division_district_court": ${ showifdef('courts[0].division_district_court') }
-      - "court_division_juvenile_court": ${ showifdef('courts[0].division_juvenile_court') }
-      - "court_division_family_court": ${ showifdef('courts[0].division_family_court') }
-      - "court_division_superior_court": ${ showifdef('courts[0].division_superior_court') }
+      - "court_division_bmc": ${ showifdef('trial_court.division_bmc') }
+      - "court_division_district_court": ${ showifdef('trial_court.division_district_court') }
+      - "court_division_juvenile_court": ${ showifdef('trial_court.division_juvenile_court') }
+      - "court_division_family_court": ${ showifdef('trial_court.division_family_court') }
+      - "court_division_superior_court": ${ showifdef('trial_court.division_superior_court') }
       - "child1_name_last_first": ${ children_of_both.item(0).name.lastfirst() }
       - "child2_name_last_first": ${ children_of_both.item(1).name.lastfirst() }
       - "child3_name_last_first": ${ children_of_both.item(2).name.lastfirst() }
@@ -1146,11 +1140,11 @@ attachment:
       - "child3_address_city_state_zip": ${ children_of_both.item(2).address.line_two() }
       - "user_address_on_one_line__2": ${ users[0].address.on_one_line(include_unit=True) }
       - "case_name": ${ case_name }
-      - "court_division_bmc": ${ showifdef('courts[0].division_bmc') }
-      - "court_division_district_court": ${ showifdef('courts[0].division_district_court') }
-      - "court_division_juvenile_court": ${ showifdef('courts[0].division_juvenile_court') }
-      - "court_division_family_court": ${ showifdef('courts[0].division_family_court') }
-      - "court_division_superior_court": ${ showifdef('courts[0].division_superior_court') }
+      - "court_division_bmc": ${ showifdef('trial_court.division_bmc') }
+      - "court_division_district_court": ${ showifdef('trial_court.division_district_court') }
+      - "court_division_juvenile_court": ${ showifdef('trial_court.division_juvenile_court') }
+      - "court_division_family_court": ${ showifdef('trial_court.division_family_court') }
+      - "court_division_superior_court": ${ showifdef('trial_court.division_superior_court') }
       - "child1_name_last_first": ${ children_of_both.item(0).name.lastfirst() }
       - "child2_name_last_first": ${ children_of_both.item(1).name.lastfirst() }
       - "child3_name_last_first": ${ children_of_both.item(2).name.lastfirst() }

@@ -1,6 +1,7 @@
 ---
 include:
- - docassemble.MAVirtualCourt:basic-questions.yml
+ - docassemble.AssemblyLine:al_package.yml
+ - docassemble.MassAccess:massaccess.yml
  - 209A_page_1.yml
  - 209A_page_2.yml
  - 209A_child-support.yml
@@ -21,8 +22,8 @@ metadata:
   back button label: Undo
 ---
 modules:
-  - docassemble.AssemblyLineToolbox.misc
-  - docassemble.AssemblyLineToolbox.ThreePartsDate # Not strictly necessary as long it's installed somewhere on the server
+  - docassemble.ALToolbox.misc
+  - docassemble.ALToolbox.ThreePartsDate # Not strictly necessary as long it's installed somewhere on the server
 ---
 features:
   navigation: True
@@ -56,7 +57,7 @@ code: |
   set_interview_defaults # Set some things that are true on any 209A
   
   ##################### Intro screen
-  basic_questions_intro_screen
+  al_intro_screen
   main_209A_package_intro
   nav.set_section('section_basic')  
   who_protecting_screener # We don't use this yet?  
@@ -222,24 +223,16 @@ code: |
   final_attachment_collection.finished
   download_screen
 ---
-id: dev hud etc
-code: |
-  # For info at the top of the screen on dev and test servers
-  package_version_number = str( docassemble.MAVirtualCourt.__version__ )
----
+sets:
+  - users[0].name.first
+  - users[0].name.last
 if: |
   who_protecting_screener == "someone else"
 question: |
   What is the name of the person who needs the order?
 fields:
-  - First Name: users[0].name.first
-  - Middle Name: users[0].name.middle
-    required: False
-  - Last Name: users[0].name.last
-  - Suffix: users[0].name.suffix
-    code: |
-      name_suffix()
-    required: False  
+  - code: |
+      users[0].name_fields()
 ---
 id: explain first person questions
 question: |
@@ -278,15 +271,15 @@ question: |
 subquestion: |
   1. Look over the forms below.
   1. If they look correct, download them or email them to yourself.
-  1. You still need to deliver them to the ${courts[0]}, when you are ready.
-  4. Call the ${courts[0]}'s clerk: <a href="tel:${courts[0].phone}">${courts[0].phone}</a> to find out how they want you to send your forms to them.
+  1. You still need to deliver them to the ${trial_court}, when you are ready.
+  4. Call the ${trial_court}'s clerk: <a href="tel:${trial_court.phone}">${trial_court.phone}</a> to find out how they want you to send your forms to them.
   % if court_closed_today:
   4. The court is closed today. If you need help to file these forms now, call your local police station.
   % elif after_hours:
   5. The court is only open between 8:30 AM and 4:30 PM. If you need help to file this form now, call your local police station.
   % endif
   6. Your hearing will probably be over the phone or Zoom video conference.  
-     The address of your court, if you need it, is: ${courts[0].address.on_one_line()}.  
+     The address of your court, if you need it, is: ${trial_court.address.on_one_line()}.  
 
   ${pdf_concatenate(final_attachment_bundle, filename="209a_petition.pdf")} 
 event: download_screen  
@@ -478,7 +471,7 @@ code: |
     allowed_courts = ["Probate and Family Court"]
   else: # not is_dating_only and not (len(children_of_both) and wants_visitation_orders):
     allowed_courts =  ["District Court","Boston Municipal Court", "Probate and Family Court", "Superior Court"]
-  all_matches = macourts.matching_courts(addresses_to_search, court_types=allowed_courts)    
+  all_matches = all_courts.matching_courts(addresses_to_search, court_types=allowed_courts)    
 ---
 if: |
   not len(all_matches)
@@ -491,17 +484,17 @@ reconsider:
   - all_matches
 id: court information (no matching court)
 sets:
-  - courts[0].name
+  - trial_court.name
 question: |
   Where will you file your request?
 subquestion: |
   ${ court_question_template }
 fields:
-  - Choose a court from this list: courts[0]
+  - Choose a court from this list: trial_court
     datatype: object
     object labeler: |
       lambda y: y.short_label()
-    choices: macourts.filter_courts(allowed_courts)
+    choices: all_courts.filter_courts(allowed_courts)
 continue button field: ask_court_question    
 help: |
   ${ court_help_template }
@@ -517,13 +510,13 @@ reconsider:
   - all_matches
 id: court information
 sets:
-  - courts[0].name
+  - trial_court.name
 question: |
   Where will you file your request?
 subquestion: |
   ${ court_question_template }
 fields:
-  - no label: courts[0]
+  - no label: trial_court
     datatype: object_radio
     choices: all_matches
     none of the above: |
@@ -534,13 +527,13 @@ fields:
     show if: 
       code: |
         len(all_matches)      
-  - If your court is not listed above, choose a court from this list: courts[0]
+  - If your court is not listed above, choose a court from this list: trial_court
     datatype: object
     object labeler: |
       lambda y: y.short_label()
-    choices: macourts.filter_courts(allowed_courts)
+    choices: all_courts.filter_courts(allowed_courts)
     show if: 
-      variable: courts[0]
+      variable: trial_court
       is: null    
 continue button field: ask_court_question    
 help: |
@@ -656,7 +649,7 @@ fields:
     validation messages:
       minlength: |
         You cannot continue unless you agree to the terms of use.        
-continue button field: basic_questions_intro_screen
+continue button field: al_intro_screen
 terms:
   green words: |
     Green words are legal terms or a short way of referring to something that needs more explanation. The definition or explanation pops up when you tap the green words.
