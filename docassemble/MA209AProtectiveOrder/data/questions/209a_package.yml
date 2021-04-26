@@ -18,9 +18,6 @@ metadata:
   title: |
     209A Domestic Violence Restraining Order
 ---
-metadata:
-  back button label: Undo
----
 modules:
   - docassemble.ALToolbox.misc
   - docassemble.ALToolbox.ThreePartsDate # Not strictly necessary as long it's installed somewhere on the server
