@@ -68,6 +68,7 @@ fields:
 sets:
   - other_parties[0].name.first
   - other_parties[0].name.last
+  - other_parties[0].gender
 id: name of abuser
 question: |
   What is the name of the person who is abusing you?  
