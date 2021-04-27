@@ -55,24 +55,28 @@ subquestion: |
   Most shelters have a P.O. Box you can use if the court needs to contact you or mail you anything.
 continue button field: domestic_violence_shelter_warning
 ---
+sets:
+  - users[0].previous_addresses[i].address
+  - users[0].previous_addresses[i].city
 id: fled from addresses
 question: |
   Former addresses
 subquestion: |
   Provide any address you recently left to avoid abuse from ${other_parties.familiar()}.
 
-  If you need to add more than one address, click "${word("Add another")}." 
+  Tell us about each address one at a time.
 fields: 
-  - Address: users[0].previous_addresses[i].address
-    address autocomplete: True
-  - Unit:     users[0].previous_addresses[i].unit
-    required: False
-  - City: users[0].previous_addresses[i].city
-  - State: users[0].previous_addresses[i].state
-    code: |
-      states_list()
-    default: "MA"    
-list collect: True    
+  - code: |
+      users[0].previous_addresses[i].address_fields(default_state="MA")
+---
+id: fled from addresses more
+question: |
+  Former addresses
+subquestion: |
+  So far you have told us about ${ users[0].previous_addresses.complete_elements() }.
+  
+  Is there any other previous address you need to tell the court about?
+yesno: users[0].previous_addresses.there_is_another
 ---
 # question: |
 #  When were you born?
@@ -341,6 +345,7 @@ code: |
   str(users[0])
   if lives_in_domestic_violence_shelter:
     domestic_violence_shelter_warning
+  users[0].other_addresses.there_are_any # ask this first to get the right address screen
   users[0].address.address
   users[0].other_addresses.gather()
   users[0].mobile_number

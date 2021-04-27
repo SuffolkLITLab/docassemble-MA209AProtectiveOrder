@@ -216,7 +216,7 @@ objects:
   - children_cares_for: PeopleList.using(ask_number=True)
   - wants_custody_of: PeopleList
   - wants_no_contact_for: PeopleList
-  - schools_to_stay_away_from: DAList.using(object_type=Person)
+  - schools_to_stay_away_from: DAList.using(object_type=ALIndividual)
   - majors_needing_support: PeopleList
 ---
 comment: |
@@ -504,7 +504,7 @@ question:
 subquestion: |
   We will ask about each school one at a time.
 fields:
-  - School or daycare name: schools_to_stay_away_from[i].name.text
+  - School or daycare name: schools_to_stay_away_from[i].name.first
   - code: |
       schools_to_stay_away_from[i].address_fields()
 ---

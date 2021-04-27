@@ -74,19 +74,14 @@ question: |
 fields:
   - code: |
       other_parties[0].name_fields()
-  - Gender: other_parties[0].gender
-    choices:
-      - Female: female
-      - Male: male
-      - Non-binary: non-binary
-      - Prefer not to say: prefer-not-to-say
-      - Prefer to write in a different gender: self-described
-    help: |
-      If you do not select "Male" or "Female", both checkboxes will be empty on the form. The police use your answer to help them identify the person who is abusing you and enforce your restraining order.  
-  - Gender: other_parties[0].gender
-    show if:
-      variable: other_parties[0].gender
-      is: "self-described"
+  - code: |
+      other_parties[0].gender_fields(show_help=True)
+---
+template: other_parties[0].gender_help_text
+content: |
+  If you do not select "Male" or "Female", both checkboxes will be empty on the
+  form. The police use your answer to help them identify the person who is 
+  abusing you and enforce your restraining order.
 ---
 id: what to expect
 question: |
@@ -575,6 +570,9 @@ fields:
   - License to carry: defendant_has_guns['license']
     datatype: yesnomaybe
 ---
+depends on:
+  - defendant_has_guns
+  - defendant_weapons_description
 code: |
   defendant_weapons = comma_list(defendant_has_guns.true_values()) + space('defendant_weapons_description', prefix=' - ')
   defendant_weapons_safe_for_pdf = defendant_weapons + (" (see Addendum)" if len(defendant_weapons) > 40 else '')
@@ -1101,7 +1099,9 @@ buttons:
   - Restart: restart
 attachment code: complaint_209A_labeled_page10003_attachment
 ---
-need: complaint_209A_labeled_page10003
+need: 
+  - complaint_209A_labeled_page10003
+  - defendant_weapons_safe_for_pdf
 attachment:
     variable name: complaint_209A_labeled_page10003_attachment
     skip undefined: True
