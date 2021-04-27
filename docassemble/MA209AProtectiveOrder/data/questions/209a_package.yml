@@ -46,6 +46,14 @@ sections:
   - section_signature: Signing
   - download_screen: Download
 ---
+continue button field: DEBUG_aldocument
+question: |
+  Debug a form quickly
+subquestion: |
+  ${ complaint_209A_Affidavit_attachment.as_pdf(key='preview') }
+
+  ${ complaint_209A_Affidavit_attachment.as_pdf(key='final')}
+---
 scan for variables: False
 mandatory: True
 code: |
@@ -54,6 +62,7 @@ code: |
   set_interview_defaults # Set some things that are true on any 209A
   
   ##################### Intro screen
+  DEBUG_aldocument 
   al_intro_screen
   main_209A_package_intro
   nav.set_section('section_basic')  
@@ -349,6 +358,20 @@ terms:
       Something is true "to the best of your knowledge" if you were there and saw, heard, or felt it.  
       Something is true to the best of your knowledge if you have good reason to believe it is true.
 ---
+######################################
+# BEGIN placeholder documents
+# TODO: iteratively switch to ALDocument, use placeholders here for now
+---
+code: |
+  affidavit_final = complaint_209A_Affidavit_attachment.as_pdf(key='final')
+---
+code: |
+  affidavit_preview = complaint_209A_Affidavit_attachment.as_pdf(key='preview')  
+---
+#######################################
+# END placeholder documents
+#######################################
+---
 reconsider: True
 code: |
   attachment_temp = []  
@@ -375,9 +398,7 @@ code: |
   attachment_temp.append(complaint_209A_labeled_page10003_attachment)
   if need_page1_addendum:
     attachment_temp.append(page1_addendum)
-  attachment_temp.append( complaint_209A_Affidavit_attachment )
-  if addAddendum_affidavit:
-    attachment_temp.append(affidavit_addendum)
+  attachment_temp.append( affidavit_final )
   # include page 2 only if there are children
   if plaintiff_has_minor_children: 
     attachment_temp.append( A_complaint_for_protection_from_abuse_probation_copy0005_attachment )
@@ -414,9 +435,7 @@ code: |
   attachment_preview_temp.append(complaint_209A_labeled_page10003_attachment_preview)
   if need_page1_addendum:
     attachment_preview_temp.append(page1_addendum)
-  attachment_preview_temp.append( complaint_209A_Affidavit_attachment_preview )
-  if addAddendum_affidavit:
-    attachment_preview_temp.append(affidavit_addendum)
+  attachment_preview_temp.append( affidavit_preview )
   # include page 2 only if there are children
   if plaintiff_has_minor_children: 
     attachment_preview_temp.append( A_complaint_for_protection_from_abuse_probation_copy0005_attachment_preview )

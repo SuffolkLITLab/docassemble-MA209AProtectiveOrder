@@ -83,9 +83,7 @@ code: |
   saw_incidents
 
   # Trigger required computed variables for attachment block
-  addAddendum_affidavit
-  affidavit_intro
-  affidavit_body_cutoff 
+  affidavit_body_final 
 
   complaint_209A_Affidavit = True
 ---
@@ -900,23 +898,22 @@ field: saw_incidents
 code: |
   affidavit_intro = "\n The preceding statement is a brief summary of the events and does not attempt to capture all the detail of the abuse. "
 ---
-attachment:
-    variable name: complaint_209A_Affidavit_attachment_preview
-    name: 209A Complaint Affidavit
-    editable: False
-    # skip undefined: True
-    filename: A_Complaint_Affidavit
-    pdf template file: complaint_209A_affidavit.pdf
-    decimal places: 2    
-    fields: 
-      - "signature_date": ${ signature_date }
-      - "affidavit_body": ${ affidavit_body_cutoff }
-      - "incident_date": ${ incident_date }
-      - "has_addendum": ${ addAddendum_affidavit }      
+objects:
+  - complaint_209A_Affidavit_attachment: ALDocument.using(filename='209A_affidavit',
+                                                          title="209A Affidavit", 
+                                                          enabled=True,
+                                                          has_addendum=True,
+                                                          default_overflow_message=" [See addendum]"
+                                                          )
+---
+code: |
+  complaint_209A_Affidavit_attachment.overflow_fields['affidavit_body_final'].overflow_trigger = 4480 # Line width is about 120 chars of lorem ipsum
+  complaint_209A_Affidavit_attachment.overflow_fields['affidavit_body_final'].line_width = 120
+  complaint_209A_Affidavit_attachment.overflow_fields.gathered = True
 ---
 need: complaint_209A_Affidavit
 attachment:
-    variable name: complaint_209A_Affidavit_attachment
+    variable name: complaint_209A_Affidavit_attachment[i]
     name: 209A Complaint Affidavit
     # skip undefined: True
     filename: A_Complaint_Affidavit
@@ -924,33 +921,21 @@ attachment:
     decimal places: 2    
     fields: 
       - "signature_date": ${ signature_date }
-      - "plaintiff_signature": ${ users[0].signature }
-      - "has_addendum": ${ addAddendum_affidavit }
+      - "plaintiff_signature": ${ users[0].signature_if_final(i) }
+      - "has_addendum": ${ complaint_209A_Affidavit_attachment.has_overflow() }
       - "incident_date": ${ incident_date }            
-      - "affidavit_body": ${ affidavit_body_cutoff }
+      - "affidavit_body": ${ complaint_209A_Affidavit_attachment.safe_value('affidavit_body_final') }
 ---
 code: |
   # List the informal part of the date first. I think this is more logical
   # E.g., Summer, 2020
   incident_date = most_recent_abuse_date + ", " + str(most_recent_abuse_year)
 ---
-comment: Addenda related code. 
-code: |  
-  txtFieldsList_affidavit = list()      
-  Limit = 3000
-  sLimit = Limit - 16   
-  need_affidavit_body_addendum = len(affidavit_body + affidavit_intro) > Limit
-  if need_affidavit_body_addendum:    
-    affidavit_body_cutoff = "(See Addendum.) " + affidavit_body[:sLimit] 
-    txtFieldsList_affidavit.append(
-      {'title': 'Affidavit',
-      'value': [affidavit_body]
-      })
-  else:
-   affidavit_body_cutoff = affidavit_body + affidavit_intro
-   
-  addAddendum_affidavit = bool(txtFieldsList_affidavit)
+depends on:
+  - affidavit_body
+code: |
+  affidavit_body_final = affidavit_body + affidavit_intro
 ---
 attachment:
-  - variable name: affidavit_addendum
+  - variable name: complaint_209A_Affidavit_attachment.addendum
     docx template file: 209A_affidavit_addendum.docx
