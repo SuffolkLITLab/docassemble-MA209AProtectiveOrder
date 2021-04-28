@@ -109,7 +109,8 @@ code: |
     child_support_safety
     wants_child_support_yes
     if need_help_for_majors:
-      majors_needing_support[0].name.first
+      majors_needing_support.gather()
+      # majors_needing_support[0].name.first
 
   # REMOVED in stitchup -- ask these later
   # have_had_custody_cases
