@@ -1,4 +1,7 @@
 ---
+modules:
+  - .care_and_custody
+---
 objects:
   - other_care_custody_proceedings: OtherProceedingList
   - signing_attorney: ALIndividual
