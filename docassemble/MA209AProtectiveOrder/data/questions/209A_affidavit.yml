@@ -916,6 +916,7 @@ attachment:
     variable name: complaint_209A_Affidavit_attachment[i]
     name: 209A Complaint Affidavit
     # skip undefined: True
+    editable: False # This is important for rendering in Firefox
     filename: A_Complaint_Affidavit
     pdf template file: complaint_209A_affidavit.pdf
     decimal places: 2    

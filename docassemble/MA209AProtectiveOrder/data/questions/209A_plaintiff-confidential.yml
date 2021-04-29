@@ -263,30 +263,29 @@ help: |
   
   You will have a chance to tell the court that you need to keep your address, phone,
   and email confidential, so that only court staff can see this information. 
-
 ---
-progress: 100
-#mandatory: True
-question: |
-  Placeholder download screen
-subquestion: |
-  Placeholder
-  
-  ### Next steps
-  
-  1. Step 1
-  1. Step 2
-  
-  Below is a preview of your form.
-  
-  ${A_Plaintiff_Confidential_Information0011_attachment }
-attachment code: A_Plaintiff_Confidential_Information0011_attachment
+objects:
+  - A_Plaintiff_Confidential_Information0011_attachment: ALDocument.using(filename="Plaintiff_Confidential_Information", title="Confidential Information Form", enabled=True, has_addendum=True, default_overflow_message=" [See addendum]")
+---
+code: |
+  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['other_addresses'].overflow_trigger = 0
+  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['other_addresses'].label = "Other addresses"
+  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['previous_addresses'].overflow_trigger = 1
+  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['previous_addresses'].label = "Previous addresses (continued)"
+  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['users[0].schools'].overflow_trigger = 1
+  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['users[0].schools'].label = "Schools (continued)"
+  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['users[0].workplaces'].overflow_trigger = 1
+  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['users[0].workplaces'].label = "Workplaces (continued)"
+  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['persons_authorized_confidential_information'].overflow_trigger = 200
+  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['persons_authorized_confidential_information'].label = "Persons authorized to access confidential information (continued)"
+  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields.gathered = True
 ---
 need: A_Plaintiff_Confidential_Information0011
 attachment:
-    variable name: A_Plaintiff_Confidential_Information0011_attachment
+    variable name: A_Plaintiff_Confidential_Information0011_attachment[i]
     name: Plaintiff Confidential Information Form
     skip undefined: True
+    editable: False
     filename: Plaintiff_Confidential_Information_Form
     pdf template file: 209A_Plaintiff_Confidential_Information.pdf
     fields: 
@@ -304,10 +303,10 @@ attachment:
       - "plaintiff_workplace_phone": ${ users[0].workplaces.item(0).phone }
       - "plaintiff_school_name": ${ users[0].schools.item(0).name }
       - "plaintiff_school_address": ${ users[0].schools.item(0).school_address }
-      - "persons_authorized_confidential_information": ${ persons_authorized_confidential_information_cutoff.replace('\r\n','; ') }
+      - "persons_authorized_confidential_information": ${ A_Plaintiff_Confidential_Information0011_attachment.safe_value('persons_authorized_confidential_information') }
       - "plaintiff_needs_interpreter": ${user_needs_interpreter}
       - "plaintiff_preferred_language": ${user_preferred_language if user_needs_interpreter else ''} 
-      - "plaintiff_signature": ${ users[0].signature }
+      - "plaintiff_signature": ${ users[0].signature_if_final(i) }
 ---
 id: plaintiff confidential intro
 comment: |
@@ -364,100 +363,12 @@ code: |
   
   Who_is_allowed_to_see_this_form
   user_needs_interpreter
-  # Trigger computed values
-  persons_authorized_confidential_information_cutoff
   
   # users[0].birthdate
   # signature_date
 
   A_Plaintiff_Confidential_Information0011 = True
 ---
-continue button field: A_Plaintiff_Confidential_Information0011_preview_question
-question: |
-  Placeholder preview screen
-subquestion: |
-  Here is a preview of the form you'll sign on the next page. 
-  
-   ${A_Plaintiff_Confidential_Information0011_attachment_preview}
----
 attachment:
-    variable name: A_Plaintiff_Confidential_Information0011_attachment_preview
-    name: Plaintiff Confidential Information Form
-    editable: False
-    skip undefined: True
-    filename: Plaintiff_Confidential_Information_Form
-    pdf template file: 209A_Plaintiff_Confidential_Information.pdf
-    fields: 
-      - "plaintiff_birthdate": ${ users[0].birthdate.format() }
-      - "plaintiff_name": ${ str(users[0]) }
-      - "plaintiff_phone": ${ users[0].mobile_number }
-      - "plaintiff_phone_home": ${users[0].phone_number }
-      #- "plaintiff_signature": ${ users[0].signature }
-      - "signature_date": ${ signature_date }
-      - "plaintiff_address_residential": ${ users[0].address.on_one_line(include_unit=True) }
-      - "plaintiff_email": ${ users[0].email }
-      - "plaintiff_apartment_yes": ${ users[0].apartment_yes }
-      - "plaintiff_address_former": ${ users[0].previous_addresses }
-      - "plaintiff_workplace_name": ${ users[0].workplaces.item(0).name }
-      - "plaintiff_workplace_address": ${ users[0].workplaces.item(0).work_address }
-      - "plaintiff_workplace_phone": ${ users[0].workplaces.item(0).phone }
-      - "plaintiff_school_name": ${ users[0].schools.item(0).name }
-      - "plaintiff_school_address": ${ users[0].schools.item(0).school_address }
-      - "persons_authorized_confidential_information": ${ persons_authorized_confidential_information_cutoff.replace('\r\n','; ') }      
-      - "plaintiff_needs_interpreter": ${user_needs_interpreter}
-      - "plaintiff_preferred_language": ${user_preferred_language if user_needs_interpreter else ''} 
----
-comment: Addenda related code. 
-code: |  
-  # txtFieldsList is an array of dictionaries that contain the title
-  # and then a *list* of items that can be reduced to text in the addendum
-  txtFieldsList_confidential = list()
-  if len(users[0].previous_addresses) >= 2:    
-    txtFieldsList_confidential.append(
-      {'title': 'FORMER ADDRESSES (CONTINUED)',
-      'value': users[0].previous_addresses[1:]
-      })
-  
-  if len(users[0].schools) >= 2:
-    txtFieldsList_confidential.append(
-      {'title': 'SCHOOL ADRESSES (CONTINUED)',
-      'value': [school.name + ': ' + school.school_address for school in users[0].schools[1:]]}
-    )
-
-  if len(users[0].workplaces) >= 2:
-    descriptions = []
-    for workplace in users[0].workplaces[1:]: # skip index 0
-      desc = workplace.name
-      if workplace.work_address:
-        desc += ': ' + workplace.work_address
-      if workplace.phone:
-        desc += ' (' + workplace.phone + ')'
-      descriptions.append(desc)
-    txtFieldsList_confidential.append(
-      {'title': 'WORKPLACE ADRESSES (CONTINUED)',
-      'value': descriptions}
-    )
-  
-  if len(users[0].other_addresses) > 0:
-    txtFieldsList_confidential.append(
-      {'title': 'OTHER HOME ADDRESSES',
-       'value': [address.on_one_line() for address in users[0].other_addresses]}
-    )
-
-  Limit = 200
-  sLimit = Limit - 16   
-  need_confidential_info_addendum = len(persons_authorized_confidential_information) > Limit
-  if need_confidential_info_addendum:    
-    persons_authorized_confidential_information_cutoff = "(See Addendum.) " + persons_authorized_confidential_information[:sLimit].replace("\r","")  
-    txtFieldsList_confidential.append(
-      {'title': 'PERSONS AUTHORIZED BY PLAINTIFF TO HAVE ACCESS TO THIS CONFIDENTIAL INFORMATION',
-      'value': [persons_authorized_confidential_information]
-      })
-  else:
-    persons_authorized_confidential_information_cutoff = persons_authorized_confidential_information  
-    
-  addAddendum_confidential = bool(txtFieldsList_confidential)
----
-attachment:
-  - variable name: confidential_info_addendum
+  - variable name:   A_Plaintiff_Confidential_Information0011_attachment.addendum
     docx template file: 209A_confidential_info_addendum.docx

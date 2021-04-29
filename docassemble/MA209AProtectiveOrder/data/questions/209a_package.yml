@@ -21,6 +21,7 @@ metadata:
 modules:
   - docassemble.ALToolbox.misc
   - docassemble.ALToolbox.ThreePartsDate # Not strictly necessary as long it's installed somewhere on the server
+  # - .ma_209A may not be needed
 ---
 features:
   navigation: True
@@ -46,13 +47,18 @@ sections:
   - section_signature: Signing
   - download_screen: Download
 ---
+code: |
+  al_form_type = "starts_case"
+---
 continue button field: DEBUG_aldocument
 question: |
   Debug a form quickly
 subquestion: |
-  ${ complaint_209A_Affidavit_attachment.as_pdf(key='preview') }
+  Preview:
+  ${ A_Plaintiff_Confidential_Information0011_attachment.as_pdf(key='preview') }
 
-  ${ complaint_209A_Affidavit_attachment.as_pdf(key='final')}
+  Final:
+  ${ A_Plaintiff_Confidential_Information0011_attachment.as_pdf(key='final')}
 ---
 scan for variables: False
 mandatory: True
@@ -363,9 +369,15 @@ terms:
 # TODO: iteratively switch to ALDocument, use placeholders here for now
 ---
 code: |
+  plaintiff_confidential_final = A_Plaintiff_Confidential_Information0011_attachment.as_pdf(key='final')
+
+  page1_final = complaint_209A_labeled_page10003_attachment.as_pdf(key='final')
   affidavit_final = complaint_209A_Affidavit_attachment.as_pdf(key='final')
 ---
 code: |
+  plaintiff_confidential_preview = A_Plaintiff_Confidential_Information0011_attachment.as_pdf(key='preview')
+
+  page1_preview = complaint_209A_labeled_page10003_attachment.as_pdf(key='preview')
   affidavit_preview = complaint_209A_Affidavit_attachment.as_pdf(key='preview')  
 ---
 #######################################
@@ -395,9 +407,7 @@ code: |
   # always include cover page for user
   attachment_temp.append(next_steps)
   # Always include page 1 
-  attachment_temp.append(complaint_209A_labeled_page10003_attachment)
-  if need_page1_addendum:
-    attachment_temp.append(page1_addendum)
+  attachment_temp.append(page1_final)
   attachment_temp.append( affidavit_final )
   # include page 2 only if there are children
   if plaintiff_has_minor_children: 
@@ -413,9 +423,7 @@ code: |
     attachment_temp.append( Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008_attachment)
     if addAddendum_chdSupport:
       attachment_temp.append(chdSupport_addendum)
-  attachment_temp.append(A_Plaintiff_Confidential_Information0011_attachment)
-  if addAddendum_confidential:
-    attachment_temp.append(confidential_info_addendum)
+  attachment_temp.append(plaintiff_confidential_final)
   attachment_temp.append(defendantinformation209A0008_attachment)
   if addAddendum_defendant:
     attachment_temp.append(defendant_addendum)
@@ -432,9 +440,7 @@ code: |
   # PREVIEW version of the attachment
   attachment_preview_temp = []  
   # Always include page 1 
-  attachment_preview_temp.append(complaint_209A_labeled_page10003_attachment_preview)
-  if need_page1_addendum:
-    attachment_preview_temp.append(page1_addendum)
+  attachment_preview_temp.append(page1_preview)
   attachment_preview_temp.append( affidavit_preview )
   # include page 2 only if there are children
   if plaintiff_has_minor_children: 
@@ -450,9 +456,7 @@ code: |
     attachment_preview_temp.append( Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008_attachment_preview)
     if addAddendum_chdSupport:
       attachment_preview_temp.append(chdSupport_addendum)
-  attachment_preview_temp.append(A_Plaintiff_Confidential_Information0011_attachment_preview)
-  if addAddendum_confidential:
-    attachment_preview_temp.append(confidential_info_addendum)
+  attachment_preview_temp.append(plaintiff_confidential_preview)
   attachment_preview_temp.append(defendantinformation209A0008_attachment_preview)
   if addAddendum_defendant:
     attachment_preview_temp.append(defendant_addendum)
