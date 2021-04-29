@@ -35,10 +35,10 @@ code: |
   # initialize_attorney_lists
   other_care_custody_proceedings.gather()
   for case in other_care_custody_proceedings:
-    for person in case.other_parties:
-      person.address.geolocate(person.address_for_form)
-      if not person.address.geolocated:
-        person.address = DAEmpty()
+    # for person in case.other_parties:
+    #  person.address.geolocate(person.address_for_form)
+    #  if not person.address.geolocated:
+    #    person.address = DAEmpty()
     if case.is_open:
       case.atty_for_user
       if case.atty_for_children and len(case.children) > 1:
@@ -647,6 +647,8 @@ code: |
 #   was a party to this case? For example, a grandparent or other parent of the child.
 # yesno: other_care_custody_proceedings[i].other_parties.there_are_any
 ---
+sets:
+  - other_care_custody_proceedings[i].other_parties[j].address.address
 id: other parties in case
 question: |
   Who else was involved in this case?
@@ -667,9 +669,8 @@ fields:
       - DCF
       - other_parties[0]
   - Name: other_care_custody_proceedings[i].other_parties[j].name.first
-  - Address: other_care_custody_proceedings[i].other_parties[j].address_for_form
-    address autocomplete: True
-    required: False
+  - code: |
+      other_care_custody_proceedings[i].other_parties[j].address_fields(default_state="MA")
 # validation code: |
   # other_care_custody_proceedings[i].other_parties[j].address.geolocate(other_care_custody_proceedings[i].other_parties[j].address_for_form)
   # if not other_care_custody_proceedings[i].other_parties[j].address.geolocated:
