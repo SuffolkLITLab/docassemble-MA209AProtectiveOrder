@@ -74,6 +74,7 @@ subquestion: |
   ${exhibits.add_action() }
 continue button field: review_exhibits  
 ---
+reconsider: True
 attachment: 
   docx template file: 209A_exhibit_cover_page.docx
   variable name: exhibit_cover_page

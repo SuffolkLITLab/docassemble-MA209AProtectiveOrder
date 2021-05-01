@@ -1027,6 +1027,7 @@ subquestion: |
   
    ${complaint_209A_labeled_page10003_attachment_preview}
 ---
+reconsider: True
 attachment:
     variable name: complaint_209A_labeled_page10003_attachment_preview
     skip undefined: True
@@ -1103,6 +1104,7 @@ attachment code: complaint_209A_labeled_page10003_attachment
 need: 
   - complaint_209A_labeled_page10003
   - defendant_weapons_safe_for_pdf
+reconsider: True
 attachment:
     variable name: complaint_209A_labeled_page10003_attachment
     skip undefined: True
@@ -1165,6 +1167,7 @@ attachment:
       - "order_relief_ex_parte": ${ order_relief_ex_parte }
       - plaintiff_and_defendant_other_case_description: ${plaintiff_and_defendant_other_case_description if not need_cases_addendum else cases_other_safe_for_pdf}
 ---
+reconsider: True
 attachment:
   - variable name: page1_addendum
     docx template file: 209A_page1_addendum.docx

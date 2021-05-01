@@ -119,6 +119,7 @@ subquestion: |
 attachment code: A_defendant_s_child_support_affidavit_ready_for_upload0004_attachment
 ---
 need: A_defendant_s_child_support_affidavit_ready_for_upload0004
+reconsider: True
 attachment:
     variable name: A_defendant_s_child_support_affidavit_ready_for_upload0004_attachment
     name: Defendant's Affidavit In Connection with Request For Child Support Order
@@ -249,6 +250,7 @@ subquestion: |
   
    ${A_defendant_s_child_support_affidavit_ready_for_upload0004_attachment_preview}
 ---
+reconsider: True
 attachment:
     variable name: A_defendant_s_child_support_affidavit_ready_for_upload0004_attachment_preview
     name: Defendant's Affidavit In Connection with Request For Child Support Order

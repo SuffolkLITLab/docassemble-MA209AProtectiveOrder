@@ -364,6 +364,7 @@ subquestion: |
 attachment code: defendantinformation209A0008_attachment
 ---
 need: defendantinformation209A0008
+reconsider: True
 attachment:
     variable name: defendantinformation209A0008_attachment
     # skip undefined: True
@@ -577,6 +578,7 @@ subquestion: |
 #     gun_description_temp.append("a concealed carry license")
 #   gun_description = comma_and_list(gun_description_temp)
 ---
+reconsider: True
 attachment:
     variable name: defendantinformation209A0008_attachment_preview
     # skip undefined: True
@@ -702,6 +704,7 @@ code: |
 
   # addAddendum_defendant = bool(txtFieldsList_defendant) or other_parties[0].photo_yes and other_parties[0].photo_yes_can_upload
 ---
+reconsider: True
 attachment:
   - variable name: defendant_addendum
     docx template file: 209A_defendant_addendum.docx
