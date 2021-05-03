@@ -80,7 +80,7 @@ include:
 sets: skip_intro
 scan for variables: False
 code: |
-  basic_questions_intro_screen  = True
+  al_intro_screen  = True
   main_209A_package_intro = True
   acknowledged_information_use = True
   user_saw_what_to_expect = True
@@ -367,7 +367,7 @@ code: |
   skip_orders = True
 ---
 code: |
-  courts[0] = macourts[26] # Should be BMC East Boston Division
+  trial_court = all_courts[26] # Should be BMC East Boston Division
   docket_numbers.auto_gather = False  
   docket_numbers[0] = '20-CV-1234'
   docket_numbers.gathered=True

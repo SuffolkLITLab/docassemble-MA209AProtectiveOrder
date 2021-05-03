@@ -65,32 +65,24 @@ fields:
       - I need the order to protect me and my children.: me and children
       - I am helping someone else ask for this order.: someone else
 ---
+sets:
+  - other_parties[0].name.first
+  - other_parties[0].name.last
+  - other_parties[0].gender
 id: name of abuser
 question: |
   What is the name of the person who is abusing you?  
 fields:
-  - First name: other_parties[0].name.first
-  - Middle name: other_parties[0].name.middle
-    required: False
-  - Last name: other_parties[0].name.last
-  - Suffix: other_parties[0].name.suffix
-    required: False
-    code: |
-      name_suffix()
-  - Gender: other_parties[0].gender
-    choices:
-      - Female: female
-      - Male: male
-      - Non-binary: non-binary
-      - Prefer not to say: prefer-not-to-say
-      - Prefer to write in a different gender: self-described
-    help: |
-      If you do not select "Male" or "Female", both checkboxes will be empty on the form. The police use your answer to help them identify the person who is abusing you and enforce your restraining order.  
-  - Gender: other_parties[0].gender
-    show if:
-      variable: other_parties[0].gender
-      is: "self-described"
-
+  - code: |
+      other_parties[0].name_fields()
+  - code: |
+      other_parties[0].gender_fields(show_help=True)
+---
+template: other_parties[0].gender_help_text
+content: |
+  If you do not select "Male" or "Female", both checkboxes will be empty on the
+  form. The police use your answer to help them identify the person who is 
+  abusing you and enforce your restraining order.
 ---
 id: what to expect
 question: |
@@ -213,9 +205,6 @@ subquestion: |
 buttons:
   - Exit: exit
   - Restart: restart
----
-include:
-  - docassemble.MAVirtualCourt:basic-questions.yml
 ---
 id: helper relationship
 question: |
@@ -582,6 +571,9 @@ fields:
   - License to carry: defendant_has_guns['license']
     datatype: yesnomaybe
 ---
+depends on:
+  - defendant_has_guns
+  - defendant_weapons_description
 code: |
   defendant_weapons = comma_list(defendant_has_guns.true_values()) + space('defendant_weapons_description', prefix=' - ')
   defendant_weapons_safe_for_pdf = defendant_weapons + (" (see Addendum)" if len(defendant_weapons) > 40 else '')
@@ -888,7 +880,7 @@ id: complaint_209A_labeled_page10003
 code: |
   # allowed_courts = interview_metadata['complaint_209A_labeled_page10003']['allowed courts']
   # preferred_court = interview_metadata['complaint_209A_labeled_page10003']['preferred court']
-  # basic_questions_intro_screen 
+  # al_intro_screen 
   # user_saw_what_to_expect
   # users[0].name.first
   # plaintiff_is_major_yes # Ask for age
@@ -1047,11 +1039,11 @@ attachment:
       - "user_name_full": ${ str(users[0]) }
       - "defendant": ${ str(other_parties[0]) }
       - "signature_date": ${ signature_date.format("M/d/yyyy") }
-      - "municipal_court": ${ courts[0].department == "Boston Municipal Court" }
-      - "district_court": ${ courts[0].department == "District Court" }
-      - "probate_court": ${ courts[0].department == "Probate and Family Court" }
-      - "superior_court": ${ courts[0].department == "Superior Court" }
-      - "court_name_short": ${ courts[0].division }
+      - "municipal_court": ${ trial_court.department == "Boston Municipal Court" }
+      - "district_court": ${ trial_court.department == "District Court" }
+      - "probate_court": ${ trial_court.department == "Probate and Family Court" }
+      - "superior_court": ${ trial_court.department == "Superior Court" }
+      - "court_name_short": ${ trial_court.division }
       - "defendant_alias": ${ other_parties[0].name_other if defendant_has_alias else '' }
       - "defendant_weapons_description": ${ defendant_weapons_safe_for_pdf  }
       - "defendant_gender_male": ${ other_parties[0].gender_male }
@@ -1108,7 +1100,9 @@ buttons:
   - Restart: restart
 attachment code: complaint_209A_labeled_page10003_attachment
 ---
-need: complaint_209A_labeled_page10003
+need: 
+  - complaint_209A_labeled_page10003
+  - defendant_weapons_safe_for_pdf
 attachment:
     variable name: complaint_209A_labeled_page10003_attachment
     skip undefined: True
@@ -1121,11 +1115,11 @@ attachment:
       - "user_name_full": ${ str(users[0]) }
       - "defendant": ${ str(other_parties[0]) }
       - "signature_date": ${ signature_date.format("M/d/yyyy") }
-      - "municipal_court": ${ courts[0].department == "Boston Municipal Court" }
-      - "district_court": ${ courts[0].department == "District Court" }
-      - "probate_court": ${ courts[0].department == "Probate and Family Court" }
-      - "superior_court": ${ courts[0].department == "Superior Court" }
-      - "court_name_short": ${ courts[0].division }
+      - "municipal_court": ${ trial_court.department == "Boston Municipal Court" }
+      - "district_court": ${ trial_court.department == "District Court" }
+      - "probate_court": ${ trial_court.department == "Probate and Family Court" }
+      - "superior_court": ${ trial_court.department == "Superior Court" }
+      - "court_name_short": ${ trial_court.division }
       - "defendant_alias": ${ other_parties[0].name_other if defendant_has_alias else '' }
       - "defendant_weapons_description": ${ defendant_weapons_safe_for_pdf  }
       - "defendant_gender_male": ${ other_parties[0].gender_male }

@@ -57,12 +57,9 @@ data:
     field_type: text
     maxlength: 25
 ---
-include:
-  - docassemble.MAVirtualCourt:basic-questions.yml
----
 id: complaint_209A_Affidavit
 code: |
-  basic_questions_intro_screen 
+  al_intro_screen 
   complaint_209A_Affidavit_intro
   complaint_209A_Affidavit_intro_2
   complaint_209A_Affidavit_intro_3

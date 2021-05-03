@@ -613,9 +613,9 @@ event: section_court
 question: |
   Your court
 review:
-  - Edit court: courts[0]
+  - Edit court: trial_court
     button: |
-      ${courts[0]}
+      ${trial_court}
 ---
 ###################################### Signature
 id: signature

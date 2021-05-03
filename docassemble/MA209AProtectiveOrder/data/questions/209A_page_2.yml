@@ -22,7 +22,7 @@ code: |
 
   interview_id = "A_complaint_for_protection_from_abuse_probation_copy0005"
 
-  # basic_questions_intro_screen 
+  # al_intro_screen 
   # A_complaint_for_protection_from_abuse_probation_copy0005_intro  # Need a way to skip intro to every form?
 
   #######
@@ -109,7 +109,8 @@ code: |
     child_support_safety
     wants_child_support_yes
     if need_help_for_majors:
-      majors_needing_support[0].name.first
+      majors_needing_support.gather()
+      # majors_needing_support[0].name.first
 
   # REMOVED in stitchup -- ask these later
   # have_had_custody_cases
@@ -216,7 +217,7 @@ objects:
   - children_cares_for: PeopleList.using(ask_number=True)
   - wants_custody_of: PeopleList
   - wants_no_contact_for: PeopleList
-  - schools_to_stay_away_from: DAList.using(object_type=Person)
+  - schools_to_stay_away_from: DAList.using(object_type=ALIndividual)
   - majors_needing_support: PeopleList
 ---
 comment: |
@@ -302,6 +303,9 @@ help:
 
     At the 10 day hearing, ${other_parties.familiar()} can try to convince the judge to change the order. 
 ---
+sets: 
+  - children[i].name.first
+  - children[i].name.last
 comment: |
   Changed code to list only first names of children in question, but then choices for children_of_both in q. id: custody_children became their full names instead of only first names even after I added '.familiar()' to the end.
 # `ordinal()` says 'first', even if there's only one :(
@@ -328,14 +332,8 @@ subquestion: |
   % endif
  
 fields:
-  - First Name: children[i].name.first
-  - Middle Name: children[i].name.middle
-    required: False
-  - Last Name: children[i].name.last
-  - Suffix: children[i].name.suffix
-    required: False
-    code: |
-      name_suffix()
+  - code: |
+      children[i].name_fields()
   - Birthdate: children[i].birthdate
     datatype: BirthDate
     min: ${ today().minus(years=18) }
@@ -352,6 +350,51 @@ validation code: |
   if children[i].birthdate < today().minus(years=18):
     validation_error("The court asks only for children under 18", field="children[i].birthdate")
 ---
+sets: 
+  - children[0].name.first
+  - children[0].name.last
+comment: |
+  Changed code to list only first names of children in question, but then choices for children_of_both in q. id: custody_children became their full names instead of only first names even after I added '.familiar()' to the end.
+# `ordinal()` says 'first', even if there's only one :(
+id: children user is parent of
+question: |
+  % if children.target_number == 1:
+  Your child
+  % else:
+  Your children
+  % endif
+subquestion: |  
+  % if children.target_number == 1:
+  Tell us about your child
+  % else:
+  Tell us about your oldest child first.
+  % endif
+     
+  % if children_cares_for.target_number >= 1:
+  For now, just name your own ${ children.as_noun()}.
+  % endif 
+fields:
+  - code: |
+      children[0].name_fields()
+  - Birthdate: children[0].birthdate
+    datatype: BirthDate
+    min: ${ today().minus(years=18) }
+    max: ${ today() }
+    validation messages:
+      min: |
+        The court asks only for children under 18.
+  - Is ${other_parties.familiar()} this child's other parent?: children[0].defendant_is_parent
+    datatype: yesnoradio
+    show if:
+      code: |
+        defendant_and_plaintiff_are_parents_of_child # means parents of any children
+validation code: |
+  if children[0].birthdate < today().minus(years=18):
+    validation_error("The court asks only for children under 18", field="children[0].birthdate")
+---
+sets:
+  - children_cares_for[i].name.first
+  - children_cares_for[i].name.last
 id: non_parent_children
 question: |
   % if ( children_cares_for.target_number == 1 ):
@@ -369,16 +412,9 @@ subquestion: |
   You have already told us
   about ${comma_and_list(children_cares_for.complete_elements())}.
   % endif
-  
 fields:
-  - First Name: children_cares_for[i].name.first
-  - Middle Name: children_cares_for[i].name.middle
-    required: False
-  - Last Name: children_cares_for[i].name.last
-  - Suffix: children_cares_for[i].name.suffix
-    required: False
-    code: |
-      name_suffix()
+  - code: |
+      children_cares_for[i].name_fields()
   - Birthdate: children_cares_for[i].birthdate
     datatype: BirthDate
     min: ${ today().minus(years=18) }
@@ -460,25 +496,23 @@ yesno: schools_to_stay_away_from.there_are_any
 ---
 # For listing for each child (if we choose to do that), see
 # 209A_affidavit_disclosing_care_or_custody_proceedings.yml on its branch
+sets:
+  - schools_to_stay_away_from[i].address.address
+  - schools_to_stay_away_from[i].address.city
 id: schools_and_daycares
 question:
   What are the schools or daycare centers you need the court to order ${other_parties.familiar()} to stay away from?
-list collect: True
-minimum number: 1
+subquestion: |
+  We will ask about each school one at a time.
 fields:
-  - School or daycare name: schools_to_stay_away_from[i].name.text
-  - Street address: schools_to_stay_away_from[i].address.address
-    address autocomplete: True
-  # needed?
-  - Unit: schools_to_stay_away_from[i].address.unit
-    required: False
-  - City: schools_to_stay_away_from[i].address.city
-  - State: schools_to_stay_away_from[i].address.state
-    code: |
-      states_list()
-    default: MA      
-  - Zip: schools_to_stay_away_from[i].address.zip
-    required: False
+  - School or daycare name: schools_to_stay_away_from[i].name.first
+  - code: |
+      schools_to_stay_away_from[i].address_fields()
+---
+id: schools and daycares has another
+question: |
+  Is there another school or daycare you need ${ other_parties.familiar() } to stay away from?
+yesno: schools_to_stay_away_from.there_is_another
 # ---
 # id: wants_to_request_visitation_details
 # question: |
@@ -689,22 +723,22 @@ yesno: majors_needing_support.there_are_any
 code: |
   need_help_for_majors = majors_needing_support.there_are_any
 ---
+sets:
+  - majors_needing_support[i].name.first
+  - majors_needing_support[i].name.last
 id: non_minors_needing_child_support
 question: |
   Who are your children between 18 and 22? 
 subquestion: |
-  Include any children who are 22.
-
-  Click "${word("Add another")}" to add more.
-list collect: True
+  Include any children who are 22. We will ask about them one at a time.
 fields:
-  - First Name: majors_needing_support[i].name.first
-  - Middle Name: majors_needing_support[i].name.middle
-    required: False
-  - Last Name: majors_needing_support[i].name.last
-  - Suffix: majors_needing_support[i].name.suffix
-    required: False
-    code: name_suffix()
+  - code: |
+      majors_needing_support[i].name_fields()
+---
+id: another major needing support
+question: |
+  Do you have any other children between 18 and 22?
+yesno: majors_needing_support.there_is_another
 ---
 id: do you already have a child support order
 question: |
