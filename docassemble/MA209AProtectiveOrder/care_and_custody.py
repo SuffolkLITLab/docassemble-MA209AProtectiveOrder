@@ -164,6 +164,6 @@ def filter_letters(letter_strings):
   try:
     retval = ''.join(sorted(unique_letters))
   except:
-    reval = ''
+    retval = ''
   return retval
   
