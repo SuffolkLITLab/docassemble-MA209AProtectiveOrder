@@ -394,6 +394,7 @@ subquestion: |
   
    ${ Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008_attachment_preview }
 ---
+reconsider: True
 attachment:
     variable name: Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008_attachment_preview
     name: Plaintiff affidavit in support of request for child support order
@@ -483,6 +484,7 @@ subquestion: |
 attachment code: Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008_attachment
 ---
 need: Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008
+reconsider: True
 attachment:
     variable name: Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008_attachment
     name: Plaintiff 209A Child Support Affidavit
@@ -558,6 +560,7 @@ comment: Addenda related code.
 code: |  
   addAddendum_chdSupport = len(all_support_children) > 4
 ---
+reconsider: True
 attachment:
   - variable name: chdSupport_addendum
     docx template file: 209A_chdSupport_addendum.docx

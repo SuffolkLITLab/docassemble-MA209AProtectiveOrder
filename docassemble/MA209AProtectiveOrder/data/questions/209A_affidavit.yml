@@ -900,6 +900,7 @@ field: saw_incidents
 code: |
   affidavit_intro = "\n The preceding statement is a brief summary of the events and does not attempt to capture all the detail of the abuse. "
 ---
+reconsider: True
 attachment:
     variable name: complaint_209A_Affidavit_attachment_preview
     name: 209A Complaint Affidavit
@@ -914,6 +915,7 @@ attachment:
       - "incident_date": ${ incident_date }
       - "has_addendum": ${ addAddendum_affidavit }      
 ---
+reconsider: True
 need: complaint_209A_Affidavit
 attachment:
     variable name: complaint_209A_Affidavit_attachment
@@ -934,7 +936,10 @@ code: |
   # E.g., Summer, 2020
   incident_date = most_recent_abuse_date + ", " + str(most_recent_abuse_year)
 ---
-comment: Addenda related code. 
+comment: Addenda related code.
+depends on:
+  - affidavit_body
+  - affidavit_intro
 code: |  
   txtFieldsList_affidavit = list()      
   Limit = 3000

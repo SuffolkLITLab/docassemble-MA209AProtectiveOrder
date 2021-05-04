@@ -803,6 +803,7 @@ subquestion: |
   
   ${A_complaint_for_protection_from_abuse_probation_copy0005_attachment_preview}
 ---
+reconsider: True
 attachment:
     variable name: A_complaint_for_protection_from_abuse_probation_copy0005_attachment_preview
     name: 209A Page 2
@@ -931,6 +932,7 @@ buttons:
 attachment code: A_complaint_for_protection_from_abuse_probation_copy0005_attachment
 ---
 need: A_complaint_for_protection_from_abuse_probation_copy0005
+reconsider: True
 attachment:
     variable name: A_complaint_for_protection_from_abuse_probation_copy0005_attachment
     name: 209A Page 2
@@ -1075,6 +1077,7 @@ code: |
   need_no_contact_addendum = len(children + children_cares_for) and len(wants_no_contact_for) > 6
   addAddendum_page2 = need_custody_addendum or need_no_contact_addendum or bool(txtFieldsList_page2)
 ---
+reconsider: True
 attachment:
   - variable name: page2_addendum
     docx template file: 209A_page2_addendum.docx

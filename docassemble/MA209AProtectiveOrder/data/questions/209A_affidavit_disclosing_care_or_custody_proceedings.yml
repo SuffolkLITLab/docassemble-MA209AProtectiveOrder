@@ -1001,6 +1001,7 @@ subquestion: |
 attachment code: A_affidavit_disclosing_care_or_custody_proceedings0009_attachment
 ---
 need: need_other_parties_appendix
+reconsider: True
 attachment:
   variable name: care_or_custody_proceedings_appendix_variable
   name: Affidavit Disclosing Care or Custody Proceedings Appendix
@@ -1008,6 +1009,7 @@ attachment:
   docx template file: care_or_custody_proceedings_appendix.docx
 ---
 need: A_affidavit_disclosing_care_or_custody_proceedings0009
+reconsider: True
 attachment:
     variable name: A_affidavit_disclosing_care_or_custody_proceedings0009_attachment
     # skip undefined: True
@@ -1120,6 +1122,7 @@ subquestion: |
 code: |
   need_care_custody_addendum = need_children_appendix or need_other_parties_appendix or need_past_address_appendix or need_attorneys_for_children_addendum or need_attorneys_for_parents_addendum or need_gals_investigators_addendum
 ---
+reconsider: True
 attachment:
     variable name: A_affidavit_disclosing_care_or_custody_proceedings0009_attachment_preview
     name: Affidavit of Care
