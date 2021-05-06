@@ -128,6 +128,7 @@ code: |
   FAHA8_motion_to_impound_attachment.enabled = asked_for_impoundment                                                
 ---
 need: a_258e_motion_for_impoundment0019
+reconsider: True
 attachment:
     variable name: FAHA8_motion_to_impound_attachment[i]
     name: Motion for Impoundment

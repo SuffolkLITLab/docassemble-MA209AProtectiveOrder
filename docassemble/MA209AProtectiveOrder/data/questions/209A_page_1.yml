@@ -1014,6 +1014,7 @@ attachment:
       - "order_relief_ex_parte": ${ order_relief_ex_parte }
       - plaintiff_and_defendant_other_case_description: ${plaintiff_and_defendant_other_case_description if not complaint_209A_labeled_page10003_attachment.overflow_fields['other_cases'].overflow_value() else other_cases.item(0).court_name + ' ' + other_cases.item(0).type_of_case + ' ' + other_cases.item(0).date  + ' ' + other_cases.item(0).docket_number }
 ---
+reconsider: True
 attachment:
   - variable name: GL209A_page1_attachment.addendum
     docx template file: 209A_page1_addendum.docx

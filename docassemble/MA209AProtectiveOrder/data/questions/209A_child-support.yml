@@ -397,6 +397,7 @@ code: |
   FA11_child_support_affidavit_attachment.overflow_fields.gathered = True  
 ---
 need: Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008
+reconsider: True
 attachment:
     variable name: FA11_child_support_affidavit_attachment[i]
     name: Plaintiff 209A Child Support Affidavit
@@ -467,6 +468,7 @@ attachment:
       - "signature_date": ${ signature_date }
       - "user_signature": ${ users[0].signature_if_final(i) }
 ---
+reconsider: True
 attachment:
   - variable name: FA11_child_support_affidavit_attachment.addendum
     docx template file: 209A_chdSupport_addendum.docx

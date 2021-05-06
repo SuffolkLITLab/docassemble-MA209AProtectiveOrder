@@ -105,11 +105,9 @@ fields:
       is: "other"
     maxlength: 9     
 ---
-id: defendant vital stats
+id: defendant age
 question: |
-  ${other_parties.familiar()}'s physical appearance
-subquestion: |
-  Answer as many questions below as you can.  
+  How old is ${other_parties.familiar()}?
 fields:
   - I don't know when ${other_parties.familiar()} was born: dont_know_birthdate
     datatype: yesno
@@ -119,6 +117,13 @@ fields:
   - Best estimate of age (in years): other_parties[0].age
     datatype: integer
     show if: dont_know_birthdate
+---
+id: defendant vital stats
+question: |
+  ${other_parties.familiar()}'s physical appearance
+subquestion: |
+  Answer as many questions below as you can.
+fields:
   - "How tall is ${other_parties.familiar()}?": other_parties[0].height
     required: False
     hint: e.g., 5 foot 10 inches
@@ -346,6 +351,7 @@ fields:
     required: False 
 ---
 need: defendantinformation209A0008
+reconsider: True
 attachment:
     variable name: GL209A_defendant_information_attachment[i]
     # skip undefined: True
@@ -457,7 +463,8 @@ code: |
   other_parties[0].photo_yes
   other_parties[0].race
   other_parties[0].eye_color # Needed if in the skip_sections code
-  other_parties[0].height  
+  other_parties[0].age
+  other_parties[0].height
   other_parties[0].photo_yes
 
   defendant_has_guns["gun"] # trigger our DADict question
@@ -513,7 +520,6 @@ code: |
   # basic_questions_signature_flow
   # other_parties[0].signature
   defendantinformation209A0008 = True
-
 ---
 code: |
   defendant_location_information_other = ("Best place to find: "
@@ -534,6 +540,7 @@ code: |
   GL209A_defendant_information_attachment.overflow_fields['photo_upload'].label = "Photo of Defendant"
   GL209A_defendant_information_attachment.overflow_fields.gathered = True
 ---
+reconsider: True
 attachment:
   - variable name: GL209A_defendant_information_attachment.addendum
     docx template file: 209A_defendant_addendum.docx

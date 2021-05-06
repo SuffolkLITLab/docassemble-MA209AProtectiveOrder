@@ -687,6 +687,7 @@ code: |
                       }
   final_attachment_collection.finished = True
 ---
+reconsider: True
 attachment: 
   docx template file: 209A_next_steps_for_user.docx
   variable name: next_steps

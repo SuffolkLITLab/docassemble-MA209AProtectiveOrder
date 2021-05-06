@@ -80,6 +80,7 @@ objects:
 code: |
   exhibit_attachment.enabled = has_evidence and has_evidence_ready_to_upload and len(exhibits)
 ---
+reconsider: True
 attachment: 
   docx template file: 209A_exhibit_cover_page.docx
   variable name: exhibit_cover_page
