@@ -265,24 +265,24 @@ help: |
   and email confidential, so that only court staff can see this information. 
 ---
 objects:
-  - A_Plaintiff_Confidential_Information0011_attachment: ALDocument.using(filename="Plaintiff_Confidential_Information", title="Confidential Information Form", enabled=True, has_addendum=True, default_overflow_message=" [See addendum]")
+  - GL209A_plaintiff_confidential_info: ALDocument.using(filename="Plaintiff_Confidential_Information", title="Confidential Information Form", enabled=True, has_addendum=True, default_overflow_message=" [See addendum]")
 ---
 code: |
-  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['other_addresses'].overflow_trigger = 0
-  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['other_addresses'].label = "Other addresses"
-  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['previous_addresses'].overflow_trigger = 1
-  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['previous_addresses'].label = "Previous addresses (continued)"
-  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['users[0].schools'].overflow_trigger = 1
-  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['users[0].schools'].label = "Schools (continued)"
-  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['users[0].workplaces'].overflow_trigger = 1
-  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['users[0].workplaces'].label = "Workplaces (continued)"
-  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['persons_authorized_confidential_information'].overflow_trigger = 200
-  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields['persons_authorized_confidential_information'].label = "Persons authorized to access confidential information (continued)"
-  A_Plaintiff_Confidential_Information0011_attachment.overflow_fields.gathered = True
+  GL209A_plaintiff_confidential_info_attachment.overflow_fields['other_addresses'].overflow_trigger = 0
+  GL209A_plaintiff_confidential_info_attachment.overflow_fields['other_addresses'].label = "Other addresses"
+  GL209A_plaintiff_confidential_info_attachment.overflow_fields['previous_addresses'].overflow_trigger = 1
+  GL209A_plaintiff_confidential_info_attachment.overflow_fields['previous_addresses'].label = "Previous addresses (continued)"
+  GL209A_plaintiff_confidential_info_attachment.overflow_fields['users[0].schools'].overflow_trigger = 1
+  GL209A_plaintiff_confidential_info_attachment.overflow_fields['users[0].schools'].label = "Schools (continued)"
+  GL209A_plaintiff_confidential_info_attachment.overflow_fields['users[0].workplaces'].overflow_trigger = 1
+  GL209A_plaintiff_confidential_info_attachment.overflow_fields['users[0].workplaces'].label = "Workplaces (continued)"
+  GL209A_plaintiff_confidential_info_attachment.overflow_fields['persons_authorized_confidential_information'].overflow_trigger = 200
+  GL209A_plaintiff_confidential_info_attachment.overflow_fields['persons_authorized_confidential_information'].label = "Persons authorized to access confidential information (continued)"
+  GL209A_plaintiff_confidential_info_attachment.overflow_fields.gathered = True
 ---
 need: A_Plaintiff_Confidential_Information0011
 attachment:
-    variable name: A_Plaintiff_Confidential_Information0011_attachment[i]
+    variable name: GL209A_plaintiff_confidential_info_attachment[i]
     name: Plaintiff Confidential Information Form
     skip undefined: True
     editable: False
@@ -303,7 +303,7 @@ attachment:
       - "plaintiff_workplace_phone": ${ users[0].workplaces.item(0).phone }
       - "plaintiff_school_name": ${ users[0].schools.item(0).name }
       - "plaintiff_school_address": ${ users[0].schools.item(0).school_address }
-      - "persons_authorized_confidential_information": ${ A_Plaintiff_Confidential_Information0011_attachment.safe_value('persons_authorized_confidential_information') }
+      - "persons_authorized_confidential_information": ${ GL209A_plaintiff_confidential_info_attachment.safe_value('persons_authorized_confidential_information') }
       - "plaintiff_needs_interpreter": ${user_needs_interpreter}
       - "plaintiff_preferred_language": ${user_preferred_language if user_needs_interpreter else ''} 
       - "plaintiff_signature": ${ users[0].signature_if_final(i) }
@@ -370,5 +370,5 @@ code: |
   A_Plaintiff_Confidential_Information0011 = True
 ---
 attachment:
-  - variable name:   A_Plaintiff_Confidential_Information0011_attachment.addendum
+  - variable name:   GL209A_plaintiff_confidential_info_attachment.addendum
     docx template file: 209A_confidential_info_addendum.docx

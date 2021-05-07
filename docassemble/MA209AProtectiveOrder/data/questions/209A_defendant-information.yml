@@ -39,7 +39,7 @@ subquestion: |
   A photograph helps the police identify ${other_parties.familiar()}.
 fields:
   - 'Can you provide a photo of ${other_parties.familiar()}?': other_parties[0].photo_yes
-    datatype: yesnoradio # MB: Stretch goal: if yes, provide option to upload photo.
+    datatype: yesnoradio
   - Are you ready to upload one now?: other_parties[0].photo_yes_can_upload  
     datatype: yesnoradio
     help: |
@@ -345,27 +345,9 @@ fields:
     maxlength: 23
     required: False 
 ---
-progress: 100
-event: download_defendant_info
-# mandatory: True
-question: |
-  Placeholder download screen
-subquestion: |
-  Placeholder
-  
-  ### Next steps
-  
-  1. Step 1
-  1. Step 2
-  
-  Below is a preview of your form.
-  
-  ${defendantinformation209A0008_attachment }
-attachment code: defendantinformation209A0008_attachment
----
 need: defendantinformation209A0008
 attachment:
-    variable name: defendantinformation209A0008_attachment
+    variable name: GL209A_defendant_information_attachment[i]
     # skip undefined: True
     name: ${other_parties.familiar()}-information-209a
     filename: Defendantinformation209a
@@ -375,9 +357,9 @@ attachment:
       - "defendant_name": ${ str(other_parties[0]) }
       - "defendant_birthdate": ${ other_parties[0].birthdate.format() if not dont_know_birthdate else 'About ' + str(other_parties[0].age) + ' years old'}
       - "parent_name": ${ str(parents[0]) }
-      - "parent2_name": ${ str(parents[2-1]) }
+      - "parent2_name": ${ str(parents[1]) }
       - "defendant_phone_home": ${ other_parties[0].phone_number }
-      - "plaintiff_signature": ${ users[0].signature }
+      - "plaintiff_signature": ${ users[0].signature_if_final(i) }
       - "signature_date": ${ signature_date }
       - "defendant_name_other": ${ other_parties[0].name_other if defendant_has_alias else '' }
       - "defendant_birthplace": ${ other_parties[0].birthplace }
@@ -422,7 +404,7 @@ attachment:
       - "defendant_drug_alcohol_abuse": ${ other_parties[0].drug_alcohol_abuse }
       - "defendant_gun_license_carry_possess_no": ${ not other_parties[0].gun_license_carry_possess_yes }
       - "defendant_gun_license_carry_possess_yes": ${ other_parties[0].gun_license_carry_possess_yes }
-      - "defendant_gun_license_carry_possess": ${ defendant_weapons_safe_for_pdf }
+      - "defendant_gun_license_carry_possess": ${ defendant_weapons } # TODO: may want this in addendum. Could use GL209A_page1_attachment.safe_value('defendant_weapons')
       - "defendant_psychiatric_emotional_problems_no": ${ not other_parties[0].psychiatric_emotional_problems_yes }
       - "defendant_psychiatric_emotional_problems_yes": ${ other_parties[0].psychiatric_emotional_problems_yes }
       - "defendant_psychiatric_emotional_problems": ${ other_parties[0].psychiatric_emotional_problems }
@@ -459,27 +441,6 @@ subquestion: |
   served, call the police. The police should not arrest
   ${other_parties.familiar()}, but they will be able to serve
   ${other_parties.familiar()}. Call the police even if you are not afraid.
-# ---
-# question: |
-#   ss
-# subquestion: |
-#   Check the following if they are true.
-# fields:
-#   - 'Defendant has a gun': defendant_weapons_guns
-#     datatype: yesno
-#   - 'Defendant has ammunition': defendant_weapons_ammunition
-#     datatype: yesno
-#   - 'Defendant has a firearms identification card': defendant_weapons_firearms_identification_card
-#     datatype: yesno
-#   - 'Defendant has a license to carry': defendant_weapons_license_to_carry
-#     datatype: yesno
-#   - 'Describe the gun(s)': defendant_weapons_description
-#     show if:
-#       variable: defendant_weapons_guns
-#       is: True
-# under: |
-#   This is important so the police can take Defendant's guns.
-# Not sure how to handle this: it's in page 1 but is really defendant information question
 ---
 id: interview_order_defendantinformation209A0008
 code: |
@@ -537,8 +498,7 @@ code: |
     other_parties[0].vehicle_model = "N/A"
     other_parties[0].vehicle_year = "N/A"
     other_parties[0].vehicle_license_plate = "N/A"
-  # str(other_parties[0])
-  # other_parties[0].birthdate.format()
+
   str(parents[0])
   str(parents[1])
   
@@ -546,8 +506,6 @@ code: |
   defendant_race
   defendant_eye_color
   defendant_hair_details
-  # defendant_location_information_other_cutoff
-  # defendant_has_alias
 
   # signature_date
 
@@ -555,93 +513,6 @@ code: |
   # basic_questions_signature_flow
   # other_parties[0].signature
   defendantinformation209A0008 = True
----
-continue button field: defendantinformation209A0008_preview_question
-question: |
-  Placeholder preview screen
-subquestion: |
-  Here is a preview of the form you'll sign on the next page. 
-  
-   ${defendantinformation209A0008_attachment_preview}
-# ---
-# code: |
-#   already_know_defendant_has_guns = defendant_weapons_guns or defendant_weapons_ammunition or defendant_weapons_firearms_identification_card or defendant_weapons_license_to_carry
-#   gun_description_temp = []
-#   if defendant_weapons_guns:
-#     gun_description_temp.append("guns")
-#   if defendant_weapons_ammunition:
-#     gun_description_temp.append("ammunition")
-#   if defendant_weapons_firearms_identification_card:
-#     gun_description_temp.append("a firearm ID card")
-#   if defendant_weapons_license_to_carry:
-#     gun_description_temp.append("a concealed carry license")
-#   gun_description = comma_and_list(gun_description_temp)
----
-attachment:
-    variable name: defendantinformation209A0008_attachment_preview
-    # skip undefined: True
-    name: ${other_parties.familiar()}-information-209a
-    editable: False
-    filename: Defendantinformation209a
-    pdf template file: defendant-information-209A.pdf
-    decimal places: 2    
-    fields: 
-      - "defendant_name": ${ str(other_parties[0]) }
-      - "defendant_birthdate": ${ other_parties[0].birthdate.format() if not dont_know_birthdate else 'About ' + str(other_parties[0].age) + ' years old'}
-      - "parent_name": ${ str(parents[0]) }
-      - "parent2_name": ${ str(parents[1]) }
-      - "defendant_phone_home": ${ other_parties[0].phone_number }
-      - "signature_date": ${ signature_date }
-      - "defendant_name_other": ${ other_parties[0].name_other  if defendant_has_alias else '' }
-      - "defendant_birthplace": ${ other_parties[0].birthplace }
-      - "defendant_social_security_number": ${ other_parties[0].social_security_number }
-      - "defendant_gender_male_yes": ${ other_parties[0].gender_male }
-      - "defendant_photo_yes": ${ other_parties[0].photo_yes }
-      - "defendant_photo_no": ${ not other_parties[0].photo_yes }
-      - "defendant_gender_female_yes": ${ other_parties[0].gender_female }
-      - "defendant_race": ${ defendant_race }
-      - "defendant_eye_color": ${ defendant_eye_color }
-      - "defendant_hair_color": ${ defendant_hair_details }
-      - "defendant_height": ${ other_parties[0].height }
-      - "defendant_weight": ${ other_parties[0].weight }
-      - "defendant_physical_build": ${ other_parties[0].physical_build.true_values() }
-      - "defendant_physical_other": ${ defendant_other_description }
-      - "defendant_address": ${ other_parties[0].address.on_one_line(include_unit=True) }
-      - "defendant_english_yes": ${ other_parties[0].understands_english }
-      - "defendant_english_no": ${ not other_parties[0].understands_english }
-      - "defendant_address_apartment": ${ showifdef('other_parties[0].address.unit') }
-      - "defendant_address_floor": ${ other_parties[0].address_floor }
-      - "defendant_name_door_mailbox": ${ other_parties[0].name_door_mailbox }
-      - "defendant_language_other": ${ other_parties[0].language_other }
-      - "defendant_employer": ${ other_parties[0].employer }
-      - "defendant_work_phone": ${ other_parties[0].work_phone }
-      - "defendant_work_title": ${ other_parties[0].work_title }
-      - "defendant_work_address": ${ other_parties[0].work_address }
-      - "defendant_work_hours": ${ other_parties[0].work_hours }
-      - "defendant_work_department": ${ other_parties[0].work_department }
-      # - "defendant_location_best": ${ other_parties[0].location_best }
-      # - "defendant_locations_other": ${ other_parties[0].locations_other }
-      # - "defendant_best_times_find": ${ other_parties[0].best_times_find }
-      - "defendant_location_information_other": ${ defendant_location_information_other }      
-      - "defendant_vehicle_license_plate": ${ other_parties[0].vehicle_license_plate }
-      - "defendant_vehicle_year": ${ other_parties[0].vehicle_year }
-      - "defendant_vehicle_make": ${ other_parties[0].vehicle_make }
-      - "defendant_vehicle_model": ${ other_parties[0].vehicle_model }
-      - "defendant_vehicle_color": ${ other_parties[0].vehicle_color }
-      - "defendant_police_violence_no": ${ not other_parties[0].police_violence_yes }
-      - "defendant_police_violence_yes": ${ other_parties[0].police_violence_yes }
-      - "defendant_drug_alcohol_no": ${ not other_parties[0].drug_alcohol_yes }
-      - "defendant_drug_alcohol_yes": ${ other_parties[0].drug_alcohol_yes }
-      - "defendant_drug_alcohol_abuse": ${ other_parties[0].drug_alcohol_abuse }
-      - "defendant_gun_license_carry_possess_no": ${ not other_parties[0].gun_license_carry_possess_yes }
-      - "defendant_gun_license_carry_possess_yes": ${ other_parties[0].gun_license_carry_possess_yes }
-      - "defendant_gun_license_carry_possess": ${ defendant_weapons_safe_for_pdf }
-      - "defendant_psychiatric_emotional_problems_no": ${ not other_parties[0].psychiatric_emotional_problems_yes }
-      - "defendant_psychiatric_emotional_problems_yes": ${ other_parties[0].psychiatric_emotional_problems_yes }
-      - "defendant_psychiatric_emotional_problems": ${ other_parties[0].psychiatric_emotional_problems }
-      - "plaintiff_name": ${ users }
-      - defendant_phone : ${other_parties[0].mobile_number}
-      - defendant_email: ${other_parties[0].email}
 
 ---
 code: |
@@ -650,58 +521,19 @@ code: |
     + ". Best times to find: " + other_parties[0].best_times_find \
     + ". Other places to find: " + other_parties[0].locations_other \
     + ". Other information: " + other_parties[0].location_information_other)
-    
 ---
-comment: Addenda related code. 
-code: |  
- addAddendum_defendant = other_parties[0].photo_yes and other_parties[0].photo_yes_can_upload
-  
-  # txtFieldsList_defendant = list()
-  #    
-  #  Limit2 = 25
-  #  sLimit2 = Limit2 - 16   
-  #  need_drug_addendum = len(other_parties[0].drug_alcohol_abuse) > Limit2
-  #  if need_drug_addendum:    
-  #    other_parties[0].drug_alcohol_abuse_cutoff = "(See Addendum.) " + other_parties[0].drug_alcohol_abuse[:sLimit2].replace("\r","") 
-  #    txtFieldsList_defendant.append(
-  #      {'title': 'History of using and/or abusing drugs and/or alcohol',
-  #      'value': [other_parties[0].drug_alcohol_abuse]
-  #      })
-  #  else:
-  #    other_parties[0].drug_alcohol_abuse_cutoff = other_parties[0].drug_alcohol_abuse
-  #    
-  #  Limit3 = 25
-  #  sLimit3 = Limit3 - 16   
-  #  need_psychiatric_addendum = len(other_parties[0].psychiatric_emotional_problems) > Limit3
-  #  if need_psychiatric_addendum:    
-  #    other_parties[0].psychiatric_emotional_problems_cutoff = "(See Addendum.) " + other_parties[0].psychiatric_emotional_problems[:sLimit3].replace("\r","") 
-  #    txtFieldsList_defendant.append(
- #    {'title': 'Mental health problems',
- #    'value': [other_parties[0].psychiatric_emotional_problems]
- #    })
- #else:
- #  other_parties[0].psychiatric_emotional_problems_cutoff = other_parties[0].psychiatric_emotional_problems
-  
-  #Limit4 = 500
-  #sLimit4 = Limit4 - 16   
-  #need_location_addendum = len(defendant_location_information_other) > Limit4
-  #if need_location_addendum:    
-  #  defendant_location_information_other_cutoff = "(See Addendum.) " +  defendant_location_information_other[:sLimit4]  
-  #  txtFieldsList_defendant.append(
-  #    {'title': 'ANY OTHER INFORMATION WHICH MIGHT BE HELFPUL IN LOCATING THE DEFENDANT',
-  #    'value': [defendant_location_information_other]
-  #    })
-  #else:
-  #  defendant_location_information_other_cutoff = defendant_location_information_other
-    
-  #if other_parties[0].photo_yes and other_parties[0].photo_yes_can_upload:
-  #   txtFieldsList_defendant.append(
-  #  {'title': 'Uploaded defendant photo',
-  #  'value': [photo_upload]
-  #   })
-
-  # addAddendum_defendant = bool(txtFieldsList_defendant) or other_parties[0].photo_yes and other_parties[0].photo_yes_can_upload
+objects:
+  - GL209A_defendant_information_attachment: ALDocument.using(filename="Defendant_Information_Form", title="Defendant Information Form", enabled=True, has_addendum=True, default_overflow_message=" [See addendum]")
+---
+depends on:
+  - other_parties[0].photo_yes
+  - other_parties[0].photo_yes_can_upload
+code: |
+  # In theory we could use photo_upload directly, but user could have photo_upload defined but change mind about using it
+  GL209A_defendant_information_attachment.overflow_fields['photo_upload'].overflow_trigger = bool(other_parties[0].photo_yes and other_parties[0].photo_yes_can_upload)
+  GL209A_defendant_information_attachment.overflow_fields['photo_upload'].label = "Photo of Defendant"
+  GL209A_defendant_information_attachment.overflow_fields.gathered = True
 ---
 attachment:
-  - variable name: defendant_addendum
+  - variable name: GL209A_defendant_information_attachment.addendum
     docx template file: 209A_defendant_addendum.docx

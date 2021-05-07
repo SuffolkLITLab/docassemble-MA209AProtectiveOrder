@@ -50,16 +50,6 @@ sections:
 code: |
   al_form_type = "starts_case"
 ---
-continue button field: DEBUG_aldocument
-question: |
-  Debug a form quickly
-subquestion: |
-  Preview:
-  ${ A_Plaintiff_Confidential_Information0011_attachment.as_pdf(key='preview') }
-
-  Final:
-  ${ A_Plaintiff_Confidential_Information0011_attachment.as_pdf(key='final')}
----
 scan for variables: False
 mandatory: True
 code: |
@@ -368,17 +358,40 @@ terms:
 # BEGIN placeholder documents
 # TODO: iteratively switch to ALDocument, use placeholders here for now
 ---
-code: |
-  plaintiff_confidential_final = A_Plaintiff_Confidential_Information0011_attachment.as_pdf(key='final')
+continue button field: DEBUG_aldocument
+question: |
+  Debug a form quickly
+subquestion: |
+  Preview:
+  ${ affidavit_of_care_or_custody_attachment.as_pdf(key='preview') }
 
-  page1_final = complaint_209A_labeled_page10003_attachment.as_pdf(key='final')
-  affidavit_final = complaint_209A_Affidavit_attachment.as_pdf(key='final')
+  Final:
+  ${ affidavit_of_care_or_custody_attachment.as_pdf(key='final')}
 ---
 code: |
-  plaintiff_confidential_preview = A_Plaintiff_Confidential_Information0011_attachment.as_pdf(key='preview')
+  aff_of_care_final = affidavit_of_care_or_custody_attachment.as_pdf(key='final')
+  exhibit_attachment_preview = exhibit_attachment.as_pdf(key='preview')
+  exhibit_attachment_final = exhibit_attachment.as_pdf(key='final')
+  motion_to_impound_final = FAHA8_motion_to_impound_attachment.as_pdf(key='final')
+  defendant_info_final = GL209A_defendant_information_attachment.as_pdf(key='final')
+  child_support_final = FA11_child_support_affidavit_attachment.as_pdf(key='final')
+  page_2_final = GL209A_page2_attachment.as_pdf(key='final')
+  plaintiff_confidential_final = GL209A_plaintiff_confidential_info_attachment.as_pdf(key='final')
 
-  page1_preview = complaint_209A_labeled_page10003_attachment.as_pdf(key='preview')
-  affidavit_preview = complaint_209A_Affidavit_attachment.as_pdf(key='preview')  
+  page1_final = GL209A_page1_attachment.as_pdf(key='final')
+  affidavit_final = GL209A_affidavit_attachment.as_pdf(key='final')
+---
+code: |
+  aff_of_care_preview = affidavit_of_care_or_custody_attachment.as_pdf(key='preview')
+
+  motion_to_impound_preview = FAHA8_motion_to_impound_attachment.as_pdf(key='preview')
+  defendant_info_preview = GL209A_defendant_information_attachment.as_pdf(key='preview')
+  child_support_preview = FA11_child_support_affidavit_attachment.as_pdf(key='preview')
+  page_2_preview = GL209A_page2_attachment.as_pdf(key='preview')
+  plaintiff_confidential_preview = GL209A_plaintiff_confidential_info_attachment.as_pdf(key='preview')
+
+  page1_preview = GL209A_page1_attachment.as_pdf(key='preview')
+  affidavit_preview = GL209A_affidavit_attachment.as_pdf(key='preview')
 ---
 #######################################
 # END placeholder documents
@@ -411,28 +424,18 @@ code: |
   attachment_temp.append( affidavit_final )
   # include page 2 only if there are children
   if plaintiff_has_minor_children: 
-    attachment_temp.append( A_complaint_for_protection_from_abuse_probation_copy0005_attachment )
-    if addAddendum_page2:
-      attachment_temp.append(page2_addendum)
+    attachment_temp.append( page_2_final )
     if defendant_and_plaintiff_are_parents_of_child and len(children_of_both) and have_had_custody_cases :
-      attachment_temp.append(A_affidavit_disclosing_care_or_custody_proceedings0009_attachment)
-      if need_care_custody_addendum:
-        attachment_temp.append(care_or_custody_proceedings_appendix_variable)
+      attachment_temp.append(aff_of_care_final)
     
   if plaintiff_has_minor_children and defendant_and_plaintiff_are_parents_of_child and len(children_of_both) and wants_child_support_yes and not existing_order:
-    attachment_temp.append( Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008_attachment)
-    if addAddendum_chdSupport:
-      attachment_temp.append(chdSupport_addendum)
+    attachment_temp.append( child_support_final)
   attachment_temp.append(plaintiff_confidential_final)
-  attachment_temp.append(defendantinformation209A0008_attachment)
-  if addAddendum_defendant:
-    attachment_temp.append(defendant_addendum)
+  attachment_temp.append(defendant_info_final)
   if asked_for_impoundment:
-    attachment_temp.append(a_258e_motion_for_impoundment0019_attachment)
-    if addAddendum_impound:
-      attachment_temp.append(impound_addendum)  
+    attachment_temp.append(motion_to_impound_final)
   if has_evidence and has_evidence_ready_to_upload and len(exhibits):
-    attachment_temp.append(exhibit_attachment)
+    attachment_temp.append(exhibit_attachment_final)
   final_attachment_bundle = attachment_temp
 ---
 reconsider: True
@@ -444,28 +447,18 @@ code: |
   attachment_preview_temp.append( affidavit_preview )
   # include page 2 only if there are children
   if plaintiff_has_minor_children: 
-    attachment_preview_temp.append( A_complaint_for_protection_from_abuse_probation_copy0005_attachment_preview )
-    if addAddendum_page2:
-      attachment_preview_temp.append(page2_addendum)
+    attachment_preview_temp.append( page_2_preview )
     if defendant_and_plaintiff_are_parents_of_child and len(children_of_both) and have_had_custody_cases:
-      attachment_preview_temp.append(A_affidavit_disclosing_care_or_custody_proceedings0009_attachment_preview)
-      if need_care_custody_addendum:
-        attachment_preview_temp.append(care_or_custody_proceedings_appendix_variable)
+      attachment_preview_temp.append(aff_of_care_preview)
     
   if plaintiff_has_minor_children and defendant_and_plaintiff_are_parents_of_child and len(children_of_both) and not existing_order and wants_child_support_yes:
-    attachment_preview_temp.append( Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008_attachment_preview)
-    if addAddendum_chdSupport:
-      attachment_preview_temp.append(chdSupport_addendum)
+    attachment_preview_temp.append( child_support_preview)
   attachment_preview_temp.append(plaintiff_confidential_preview)
-  attachment_preview_temp.append(defendantinformation209A0008_attachment_preview)
-  if addAddendum_defendant:
-    attachment_preview_temp.append(defendant_addendum)
+  attachment_preview_temp.append(defendant_info_preview)
   if asked_for_impoundment:
-    attachment_preview_temp.append(a_258e_motion_for_impoundment0019_attachment_preview)
-    if addAddendum_impound:
-      attachment_preview_temp.append(impound_addendum) 
+    attachment_preview_temp.append(motion_to_impound_preview)
   if has_evidence and has_evidence_ready_to_upload and len(exhibits):
-    attachment_preview_temp.append(exhibit_attachment)
+    attachment_preview_temp.append(exhibit_attachment_preview)
   final_attachment_preview = attachment_preview_temp
 ---
 depends on: 

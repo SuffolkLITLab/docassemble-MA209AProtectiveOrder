@@ -899,21 +899,21 @@ code: |
   affidavit_intro = "\n The preceding statement is a brief summary of the events and does not attempt to capture all the detail of the abuse. "
 ---
 objects:
-  - complaint_209A_Affidavit_attachment: ALDocument.using(filename='209A_affidavit',
-                                                          title="209A Affidavit", 
-                                                          enabled=True,
-                                                          has_addendum=True,
-                                                          default_overflow_message=" [See addendum]"
-                                                          )
+  - GL209A_affidavit_attachment: ALDocument.using(filename='209A_affidavit',
+                                                  title="209A Affidavit", 
+                                                  enabled=True,
+                                                  has_addendum=True,
+                                                  default_overflow_message=" [See addendum]"
+                                                  )
 ---
 code: |
-  complaint_209A_Affidavit_attachment.overflow_fields['affidavit_body_final'].overflow_trigger = 4480 # Line width is about 120 chars of lorem ipsum
-  complaint_209A_Affidavit_attachment.overflow_fields['affidavit_body_final'].line_width = 120
-  complaint_209A_Affidavit_attachment.overflow_fields.gathered = True
+  GL209A_affidavit_attachment.overflow_fields['affidavit_body_final'].overflow_trigger = 4480 # Line width is about 120 chars of lorem ipsum
+  GL209A_affidavit_attachment.overflow_fields['affidavit_body_final'].line_width = 120
+  GL209A_affidavit_attachment.overflow_fields.gathered = True
 ---
 need: complaint_209A_Affidavit
 attachment:
-    variable name: complaint_209A_Affidavit_attachment[i]
+    variable name: GL209A_affidavit_attachment[i]
     name: 209A Complaint Affidavit
     # skip undefined: True
     editable: False # This is important for rendering in Firefox
@@ -923,9 +923,9 @@ attachment:
     fields: 
       - "signature_date": ${ signature_date }
       - "plaintiff_signature": ${ users[0].signature_if_final(i) }
-      - "has_addendum": ${ complaint_209A_Affidavit_attachment.has_overflow() }
-      - "incident_date": ${ incident_date }            
-      - "affidavit_body": ${ complaint_209A_Affidavit_attachment.safe_value('affidavit_body_final') }
+      - "has_addendum": ${ GL209A_affidavit_attachment.has_overflow() }
+      - "incident_date": ${ incident_date }
+      - "affidavit_body": ${ GL209A_affidavit_attachment.safe_value('affidavit_body_final') }
 ---
 code: |
   # List the informal part of the date first. I think this is more logical
@@ -938,5 +938,5 @@ code: |
   affidavit_body_final = affidavit_body + affidavit_intro
 ---
 attachment:
-  - variable name: complaint_209A_Affidavit_attachment.addendum
+  - variable name: GL209A_affidavit_attachment.addendum
     docx template file: 209A_affidavit_addendum.docx

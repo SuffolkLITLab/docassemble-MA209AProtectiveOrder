@@ -906,7 +906,6 @@ code: |
   # plaintiff_assistant_name
   other_parties[0].gender_male
   other_parties[0].gender_female
-  defendant_weapons_safe_for_pdf
   defendant_and_plaintiff_relationship_not_married_but_are_related
   defendant_relationship_to_plaintiff_is
   defendant_is_major
@@ -933,7 +932,7 @@ code: |
       showifdef('case.docket_number') for case in other_cases])
 ---
 objects:
-  - complaint_209A_labeled_page10003_attachment: ALDocument.using(filename="CRA_Motion_to_Dismiss", title="Motion to Dismiss CRA", enabled=True, has_addendum=True, default_overflow_message=" [See addendum]")
+  - GL209A_page1_attachment: ALDocument.using(filename="CRA_Motion_to_Dismiss", title="Motion to Dismiss CRA", enabled=True, has_addendum=True, default_overflow_message=" [See addendum]")
 ---
 depends on:
   - defendant_has_guns
@@ -942,18 +941,18 @@ code: |
   defendant_weapons = comma_list(defendant_has_guns.true_values()) + space('defendant_weapons_description', prefix=' - ')
 ---
 code: |
-  complaint_209A_labeled_page10003_attachment.overflow_fields['defendant_weapons'].overflow_trigger = 40
-  complaint_209A_labeled_page10003_attachment.overflow_fields['defendant_weapons'].label = "Guns owned by defendant (continued)"
-  complaint_209A_labeled_page10003_attachment.overflow_fields['other_cases'].overflow_trigger = 1
-  complaint_209A_labeled_page10003_attachment.overflow_fields['other_cases'].label = "Other cases involving the Defendant"
-  complaint_209A_labeled_page10003_attachment.overflow_fields.gathered = True
+  GL209A_page1_attachment.overflow_fields['defendant_weapons'].overflow_trigger = 40
+  GL209A_page1_attachment.overflow_fields['defendant_weapons'].label = "Guns owned by defendant (continued)"
+  GL209A_page1_attachment.overflow_fields['other_cases'].overflow_trigger = 1
+  GL209A_page1_attachment.overflow_fields['other_cases'].label = "Other cases involving the Defendant"
+  GL209A_page1_attachment.overflow_fields.gathered = True
 ---
 need: 
   - complaint_209A_labeled_page10003
   - defendant_weapons
   - other_cases
 attachment:
-    variable name: complaint_209A_labeled_page10003_attachment[i]
+    variable name: GL209A_page1_attachment[i]
     skip undefined: True
     editable: False
     name: 209A Complaint Page 1
@@ -971,7 +970,7 @@ attachment:
       - "superior_court": ${ trial_court.department == "Superior Court" }
       - "court_name_short": ${ trial_court.division }
       - "defendant_alias": ${ other_parties[0].name_other if defendant_has_alias else '' }
-      - "defendant_weapons_description": ${ defendant_weapons_safe_for_pdf  }
+      - "defendant_weapons_description": ${ GL209A_page1_attachment.safe_value('defendant_weapons')  }
       - "defendant_gender_male": ${ other_parties[0].gender_male }
       - "defendant_gender_female": ${ other_parties[0].gender_female }
       - "plaintiff_is_major_yes": ${ plaintiff_is_major_yes }
@@ -1016,5 +1015,5 @@ attachment:
       - plaintiff_and_defendant_other_case_description: ${plaintiff_and_defendant_other_case_description if not complaint_209A_labeled_page10003_attachment.overflow_fields['other_cases'].overflow_value() else other_cases.item(0).court_name + ' ' + other_cases.item(0).type_of_case + ' ' + other_cases.item(0).date  + ' ' + other_cases.item(0).docket_number }
 ---
 attachment:
-  - variable name: complaint_209A_labeled_page10003_attachment.addendum
+  - variable name: GL209A_page1_attachment.addendum
     docx template file: 209A_page1_addendum.docx
