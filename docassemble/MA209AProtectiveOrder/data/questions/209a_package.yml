@@ -61,32 +61,33 @@ code: |
   nav.set_section('section_basic')  
   who_protecting_screener # We don't use this yet?  
   users[0].name.first
+  plaintiff_assistant_type_obo
   # if who_protecting_screener == "someone else":
   #  plaintiff_assistant_relationship_to_plaintiff
   # plaintiff_is_major_yes # Ask for age
-  if plaintiff_is_major_yes: # Plaintiff over 18
-    plaintiff_is_major_no = False
-    # plaintiff_assistant_name = DAEmpty()
-    plaintiff_assistant_type = DAEmpty()   
-  else: # if not over 18
-    plaintiff_is_major_no = True
-    # place holder until plaintiff_assistant_relationship_to_plaintiff is removed
-    plaintiff_assistant_relationship_to_plaintiff = plaintiff_assistant_type
-    if who_protecting_screener == 'someone else':
-      if plaintiff_assistant_type == 'advocate':
-        advocate_filing_obo
-      elif plaintiff_assistant_type not in ('parent', 'guardian'):
-        refer_to_advocate
-      else:
-        dcf_warning_given
-    else: # not protecting someone else
-      if plaintiff_assistant_type == 'self':
-        refer_to_advocate
-      else:
-        plaintiff_assistant_relationship_to_plaintiff = plaintiff_assistant_type
-        plaintiff_assistant_type_name
-        plaintiff_assistant_name
-        dcf_warning_given
+  #if plaintiff_is_major_yes: # Plaintiff over 18
+  #  plaintiff_is_major_no = False
+  #  # plaintiff_assistant_name = DAEmpty()
+  #  plaintiff_assistant_type = DAEmpty()   
+  #else: # if not over 18
+  #  plaintiff_is_major_no = True
+  #  # place holder until plaintiff_assistant_relationship_to_plaintiff is removed
+  #  # plaintiff_assistant_relationship_to_plaintiff = plaintiff_assistant_type
+  #  if who_protecting_screener == 'someone else':
+  #    if plaintiff_assistant_type == 'advocate':
+  #      advocate_filing_obo
+  if plaintiff_assistant_type in('self', 'other'):
+    refer_to_advocate
+  elif plaintiff_assistant_type in('parent', 'guardian', 'advocate'):
+    dcf_warning_given
+  #  else: # not protecting someone else
+  #    if plaintiff_assistant_type == 'self':
+  #      refer_to_advocate
+  #    else:
+  #      # plaintiff_assistant_relationship_to_plaintiff = plaintiff_assistant_type
+  #      plaintiff_assistant_type_name
+  #      plaintiff_assistant_name
+  #      dcf_warning_given
 
   if who_protecting_screener == 'someone else':
     tell_user_about_first_person_questions   
@@ -247,11 +248,23 @@ fields:
 ---
 id: explain first person questions
 question: |
-  You are helping ${users.familiar()} fill out this form
+  % if plaintiff_assistant_type_obo:   
+  Because you are helping ${plaintiff_assistant_name} fill out this form for ${users.familiar()}
+  % else:
+  Because you are helping ${users.familiar()} fill out this form
+  % endif
 subquestion: |
+  % if plaintiff_assistant_type_obo:
+  Answer the rest of the questions as if you are ${users.familiar()}.
+  
+  **Except for the questions about the affidavit.**
+  
+  The affidavit should be in ${plaintiff_assistant_name}'s words. 
+  % else:
   Answer the rest of the questions as if you are ${users.familiar()}. 
   
   Some answers need to be in ${users.familiar()}'s own words.
+  % endif
 field: tell_user_about_first_person_questions  
 ---
 id: preview form

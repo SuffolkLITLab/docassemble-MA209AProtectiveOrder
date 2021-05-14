@@ -276,6 +276,17 @@ fields:
     js show if: |
       val('advocate_filing_obo') == 'parent' || val('advocate_filing_obo') == 'guardian'      
 ---
+code: |
+  if plaintiff_is_major_yes:
+    plaintiff_assistant_type =''
+    plaintiff_assistant_type_obo = False
+    advocate_filing_obo = ''
+  else:
+   if plaintiff_assistant_type == 'advocate' and advocate_filing_obo in ('parent', 'guardian'):
+     plaintiff_assistant_type_obo = True
+   else:
+     plaintiff_assistant_type_obo = False
+---
 # code: |
 #  if plaintiff_is_major_no:
 #    if not plaintiff_assistant_relationships_to_plaintiff == 'other':
@@ -1071,11 +1082,11 @@ attachment:
       - "defendant_gender_male": ${ other_parties[0].gender_male }
       - "defendant_gender_female": ${ other_parties[0].gender_female }
       - "plaintiff_is_major_yes": ${ plaintiff_is_major_yes }
-      - "plaintiff_is_major_no": ${ plaintiff_is_major_no }
+      - "plaintiff_is_major_no": ${ not plaintiff_is_major_yes }
       - "defendant_and_plaintiff_relationship_married_to_each_other": ${ relationship_to_defendant_married['now'] }
       - "defendant_and_plaintiff_relationship_formerly_married_to_each_other": ${ relationship_to_defendant_married['past'] }
-      - "plaintiff_assistant_name": ${ plaintiff_assistant_name if plaintiff_is_major_no else '' }
-      - "plaintiff_assistant_relationship_to_plaintiff": ${ plaintiff_assistant_relationship_to_plaintiff }
+      - "plaintiff_assistant_name": ${ plaintiff_assistant_name if plaintiff_assistant_type_obo else '' }
+      - "plaintiff_assistant_relationship_to_plaintiff": ${ advocate_filing_obo if plaintiff_assistant_type_obo else plaintiff_assistant_type }
       - "defendant_and_plaintiff_relationship_not_married_but_are_related": ${ defendant_and_plaintiff_relationship_not_married_but_are_related }
       - "defendant_relationship_to_plaintiff_is": ${ defendant_relationship_to_plaintiff_is }
       - "defendant_is_major": ${ defendant_is_major }
@@ -1145,11 +1156,11 @@ attachment:
       - "defendant_gender_male": ${ other_parties[0].gender_male }
       - "defendant_gender_female": ${ other_parties[0].gender_female }
       - "plaintiff_is_major_yes": ${ plaintiff_is_major_yes }
-      - "plaintiff_is_major_no": ${ plaintiff_is_major_no }
+      - "plaintiff_is_major_no": ${ not plaintiff_is_major_no }
       - "defendant_and_plaintiff_relationship_married_to_each_other": ${ relationship_to_defendant_married['now'] }
       - "defendant_and_plaintiff_relationship_formerly_married_to_each_other": ${ relationship_to_defendant_married['past'] }
-      - "plaintiff_assistant_name": ${ plaintiff_assistant_name if plaintiff_is_major_no else '' }
-      - "plaintiff_assistant_relationship_to_plaintiff": ${ plaintiff_assistant_relationship_to_plaintiff }
+      - "plaintiff_assistant_name": ${ plaintiff_assistant_name if plaintiff_assistant_type_obo else '' }
+      - "plaintiff_assistant_relationship_to_plaintiff": ${ advocate_filing_obo if plaintiff_assistant_type_obo else plaintiff_assistant_type }
       - "defendant_and_plaintiff_relationship_not_married_but_are_related": ${ defendant_and_plaintiff_relationship_not_married_but_are_related }
       - "defendant_relationship_to_plaintiff_is": ${ defendant_relationship_to_plaintiff_is }
       - "defendant_is_major": ${ defendant_is_major }
