@@ -224,11 +224,6 @@ fields:
   - 'My name is': plaintiff_assistant_name
     maxlength: 30  
 ---
-# code: |
-#  if plaintiff_is_major_no:
-#    if not plaintiff_assistant_relationships_to_plaintiff == 'other':
-#      plaintiff_assistant_relationship_to_plaintiff = plaintiff_assistant_relationships_to_plaintiff
----
 id: defendant alias
 question: |
   Has ${other_parties.familiar()} ever used another name?
@@ -828,35 +823,19 @@ code: |
 ---
 comment: |
   interview_order
+# TODO: this should not depend on `scan for variables: False`
+# REFACTOR to remove all of the assignment happening here
 scan for variables: False
 sets: complaint_209A_labeled_page10003
 id: complaint_209A_labeled_page10003
 code: |
-  # allowed_courts = interview_metadata['complaint_209A_labeled_page10003']['allowed courts']
-  # preferred_court = interview_metadata['complaint_209A_labeled_page10003']['preferred court']
-  # al_intro_screen 
-  # user_saw_what_to_expect
-  # users[0].name.first
-  # plaintiff_is_major_yes # Ask for age
-  # other_parties[0].name.first
-
-  # defendant_has_alias # We ask this towards end
-
-  # if plaintiff_is_major_yes == True:
-  #  plaintiff_is_major_no = False
-  #  plaintiff_assistant_name = DAEmpty()
-  # else:
-  #  plaintiff_is_major_no = True
-  #  dcf_warning_given
-  #  if user_is_minor_plaintiff:
-  #    refer_to_advocate
-  #  plaintiff_assistant_name
 
   # plaintiff defendant relationship
   user_saw_relationship
   defendant_and_plaintiff_are_parents_of_child
   related_by_household
   related_as_couple 
+  relationship_to_defendant_married['past']
   if relationship_to_defendant_married['past']:
     defendant_and_plaintiff_relationship_not_married_but_are_related = True
     if defendant_and_plaintiff_are_parents_of_child:
@@ -899,6 +878,9 @@ code: |
 
   complaint_209A_labeled_page10003 = True
 ---
+comment: |
+  Defines   
+---
 code: |
   # Trigger computed values from page 1
   # We need this to let skip undefined work. and in its own block
@@ -932,7 +914,7 @@ code: |
       showifdef('case.docket_number') for case in other_cases])
 ---
 objects:
-  - GL209A_page1_attachment: ALDocument.using(filename="CRA_Motion_to_Dismiss", title="Motion to Dismiss CRA", enabled=True, has_addendum=True, default_overflow_message=" [See addendum]")
+  - GL209A_page1_attachment: ALDocument.using(filename="209A_page_1", title="209A Petition for Protection Order (Page 1)", enabled=True, has_addendum=True, default_overflow_message=" [See addendum]")
 ---
 depends on:
   - defendant_has_guns
@@ -974,10 +956,10 @@ attachment:
       - "defendant_gender_male": ${ other_parties[0].gender_male }
       - "defendant_gender_female": ${ other_parties[0].gender_female }
       - "plaintiff_is_major_yes": ${ plaintiff_is_major_yes }
-      - "plaintiff_is_major_no": ${ plaintiff_is_major_no }
+      - "plaintiff_is_major_no": ${ not plaintiff_is_major_yes }
       - "defendant_and_plaintiff_relationship_married_to_each_other": ${ relationship_to_defendant_married['now'] }
       - "defendant_and_plaintiff_relationship_formerly_married_to_each_other": ${ relationship_to_defendant_married['past'] }
-      - "plaintiff_assistant_name": ${ plaintiff_assistant_name if plaintiff_is_major_no else '' }
+      - "plaintiff_assistant_name": ${ plaintiff_assistant_name if not plaintiff_is_major_yes else '' }
       - "plaintiff_assistant_relationship_to_plaintiff": ${ plaintiff_assistant_relationship_to_plaintiff }
       - "defendant_and_plaintiff_relationship_not_married_but_are_related": ${ defendant_and_plaintiff_relationship_not_married_but_are_related }
       - "defendant_relationship_to_plaintiff_is": ${ defendant_relationship_to_plaintiff_is }
@@ -1012,7 +994,15 @@ attachment:
       - "order_other_relief_yes": ${ order_other_relief_yes }
       - "other_relief_description": ${ other_relief.replace("\r","").replace("\n","") if order_other_relief_yes  else '' }
       - "order_relief_ex_parte": ${ order_relief_ex_parte }
-      - plaintiff_and_defendant_other_case_description: ${plaintiff_and_defendant_other_case_description if not complaint_209A_labeled_page10003_attachment.overflow_fields['other_cases'].overflow_value() else other_cases.item(0).court_name + ' ' + other_cases.item(0).type_of_case + ' ' + other_cases.item(0).date  + ' ' + other_cases.item(0).docket_number }
+      - plaintiff_and_defendant_other_case_description: |
+          % if not GL209A_page1_attachment.overflow_fields['other_cases'].overflow_value():        
+          ${ plaintiff_and_defendant_other_case_description }
+          % else:
+          ${ other_cases.item(0).court_name }
+          ${ other_cases.item(0).type_of_case }
+          ${ other_cases.item(0).date }
+          ${ other_cases.item(0).docket_number }
+          % endif
 ---
 reconsider: True
 attachment:

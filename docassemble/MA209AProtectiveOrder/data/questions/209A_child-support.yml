@@ -387,9 +387,6 @@ code: |
 ---
 objects:
   - FA11_child_support_affidavit_attachment: ALDocument.using(filename="child_support_affidavit", title="Plaintiff's Child Support Affidavit", has_addendum=True, default_overflow_message="[See addendum]")
----    
-code: |
-  FA11_child_support_affidavit_attachment.enabled = plaintiff_has_minor_children and defendant_and_plaintiff_are_parents_of_child and len(children_of_both) and wants_child_support_yes and not existing_order
 ---
 code: |
   FA11_child_support_affidavit_attachment.overflow_fields['all_support_children'].overflow_trigger = 4

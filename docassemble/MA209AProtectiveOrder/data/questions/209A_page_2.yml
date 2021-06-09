@@ -3,42 +3,17 @@ reconsider: True
 code: |
   children_of_both = children.filter(defendant_is_parent = True)
 ---
+
+---
 id: A_complaint_for_protection_from_abuse_probation_copy0005
 scan for variables: False
 sets: A_complaint_for_protection_from_abuse_probation_copy0005
 code: |
-  #######
   # Implementation of https://docs.google.com/document/d/1o-7280WLN8U64ofjxb5m6JFycKvpmnGryvVmflmZv2I/edit?pli=1
-  #######
-
-  # TODO:
-  # Add ways to attach addenda for:
-  # 1. Children want custody of table
-  # 1. Children want no contact order for table
-  # 1. Reasons want no contact paragraph
-  # 1. School names/address paragraph
-  # check text vertical alignment of pdf fields
-  # TODOs in rest of the document
-
-  interview_id = "A_complaint_for_protection_from_abuse_probation_copy0005"
-
-  # al_intro_screen 
-  # A_complaint_for_protection_from_abuse_probation_copy0005_intro  # Need a way to skip intro to every form?
 
   #######
   # Custom logic start
   #######
-
-  # Placeholder for now
-  # defendant_and_plaintiff_are_parents_of_child = True
-
-  # TODO: snippet contender
-  # if not plaintiff_has_children_parent_of:
-  #  children.target_number = 0
-  # if not plaintiff_has_children_cares_for:
-  #  children_cares_for.target_number = 0
-  # children.target_number
-  # children_cares_for.target_number
 
   children.gather()  # .name.first completes the person
   for child in children:
@@ -51,9 +26,6 @@ code: |
   for child in children + children_cares_for:
     if not defendant_and_plaintiff_are_parents_of_child:
       child.defendant_is_parent = False
-
-  # Works in DA  
-  # all_children = children + children_cares_for
   
   # Should ask for custody and other things if child of both
   children_of_both
@@ -65,7 +37,7 @@ code: |
     for custody_child in wants_custody_of:
       custody_child.seeking_custody = True
   else:
-    wants_custody_of = PeopleList("wants_custody_of", gathered=True, auto_gather=False)
+    wants_custody_of = ALPeopleList("wants_custody_of", gathered=True, auto_gather=False)
   wants_no_contact_for
   if request_no_contact:
     reasons_for_no_contact
@@ -121,40 +93,18 @@ code: |
   
   normalize_vars_for_attachment # MB's code to set variables empty
 
-  #########
-  # End custom logic basically
-  #########
-  # user_signature_date = signature_date
-  # # Pre-canned preview screen
-  # A_complaint_for_protection_from_abuse_probation_copy0005_preview_question
-  # basic_questions_signature_flow
-  # users[0].signature
-
   A_complaint_for_protection_from_abuse_probation_copy0005 = True
 ---
 id: ensure_attachment_values
 code: |
 
-  # TODO QS: This may be worth refactoring later--a lot of code
-  # here that has an unclear purpose.
-  # May make more sense to move into attachment block.
+  # TODO: this is almost all mooted by the `skip undefined: True` feature
+  # which came out after 
 
-  # NOTE: showifdef() is a DA form-filling function
-  
-  # Vars these attachments need
-  # children = all_children
-  
-  # This should just happen right in the attachment
-  # Doesn't make sense to assign to a temporary var
-  # True for most of this block
   requests_custody_yes = len(children_of_both) > 0 and requests_custody and len(wants_custody_of.elements) > 0
   
   keep_away_from_schools_daycares = schools_to_stay_away_from.there_are_any
 
-  # permit_visitation_yes = wants_visitation_orders and no_visitation_restrictions
-  # prohibit_visitation_pdf = showifdef('prohibit_visitation', False)
-  # prohibit_visitation_yes = prohibit_visitation_pdf
-  
   wants_center_pdf = showifdef('wants_center', False)
   wants_visitation_center_yes = wants_center_pdf
   visitation_center_name_pdf = showifdef('visitation_center_name', '')
@@ -182,35 +132,19 @@ code: |
   other_order_description = other_order_pdf
 
   # Trigger computed values
-  # reasons_no_contact
   if request_no_contact:
     reasons_for_no_contact
-  # addAddendum_page2
-
-  # wants_child_support_yes = len(wants_child_support_for) > 0
-  
-  # Vars other interviews need
-  # majors_needing_support  # is list
-
-  # Placeholders (to be answered in a previous interview).
-  # TODO: remove when stitching
-  # have_had_custody_cases_yes = have_had_custody_cases
-  # have_had_custody_cases_no = not have_had_custody_cases
-  # have_had_paternity_cases_yes = have_had_paternity_cases
-  # have_had_paternity_cases_no = not have_had_paternity_cases
-  # Important in question display logic in this form
-  # defendant_and_plaintiff_are_parents_of_child = True
 
   normalize_vars_for_attachment = True
 ---
 id: custom_objects
 objects:
-  - children: PeopleList.using(ask_number=True)
-  - children_cares_for: PeopleList.using(ask_number=True)
-  - wants_custody_of: PeopleList
-  - wants_no_contact_for: PeopleList
+  - children: ALPeopleList.using(ask_number=True)
+  - children_cares_for: ALPeopleList.using(ask_number=True)
+  - wants_custody_of: ALPeopleList
+  - wants_no_contact_for: ALPeopleList
   - schools_to_stay_away_from: DAList.using(object_type=ALIndividual)
-  - majors_needing_support: PeopleList
+  - majors_needing_support: ALPeopleList
 ---
 comment: |
   This screen is used to introduce your interview. Please customize.
@@ -447,7 +381,7 @@ fields:
     minlength: 1
 validation code: |
   if not requests_custody:
-    wants_custody_of = PeopleList(gathered=True, auto_gather=False)
+    wants_custody_of = ALPeopleList(gathered=True, auto_gather=False)
 ---
 id: no_contact_children
 question: |
@@ -466,7 +400,7 @@ fields:
     none of the above: False
 validation code: |
   if not request_no_contact:
-    wants_no_contact_for = PeopleList(gathered=True,auto_gather=False)
+    wants_no_contact_for = ALPeopleList(gathered=True,auto_gather=False)
 ---
 id: reasons_no_contact
 question: |
@@ -787,10 +721,7 @@ subquestion: |
 yesno: ask_had_paternity_case
 ---
 objects:
-  - GL209A_page2_attachment: ALDocument.using(filename="209A_page2", title="209A Petition - Page 2", has_addendum=True, default_overflow_message=" [See addendum]")
----
-code: |
-  GL209A_page2_attachment.enabled = plaintiff_has_minor_children
+  - GL209A_page2_attachment: ALDocument.using(filename="209A_page2", title="209A Petition (Page 2)", has_addendum=True, default_overflow_message=" [See addendum]")
 ---
 code: |
   GL209A_page2_attachment.overflow_fields['wants_custody_of'].overflow_trigger = 6

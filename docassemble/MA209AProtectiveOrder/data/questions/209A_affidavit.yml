@@ -29,34 +29,6 @@ objects:
 features:
   question help button: True
 ---
-
-id: isolated_test_download
-event: affidavit_download
-comment: |
-  Hopefully this screen will be unnecessary when merged in to parent
-# mandatory: True
-question: |
-  Download your 209A Affidavit 
-buttons:
-  - Exit: exit
-  - Restart: restart
-attachment code: complaint_209A_Affidavit_attachment
----
-variable name: interview_metadata['complaint_209A_Affidavit']['built_in_fields_used']
-data:
-  - variable: user_name_full
-  - variable: defendant
-  - variable: signature_date
-  - variable: user_signature
----
-variable name: interview_metadata['complaint_209A_Affidavit']['field_list']
-data:
-  - variable: affidavit_body
-    field_type: text
-  - variable: incident_date
-    field_type: text
-    maxlength: 25
----
 id: complaint_209A_Affidavit
 code: |
   al_intro_screen 
@@ -160,60 +132,6 @@ terms:
   - true to the best of your knowledge: |
       Something is true "to the best of your knowledge" if you were there and saw, heard, or felt it.  
       Something is true to the best of your knowledge if you have good reason to believe it is true.
----
-
-comment: |
-  Hopefully this screen will also go away if/when it is merged with other parts of 209A
-continue button field: complaint_209A_Affidavit_preview_question
-question: |
-  Preview of your 209A Affidavit
-subquestion: |
-  Here is a preview of the form you'll sign on the next page. 
-  
-   ${complaint_209A_Affidavit_attachment_preview}
----
-# comment: |
-#  (KG) Included because we want the name of the defendant. 
-#  Should be included from another interview later
-# question: |
-#  The Defendant
-# subquestion: |
-#  Tell me about the Defendant.
-# fields:
-#  - 'Defendant Name': defendant
----
-# code: |
-#   incidents_of_abuse[i].year
-#   incidents_of_abuse[i].time_of_day
-#   incidents_of_abuse[i].location
-#   # incidents_of_abuse[i].abuse
-#   incidents_of_abuse[i].description
-  
-#   if not incidents_of_abuse[i].police_included:
-#     if not incidents_of_abuse[i].police_involved:
-#       if incidents_of_abuse[i].police_why_not:
-#         incidents_of_abuse[i].description = incidents_of_abuse[i].police_description
-#     else:
-#       if incidents_of_abuse[i].add_police:
-#         incidents_of_abuse[i].description = incidents_of_abuse[i].police_description
-
-#   if plaintiff_has_minor_children:
-#   #  if incidents_of_abuse[i].injuries_self_child:	
-#     incidents_of_abuse[i].injuries_describe	
-#     if incidents_of_abuse[i].injuries_edit:	
-#       incidents_of_abuse[i].description = incidents_of_abuse[i].injuries_description
-#   else:
-#     if not incidents_of_abuse[i].injuries:
-#       if incidents_of_abuse[i].injuries_edit:
-#         incidents_of_abuse[i].description = incidents_of_abuse[i].injuries_description
-    
-#   if incidents_of_abuse[i].medical_add:
-#     incidents_of_abuse[i].description = incidents_of_abuse[i].medical_treatment
-    
-#   incidents_of_abuse[i].feelings
-#   incidents_of_abuse[i].summary
-  
-#   incidents_of_abuse[i].complete = True
 ---
 code: |
   incidents_of_abuse[i].description

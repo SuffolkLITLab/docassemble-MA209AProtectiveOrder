@@ -265,7 +265,7 @@ help: |
   and email confidential, so that only court staff can see this information. 
 ---
 objects:
-  - GL209A_plaintiff_confidential_info: ALDocument.using(filename="Plaintiff_Confidential_Information", title="Confidential Information Form", enabled=True, has_addendum=True, default_overflow_message=" [See addendum]")
+  - GL209A_plaintiff_confidential_info_attachment: ALDocument.using(filename="Plaintiff_Confidential_Information", title="Confidential Information Form", has_addendum=True, enabled=True, default_overflow_message=" [See addendum]")
 ---
 code: |
   GL209A_plaintiff_confidential_info_attachment.overflow_fields['other_addresses'].overflow_trigger = 0

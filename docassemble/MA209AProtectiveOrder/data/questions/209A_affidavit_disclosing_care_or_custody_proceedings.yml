@@ -5,11 +5,10 @@ modules:
 objects:
   - other_care_custody_proceedings: OtherProceedingList
   - signing_attorney: ALIndividual
-  # - children: PeopleList.using(complete_attribute='child_complete')
-  - others_in_proceedings: PeopleList.using(auto_gather=False)
-  - attorneys_for_children: PeopleList.using(auto_gather=False)
-  - attorneys_for_children[i].represented_children: PeopleList
-  - attorneys_for_parents: PeopleList.using(auto_gather=False)
+  - others_in_proceedings: ALPeopleList.using(auto_gather=False)
+  - attorneys_for_children: ALPeopleList.using(auto_gather=False)
+  - attorneys_for_children[i].represented_children: ALPeopleList
+  - attorneys_for_parents: ALPeopleList.using(auto_gather=False)
 ---
 id: interview_order_A_affidavit_disclosing_care_or_custody_proceedings0009
 code: |
@@ -686,8 +685,8 @@ subquestion: |
 yesno: other_care_custody_proceedings[i].other_parties.there_is_another
 ---
 # TODO: this way of uniquely gathering the parties is not the best
-# approach. May be smarter to make a method on PeopleList
-# or make a new class that subclasses PeopleList with a
+# approach. May be smarter to make a method on ALPeopleList
+# or make a new class that subclasses ALPeopleList with a
 # unique_people method.
 # Also need to re-think the "child_letters" being an attribute
 # of the person, rather than collecting the unique child letters
@@ -939,11 +938,16 @@ code: |
   need_past_address_appendix = need_past_address_appendix_temp
 ---
 code: |
+  other_care_custody_proceedings[i].put_on_appendix = False
+---
+code: |
   need_other_parties_appendix_temp = False
   for proceeding in other_care_custody_proceedings:
     if len(proceeding.other_parties) > 3:
       need_other_parties_appendix_temp = True
       proceeding.put_on_appendix = True
+    else:
+      proceeding.put_on_appendix = False
   need_other_parties_appendix = need_other_parties_appendix_temp
 ---
 code: |
