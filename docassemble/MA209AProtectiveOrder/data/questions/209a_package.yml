@@ -61,25 +61,14 @@ code: |
   nav.set_section('section_basic')  
   who_protecting_screener # We don't use this yet?  
   users[0].name.first
-  if who_protecting_screener == "someone else":
-    plaintiff_assistant_relationship_to_plaintiff
-  # plaintiff_is_major_yes # Ask for age
-  if plaintiff_is_major_yes: # Plaintiff over 18
-    plaintiff_assistant_relationship_to_plaintiff = DAEmpty()   
-  else: # if not over 18
-    if who_protecting_screener == 'someone else':
-      if plaintiff_assistant_relationship_to_plaintiff not in ('parent', 'guardian','advocate'):
-        refer_to_advocate
-      else:
-        dcf_warning_given
-    else: # not protecting someone else
-      if plaintiff_assistant_type == 'self':
-        refer_to_advocate
-      else:
-        plaintiff_assistant_relationship_to_plaintiff = plaintiff_assistant_type
-        plaintiff_assistant_type_name
-        plaintiff_assistant_name
-        dcf_warning_given
+  plaintiff_assistant_type_obo
+  if plaintiff_assistant_type in('self', 'other'):
+    refer_to_advocate
+  elif plaintiff_assistant_type in('parent', 'guardian'):
+    plaintiff_assistant_name
+    dcf_warning_given
+  elif plaintiff_assistant_type == 'advocate':
+    dcf_warning_given
 
   if who_protecting_screener == 'someone else':
     tell_user_about_first_person_questions   
@@ -229,11 +218,23 @@ fields:
 ---
 id: explain first person questions
 question: |
-  You are helping ${users.familiar()} fill out this form
+  % if plaintiff_assistant_type_obo:   
+  Because you are helping ${plaintiff_assistant_name} fill out this form for ${users.familiar()}
+  % else:
+  Because you are helping ${users.familiar()} fill out this form
+  % endif
 subquestion: |
+  % if plaintiff_assistant_type_obo:
+  Answer the rest of the questions as if you are ${users.familiar()}.
+  
+  **Except for the questions about the affidavit.**
+  
+  The affidavit should be in ${plaintiff_assistant_name}'s words. 
+  % else:
   Answer the rest of the questions as if you are ${users.familiar()}. 
   
   Some answers need to be in ${users.familiar()}'s own words.
+  % endif
 field: tell_user_about_first_person_questions  
 ---
 id: preview form
@@ -321,7 +322,15 @@ id: Signing under oath
 question: |
   Signing under oath 
 subquestion: |
-  When you sign your name you are declaring, "{under penalty of perjury}” that what you put in your affidavit is {true to the best of your knowledge}.
+
+  % if plaintiff_assistant_type in ('parent', 'guardian'):
+  ${ users.familiar() }, since you are under 18 your ${ plaintiff_assistant_type} must sign and file this complaint for you. You will need them to read and answer this question:
+  % endif
+  % if plaintiff_assistant_type in ('parent', 'guardian') or plaintiff_assistant_type_obo: 
+  ${ plaintiff_assistant_name }, since you are filing **for** ${ users.familiar() }, you must sign for ${ users.familiar() }.
+  % endif
+
+  When you sign your name you are declaring, "{under penalty of perjury}" that what you put in your affidavit is {true to the best of your knowledge}.
   
   Do you swear under penalty of perjury that all your answers to the questions in this interview are true, to the best of your knowledge?
 fields:

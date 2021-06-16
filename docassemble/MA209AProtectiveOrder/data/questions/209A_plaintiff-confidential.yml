@@ -230,10 +230,19 @@ id: contact information
 question: |
   Contact information
 subquestion: |
-  Put at least one way for the court to reach you below.
-
-  You will have a chance to request this contact information
-  to be kept private later.
+  % if plaintiff_assistant_type in ('parent', 'guardian'):
+  ${ users.familiar() }, since you are under 18 the court needs to be able to contact your ${ plaintiff_assistant_type}
+  Give the court least one way to reach them.
+  % elif plaintiff_assistant_type_obo: 
+  ${ plaintiff_assistant_name }, since you are filing **for** ${ users.familiar() }, enter the best way for the court to contact **you**. 
+  Give the court least one way to reach you.
+  % else:
+  Give the court least one way to reach you.
+  % endif
+  
+  Later, you will get a chance to ask the court to keep this contact information
+  private.
+  
 fields:
   - Mobile number: users[0].mobile_number
     maxlength: 14
@@ -314,14 +323,22 @@ comment: |
   This question is used to introduce your interview. Please customize
 continue button field: A_Plaintiff_Confidential_Information0011_intro # SMEs to provide splash page language.
 question: |
+  % if plaintiff_assistant_type in ('parent', 'guardian') or plaintiff_assistant_type_obo:
+  Keeping information about you safe
+  % else:
   Getting and staying in touch with you
+  % endif
 subquestion: |
   The next questions ask for your home, work, school, email address and phone numbers. 
   
-  The court needs this information to:
   
+  % if plaintiff_assistant_type in ('parent', 'guardian') or plaintiff_assistant_type_obo:
+  The court needs this information to make an order that will help keep you as safe as possible.
+  % else:
+  The court needs this information to:
   * contact you about your case, and
   * make an order that will help keep you as safe as possible.
+  % endif
   
   ${other_parties.familiar()}, ${other_parties.familiar()}’s lawyer, and the public are not allowed to see this information about you.
   
