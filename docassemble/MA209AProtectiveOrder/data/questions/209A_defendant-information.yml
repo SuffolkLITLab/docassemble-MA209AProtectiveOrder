@@ -426,7 +426,7 @@ attachment:
       - "defendant_psychiatric_emotional_problems_no": ${ not other_parties[0].psychiatric_emotional_problems_yes }
       - "defendant_psychiatric_emotional_problems_yes": ${ other_parties[0].psychiatric_emotional_problems_yes }
       - "defendant_psychiatric_emotional_problems": ${ other_parties[0].psychiatric_emotional_problems }
-      - "plaintiff_name": ${ users }
+      - "plaintiff_name": ${plaintiff_assistant_name + ' obo ' + str(users) if plaintiff_assistant_type in ('parent', 'guardian') or plaintiff_assistant_type_obo else str(users) }
       - defendant_phone : ${other_parties[0].mobile_number}
       - defendant_email: ${other_parties[0].email}
 ---
@@ -639,7 +639,7 @@ attachment:
       - "defendant_psychiatric_emotional_problems_no": ${ not other_parties[0].psychiatric_emotional_problems_yes }
       - "defendant_psychiatric_emotional_problems_yes": ${ other_parties[0].psychiatric_emotional_problems_yes }
       - "defendant_psychiatric_emotional_problems": ${ other_parties[0].psychiatric_emotional_problems }
-      - "plaintiff_name": ${ users }
+      - "plaintiff_name": ${plaintiff_assistant_name + ' obo ' + str(users) if plaintiff_assistant_type in ('parent', 'guardian') or plaintiff_assistant_type_obo else str(users) }
       - defendant_phone : ${other_parties[0].mobile_number}
       - defendant_email: ${other_parties[0].email}
 

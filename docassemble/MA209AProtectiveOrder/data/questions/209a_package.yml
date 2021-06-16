@@ -230,6 +230,28 @@ code: |
   final_attachment_collection.finished
   download_screen
 ---
+id: persons signature
+generic object: Individual
+question: |
+  Sign the 209A Application
+subquestion: |
+  % if plaintiff_assistant_type in ('parent', 'guardian') or plaintiff_assistant_type_obo:
+  ${plaintiff_assistant_name}, just sign your name below. 
+  
+  The form will show you are signing for ${users.familiar()}.
+  % else:
+  ${users}, sign below.
+  % endif
+signature: x.signature
+under: |
+  % if plaintiff_assistant_type in ('parent', 'guardian') or plaintiff_assistant_type_obo:
+  ${plaintiff_assistant_name} obo ${users[0]}
+  % else:
+  ${users[0]}
+  % endif
+progress: 99 
+
+---
 id: dev hud etc
 code: |
   # For info at the top of the screen on dev and test servers
