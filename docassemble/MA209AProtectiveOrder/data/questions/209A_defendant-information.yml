@@ -143,9 +143,7 @@ fields:
       - Small: Small
       - Medium: Medium
       - Large: Large
-      - Lanky: Lanky
-      - Stocky: Stocky
-      - Husky: Husky
+      - Athletic: Athletic
       - Muscular: Muscular
       - Fat: Fat
       - Thin: Thin
@@ -450,20 +448,17 @@ subquestion: |
 ---
 id: interview_order_defendantinformation209A0008
 code: |
-  # This is a placeholder to control logic flow in this interview
-  # It was generated from interview_generator.py as an 'interview order' type question.
   al_intro_screen 
   defendantinformation209A0008_intro
-  # Set the preferred/allowed courts for this interview
-  # preferred_court = interview_metadata["defendantinformation209A0008"]["preferred court"]
-  # allowed_courts = interview_metadata["defendantinformation209A0008"]["allowed courts"]
-  # other_parties[0].name_other
   if other_parties[0].understands_english:
     other_parties[0].language_other = ''
   other_parties[0].photo_yes
   other_parties[0].race
   other_parties[0].eye_color # Needed if in the skip_sections code
-  other_parties[0].age
+  if dont_know_birthdate:
+    other_parties[0].age
+  else:
+    other_parties[0].birthdate
   other_parties[0].height
   other_parties[0].photo_yes
 
