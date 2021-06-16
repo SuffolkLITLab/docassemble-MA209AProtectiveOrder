@@ -21,6 +21,7 @@ metadata:
 modules:
   - docassemble.ALToolbox.misc
   - docassemble.ALToolbox.ThreePartsDate # Not strictly necessary as long it's installed somewhere on the server
+  # - .ma_209A may not be needed
 ---
 features:
   navigation: True
@@ -46,11 +47,12 @@ sections:
   - section_signature: Signing
   - download_screen: Download
 ---
+code: |
+  al_form_type = "starts_case"
+---
 scan for variables: False
 mandatory: True
 code: |
-  package_version_number  # Ensure the package version number is defined so available for show_id.js
-
   set_interview_defaults # Set some things that are true on any 209A
   
   ##################### Intro screen
@@ -59,28 +61,14 @@ code: |
   nav.set_section('section_basic')  
   who_protecting_screener # We don't use this yet?  
   users[0].name.first
-  if who_protecting_screener == "someone else":
-    plaintiff_assistant_relationship_to_plaintiff
-  # plaintiff_is_major_yes # Ask for age
-  if plaintiff_is_major_yes: # Plaintiff over 18
-    plaintiff_is_major_no = False
-    # plaintiff_assistant_name = DAEmpty()
-    plaintiff_assistant_relationship_to_plaintiff = DAEmpty()   
-  else: # if not over 18
-    plaintiff_is_major_no = True
-    if who_protecting_screener == 'someone else':
-      if plaintiff_assistant_relationship_to_plaintiff not in ('parent', 'guardian','advocate'):
-        refer_to_advocate
-      else:
-        dcf_warning_given
-    else: # not protecting someone else
-      if plaintiff_assistant_type == 'self':
-        refer_to_advocate
-      else:
-        plaintiff_assistant_relationship_to_plaintiff = plaintiff_assistant_type
-        plaintiff_assistant_type_name
-        plaintiff_assistant_name
-        dcf_warning_given
+  plaintiff_assistant_type_obo
+  if plaintiff_assistant_type in('self', 'other'):
+    refer_to_advocate
+  elif plaintiff_assistant_type in('parent', 'guardian'):
+    plaintiff_assistant_name
+    dcf_warning_given
+  elif plaintiff_assistant_type == 'advocate':
+    dcf_warning_given
 
   if who_protecting_screener == 'someone else':
     tell_user_about_first_person_questions   
@@ -189,7 +177,6 @@ code: |
   # Other cases involving P/D but not about the children
   nav.set_section('section_cases_with_defendant')
   other_cases.gather()
-  cases_other_safe_for_pdf
   plaintiff_and_defendant_other_case_description
 
   nav.set_section('section_court')
@@ -215,9 +202,7 @@ code: |
   basic_questions_signature_flow
   users[0].signature
   
-  final_attachment_bundle
   nav.set_section('section_filing')
-  final_attachment_collection.finished
   download_screen
 ---
 sets:
@@ -233,11 +218,23 @@ fields:
 ---
 id: explain first person questions
 question: |
-  You are helping ${users.familiar()} fill out this form
+  % if plaintiff_assistant_type_obo:   
+  Because you are helping ${plaintiff_assistant_name} fill out this form for ${users.familiar()}
+  % else:
+  Because you are helping ${users.familiar()} fill out this form
+  % endif
 subquestion: |
+  % if plaintiff_assistant_type_obo:
+  Answer the rest of the questions as if you are ${users.familiar()}.
+  
+  **Except for the questions about the affidavit.**
+  
+  The affidavit should be in ${plaintiff_assistant_name}'s words. 
+  % else:
   Answer the rest of the questions as if you are ${users.familiar()}. 
   
   Some answers need to be in ${users.familiar()}'s own words.
+  % endif
 field: tell_user_about_first_person_questions  
 ---
 id: preview form
@@ -250,7 +247,7 @@ subquestion: |
   Remember to come back to this screen to sign and download
   your final set of forms.
 
-  ${pdf_concatenate(final_attachment_preview, filename="209a_preview.pdf")}
+  ${ al_court_bundle.as_pdf(key='preview') }
 
   Tap ${word("Next")} when you are ready to sign.
 field: preview_209a_package
@@ -260,8 +257,6 @@ code: |
   after_hours = ((current_datetime() > current_datetime().replace(hour=16,minute=30)) or (current_datetime() < current_datetime().replace(hour=8,minute=30)) )
   court_closed_today = (today().dow > 5)
 ---
-reconsider:
-  - final_attachment_bundle
 id: download
 question: |
   Your forms are ready to download and file
@@ -269,7 +264,7 @@ subquestion: |
   1. Look over the forms below.
   1. If they look correct, download them or email them to yourself.
   1. You still need to deliver them to the ${trial_court}, when you are ready.
-  4. Call the ${trial_court}'s clerk: <a href="tel:${trial_court.phone}">${trial_court.phone}</a> to find out how they want you to send your forms to them.
+  4. Call the ${trial_court}'s clerk: ${tel(trial_court.phone) } to find out how they want you to send your forms to them.
   % if court_closed_today:
   4. The court is closed today. If you need help to file these forms now, call your local police station.
   % elif after_hours:
@@ -278,9 +273,11 @@ subquestion: |
   6. Your hearing will probably be over the phone or Zoom video conference.  
      The address of your court, if you need it, is: ${trial_court.address.on_one_line()}.  
 
-  ${pdf_concatenate(final_attachment_bundle, filename="209a_petition.pdf")} 
+  ${ al_user_bundle.as_pdf() }
+
+  ${ al_user_bundle.send_button_html() }
+
 event: download_screen  
-attachment code: final_attachment_collection
 ---
 comment: |
   ${action_button_html(url_action('review_all_sections'), icon='edit', label=word("Make changes"))}
@@ -325,7 +322,15 @@ id: Signing under oath
 question: |
   Signing under oath 
 subquestion: |
-  When you sign your name you are declaring, "{under penalty of perjury}” that what you put in your affidavit is {true to the best of your knowledge}.
+
+  % if plaintiff_assistant_type in ('parent', 'guardian'):
+  ${ users.familiar() }, since you are under 18 your ${ plaintiff_assistant_type} must sign and file this complaint for you. You will need them to read and answer this question:
+  % endif
+  % if plaintiff_assistant_type in ('parent', 'guardian') or plaintiff_assistant_type_obo: 
+  ${ plaintiff_assistant_name }, since you are filing **for** ${ users.familiar() }, you must sign for ${ users.familiar() }.
+  % endif
+
+  When you sign your name you are declaring, "{under penalty of perjury}" that what you put in your affidavit is {true to the best of your knowledge}.
   
   Do you swear under penalty of perjury that all your answers to the questions in this interview are true, to the best of your knowledge?
 fields:
@@ -348,102 +353,6 @@ terms:
   - true to the best of your knowledge: |
       Something is true "to the best of your knowledge" if you were there and saw, heard, or felt it.  
       Something is true to the best of your knowledge if you have good reason to believe it is true.
----
-reconsider: True
-code: |
-  attachment_temp = []  
-  # Build the 209A package. Up to 8 total forms
-  # Page 1: complaint_209A_labeled_page10003_attachment
-  #     page1_addendum
-  # Complaint Affidavit: complaint_209A_Affidavit_attachment
-  #     affidavit_addendum, triggered by addAddendum_affidavit
-  # Page 2: A_complaint_for_protection_from_abuse_probation_copy0005_attachment
-  #     page2_addendum, triggered by addAddendum_page2
-  # Child support: Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008_attachment
-  # Affidavit care/custody: A_affidavit_disclosing_care_or_custody_proceedings0009_attachment 
-  #     care_or_custody_proceedings_appendix_variable, triggered by need_care_custody_addendum
-  # Plaintiff info: A_Plaintiff_Confidential_Information0011_attachment
-  #     confidential_info_addendum
-  # Defendant info: defendantinformation209A0008_attachment
-  #    defendant_addendum
-  # motion to impound: a_258e_motion_for_impoundment0019_attachment
-  #    impound_addendum
-  
-  # always include cover page for user
-  attachment_temp.append(next_steps)
-  # Always include page 1 
-  attachment_temp.append(complaint_209A_labeled_page10003_attachment)
-  if need_page1_addendum:
-    attachment_temp.append(page1_addendum)
-  attachment_temp.append( complaint_209A_Affidavit_attachment )
-  if addAddendum_affidavit:
-    attachment_temp.append(affidavit_addendum)
-  # include page 2 only if there are children
-  if plaintiff_has_minor_children: 
-    attachment_temp.append( A_complaint_for_protection_from_abuse_probation_copy0005_attachment )
-    if addAddendum_page2:
-      attachment_temp.append(page2_addendum)
-    if defendant_and_plaintiff_are_parents_of_child and len(children_of_both) and have_had_custody_cases :
-      attachment_temp.append(A_affidavit_disclosing_care_or_custody_proceedings0009_attachment)
-      if need_care_custody_addendum:
-        attachment_temp.append(care_or_custody_proceedings_appendix_variable)
-    
-  if plaintiff_has_minor_children and defendant_and_plaintiff_are_parents_of_child and len(children_of_both) and wants_child_support_yes and not existing_order:
-    attachment_temp.append( Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008_attachment)
-    if addAddendum_chdSupport:
-      attachment_temp.append(chdSupport_addendum)
-  attachment_temp.append(A_Plaintiff_Confidential_Information0011_attachment)
-  if addAddendum_confidential:
-    attachment_temp.append(confidential_info_addendum)
-  attachment_temp.append(defendantinformation209A0008_attachment)
-  if addAddendum_defendant:
-    attachment_temp.append(defendant_addendum)
-  if asked_for_impoundment:
-    attachment_temp.append(a_258e_motion_for_impoundment0019_attachment)
-    if addAddendum_impound:
-      attachment_temp.append(impound_addendum)  
-  if has_evidence and has_evidence_ready_to_upload and len(exhibits):
-    attachment_temp.append(exhibit_attachment)
-  final_attachment_bundle = attachment_temp
----
-reconsider: True
-code: |
-  # PREVIEW version of the attachment
-  attachment_preview_temp = []  
-  # Always include page 1 
-  attachment_preview_temp.append(complaint_209A_labeled_page10003_attachment_preview)
-  if need_page1_addendum:
-    attachment_preview_temp.append(page1_addendum)
-  attachment_preview_temp.append( complaint_209A_Affidavit_attachment_preview )
-  if addAddendum_affidavit:
-    attachment_preview_temp.append(affidavit_addendum)
-  # include page 2 only if there are children
-  if plaintiff_has_minor_children: 
-    attachment_preview_temp.append( A_complaint_for_protection_from_abuse_probation_copy0005_attachment_preview )
-    if addAddendum_page2:
-      attachment_preview_temp.append(page2_addendum)
-    if defendant_and_plaintiff_are_parents_of_child and len(children_of_both) and have_had_custody_cases:
-      attachment_preview_temp.append(A_affidavit_disclosing_care_or_custody_proceedings0009_attachment_preview)
-      if need_care_custody_addendum:
-        attachment_preview_temp.append(care_or_custody_proceedings_appendix_variable)
-    
-  if plaintiff_has_minor_children and defendant_and_plaintiff_are_parents_of_child and len(children_of_both) and not existing_order and wants_child_support_yes:
-    attachment_preview_temp.append( Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008_attachment_preview)
-    if addAddendum_chdSupport:
-      attachment_preview_temp.append(chdSupport_addendum)
-  attachment_preview_temp.append(A_Plaintiff_Confidential_Information0011_attachment_preview)
-  if addAddendum_confidential:
-    attachment_preview_temp.append(confidential_info_addendum)
-  attachment_preview_temp.append(defendantinformation209A0008_attachment_preview)
-  if addAddendum_defendant:
-    attachment_preview_temp.append(defendant_addendum)
-  if asked_for_impoundment:
-    attachment_preview_temp.append(a_258e_motion_for_impoundment0019_attachment_preview)
-    if addAddendum_impound:
-      attachment_preview_temp.append(impound_addendum) 
-  if has_evidence and has_evidence_ready_to_upload and len(exhibits):
-    attachment_preview_temp.append(exhibit_attachment)
-  final_attachment_preview = attachment_preview_temp
 ---
 depends on: 
   - abuser_caused_plaintiff_to_leave_home
@@ -659,19 +568,52 @@ right: |
   % endif    
 ---
 objects:
-  - final_attachment_collection: DAFileCollection
+  - next_steps: ALDocument.using(title="Next Steps",
+                                 filename="next_steps",
+                                 has_addendum=False,
+                                 enabled=True)  
 ---
-code: |
-  final_attachment_collection.pdf = pdf_concatenate(final_attachment_bundle)
-  final_attachment_collection.info = {'name': '209A (Abuse Prevention Order/Restraining Order) Application', 
-                      'filename': '209a_restraining_order_application',
-                      'description': '',
-                      'file': {'pdf': final_attachment_collection.pdf.number},
-                      'mimetype': {'pdf': final_attachment_collection.pdf.mimetype}
-                      }
-  final_attachment_collection.finished = True
----
-reconsider: True
 attachment: 
   docx template file: 209A_next_steps_for_user.docx
-  variable name: next_steps
+  variable name: next_steps[i]
+
+---
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[
+      next_steps,
+      GL209A_page1_attachment,
+      GL209A_affidavit_attachment,
+      GL209A_page2_attachment,
+      FA11_child_support_affidavit_attachment,
+      affidavit_of_care_or_custody_attachment,
+      GL209A_plaintiff_confidential_info_attachment,
+      GL209A_defendant_information_attachment,
+      FAHA8_motion_to_impound_attachment,
+      exhibit_attachment,
+      ], title="Your 209A Petition", filename="209A_petition_bundle.pdf")
+  - al_court_bundle: ALDocumentBundle.using(elements=[
+      GL209A_page1_attachment,
+      GL209A_affidavit_attachment,
+      GL209A_page2_attachment,
+      FA11_child_support_affidavit_attachment,
+      affidavit_of_care_or_custody_attachment,
+      GL209A_plaintiff_confidential_info_attachment,
+      GL209A_defendant_information_attachment,
+      FAHA8_motion_to_impound_attachment,
+      exhibit_attachment,
+      ], title="Your 209A Petition", filename="209A_petition_bundle.pdf")
+---
+code: |
+  GL209A_page2_attachment.enabled = plaintiff_has_minor_children
+---
+code: |
+  affidavit_of_care_or_custody_attachment.enabled = defendant_and_plaintiff_are_parents_of_child and len(children_of_both) and have_had_custody_cases
+---
+code: |
+  FA11_child_support_affidavit_attachment.enabled = plaintiff_has_minor_children and defendant_and_plaintiff_are_parents_of_child and len(children_of_both) and not existing_order and wants_child_support_yes
+---
+code: |
+  FAHA8_motion_to_impound_attachment.enabled = asked_for_impoundment
+---
+code: |
+  exhibit_attachment.enabled = has_evidence and has_evidence_ready_to_upload and len(exhibits)

@@ -405,7 +405,7 @@ comment: |
     minlength: 1
   validation code: |
     if not requests_custody:
-      wants_custody_of = PeopleList(gathered=True, auto_gather=False)
+      wants_custody_of = ALPeopleList(gathered=True, auto_gather=False)
 ---
 # Wants no contact for - can set request_no_contact
 comment: |
@@ -422,7 +422,7 @@ comment: |
     none of the above: False
   validation code: |
     if not request_no_contact:
-      wants_no_contact_for = PeopleList(gathered=True,auto_gather=False)
+      wants_no_contact_for = ALPeopleList(gathered=True,auto_gather=False)
 ---
 id: daycares
 sets: set_daycares

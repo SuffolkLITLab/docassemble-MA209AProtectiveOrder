@@ -5,11 +5,10 @@ modules:
 objects:
   - other_care_custody_proceedings: OtherProceedingList
   - signing_attorney: ALIndividual
-  # - children: PeopleList.using(complete_attribute='child_complete')
-  - others_in_proceedings: PeopleList.using(auto_gather=False)
-  - attorneys_for_children: PeopleList.using(auto_gather=False)
-  - attorneys_for_children[i].represented_children: PeopleList
-  - attorneys_for_parents: PeopleList.using(auto_gather=False)
+  - others_in_proceedings: ALPeopleList.using(auto_gather=False)
+  - attorneys_for_children: ALPeopleList.using(auto_gather=False)
+  - attorneys_for_children[i].represented_children: ALPeopleList
+  - attorneys_for_parents: ALPeopleList.using(auto_gather=False)
 ---
 id: interview_order_A_affidavit_disclosing_care_or_custody_proceedings0009
 code: |
@@ -686,8 +685,8 @@ subquestion: |
 yesno: other_care_custody_proceedings[i].other_parties.there_is_another
 ---
 # TODO: this way of uniquely gathering the parties is not the best
-# approach. May be smarter to make a method on PeopleList
-# or make a new class that subclasses PeopleList with a
+# approach. May be smarter to make a method on ALPeopleList
+# or make a new class that subclasses ALPeopleList with a
 # unique_people method.
 # Also need to re-think the "child_letters" being an attribute
 # of the person, rather than collecting the unique child letters
@@ -939,19 +938,7 @@ code: |
   need_past_address_appendix = need_past_address_appendix_temp
 ---
 code: |
-  need_attorneys_for_children_addendum = len(attorneys_for_children) > 3
----
-code: |
-  need_attorneys_for_parents_addendum = len(attorneys_for_parents) > 3
----
-code: |
-  need_gals_investigators_addendum = len(gals_investigators) > 3
----
-code: |
-  need_children_appendix_temp = False 
-  if len(children_of_both) > 3:
-    need_children_appendix_temp = True
-  need_children_appendix = need_children_appendix_temp
+  other_care_custody_proceedings[i].put_on_appendix = False
 ---
 code: |
   need_other_parties_appendix_temp = False
@@ -959,6 +946,8 @@ code: |
     if len(proceeding.other_parties) > 3:
       need_other_parties_appendix_temp = True
       proceeding.put_on_appendix = True
+    else:
+      proceeding.put_on_appendix = False
   need_other_parties_appendix = need_other_parties_appendix_temp
 ---
 code: |
@@ -980,30 +969,39 @@ code: |
   
   removed_other_people_duplicates = True
 ---
-progress: 100
-# mandatory: True
-question: |
-  Placeholder download screen
-subquestion: |
-  Placeholder
-  
-  ### Next steps
-  
-  1. Step 1
-  1. Step 2
-  
-  Below is a preview of your form.
-  
-  ${A_affidavit_disclosing_care_or_custody_proceedings0009_attachment }
-  % if (need_children_appendix or need_other_parties_appendix or need_past_address_appendix):
-  ${care_or_custody_proceedings_appendix_variable }
-  % endif
-attachment code: A_affidavit_disclosing_care_or_custody_proceedings0009_attachment
+objects:
+  - affidavit_of_care_or_custody_attachment: ALDocument.using(filename="care_or_custody",
+                                                        title="Affidavit of Care or Custody",
+                                                        has_addendum=True)
+---
+code: |
+  affidavit_of_care_or_custody_attachment.overflow_fields['children_of_both'].overflow_trigger = 3
+  affidavit_of_care_or_custody_attachment.overflow_fields['children_of_both'].label = "Children (continued)"
+
+  affidavit_of_care_or_custody_attachment.overflow_fields['children_of_both.item(0).previous_addresses'].overflow_trigger = 2
+  affidavit_of_care_or_custody_attachment.overflow_fields['children_of_both.item(1).previous_addresses'].overflow_trigger = 2
+  affidavit_of_care_or_custody_attachment.overflow_fields['children_of_both.item(2).previous_addresses'].overflow_trigger = 2
+
+  affidavit_of_care_or_custody_attachment.overflow_fields['other_care_custody_proceedings'].overflow_trigger = 3
+  affidavit_of_care_or_custody_attachment.overflow_fields['other_care_custody_proceedings.item(0).other_parties'].overflow_trigger = 3
+  affidavit_of_care_or_custody_attachment.overflow_fields['other_care_custody_proceedings.item(1).other_parties'].overflow_trigger = 3
+  affidavit_of_care_or_custody_attachment.overflow_fields['other_care_custody_proceedings.item(2).other_parties'].overflow_trigger = 3
+
+  affidavit_of_care_or_custody_attachment.overflow_fields['gals_investigators'].overflow_trigger = 3
+  affidavit_of_care_or_custody_attachment.overflow_fields['gals_investigators'].label = "Guardians Ad Litem and Investigators (continued)"
+
+  affidavit_of_care_or_custody_attachment.overflow_fields['attorneys_for_parents'].overflow_trigger = 3
+  affidavit_of_care_or_custody_attachment.overflow_fields['attorneys_for_parents'].label = "Attorneys for parents (continued)"
+
+  affidavit_of_care_or_custody_attachment.overflow_fields['attorneys_for_children'].overflow_trigger = 3
+  affidavit_of_care_or_custody_attachment.overflow_fields['attorneys_for_children'].label = "Attorneys for children (continued)"
+
+  affidavit_of_care_or_custody_attachment.overflow_fields.gathered = True
 ---
 need: need_other_parties_appendix
 reconsider: True
 attachment:
-  variable name: care_or_custody_proceedings_appendix_variable
+  variable name: affidavit_of_care_or_custody_attachment.addendum
   name: Affidavit Disclosing Care or Custody Proceedings Appendix
   filename: Affidavit_Disclosing_Care_or_Custody_Appendix
   docx template file: care_or_custody_proceedings_appendix.docx
@@ -1011,7 +1009,7 @@ attachment:
 need: A_affidavit_disclosing_care_or_custody_proceedings0009
 reconsider: True
 attachment:
-    variable name: A_affidavit_disclosing_care_or_custody_proceedings0009_attachment
+    variable name: affidavit_of_care_or_custody_attachment[i]
     # skip undefined: True
     name: Affidavit of Care
     filename: Affidavit_of_Care
@@ -1094,7 +1092,7 @@ attachment:
       - "attorneys_for_parents_1": ${ str(attorneys_for_parents.item(0)) + ' (' + str(attorneys_for_parents.item(0).represented_party) + ')' if defined('attorneys_for_parents[0]') else ''}
       - "attorneys_for_parents_2": ${ str(attorneys_for_parents.item(1)) +  ' (' + str(attorneys_for_parents.item(1).represented_party) + ')' if defined('attorneys_for_parents[1]') else ''}
       - "attorneys_for_parents_3": ${ str(attorneys_for_parents.item(2)) + ' (' + str(attorneys_for_parents.item(2).represented_party) + ')' if defined('attorneys_for_parents[2]') else ''}
-      - "user_signature": ${ users[0].signature }
+      - "user_signature": ${ users[0].signature_if_final(i) }
 ---
 id: care or custody intro
 comment: |
@@ -1108,106 +1106,6 @@ subquestion: |
   The main purpose of this form is to find out about any open or closed cases 
   related to the care and/or custody of your children. This helps the court get a 
   better picture of your childrens’ situations.
----
-continue button field: A_affidavit_disclosing_care_or_custody_proceedings0009_preview_question
-question: |
-  Placeholder preview screen
-subquestion: |
-  Here is a preview of the form you'll sign on the next page. 
-     ${A_affidavit_disclosing_care_or_custody_proceedings0009_attachment_preview}
-  % if need_care_custody_addendum:
-  ${care_or_custody_proceedings_appendix_variable }
-  % endif
----
-code: |
-  need_care_custody_addendum = need_children_appendix or need_other_parties_appendix or need_past_address_appendix or need_attorneys_for_children_addendum or need_attorneys_for_parents_addendum or need_gals_investigators_addendum
----
-reconsider: True
-attachment:
-    variable name: A_affidavit_disclosing_care_or_custody_proceedings0009_attachment_preview
-    name: Affidavit of Care
-    filename: Affidavit_of_Care
-    # skip undefined: True
-    # editable: False    
-    pdf template file: 209A_affidavit_disclosing_care_or_custody_proceedings.pdf
-    decimal places: 2    
-    fields: 
-      - "docket_number": ${ docket_numbers[0] }
-      - "user_name_full": ${ str(users[0]) }
-      - "child1_address_on_one_line": ${ children_of_both.item(0).address.on_one_line(include_unit=True) if not confidential_address else ''}
-      - "child2_address_on_one_line": ${ children_of_both.item(1).address.on_one_line(include_unit=True)  if not confidential_address else ''}
-      - "child3_address_on_one_line": ${ children_of_both.item(2).address.on_one_line(include_unit=True)  if not confidential_address else ''}
-      - "user_address_on_one_line": ${ users[0].address.on_one_line(include_unit=True)  if not confidential_address else ''}
-      - "user_name_full__1": ${ str(users[0]) }
-      - "child1_address_street": ${ children_of_both.item(0).address.line_one() }
-      - "child1_address_city_state_zip": ${ children_of_both.item(0).address.line_two() }
-      - "child2_address_street": ${ children_of_both.item(1).address.line_one() }
-      - "child2_address_city_state_zip": ${ children_of_both.item(1).address.line_two() }
-      - "child3_address_street": ${ children_of_both.item(2).address.line_one() }
-      - "child3_address_city_state_zip": ${ children_of_both.item(2).address.line_two() }
-      - "user_address_on_one_line__2": ${ users[0].address.on_one_line(include_unit=True) }
-      - "case_name": ${ case_name }
-      - "court_division_bmc": ${ showifdef('trial_court.division_bmc') }
-      - "court_division_district_court": ${ showifdef('trial_court.division_district_court') }
-      - "court_division_juvenile_court": ${ showifdef('trial_court.division_juvenile_court') }
-      - "court_division_family_court": ${ showifdef('trial_court.division_family_court') }
-      - "court_division_superior_court": ${ showifdef('trial_court.division_superior_court') }
-      - "child1_name_last_first": ${ children_of_both.item(0).name.lastfirst() }
-      - "child2_name_last_first": ${ children_of_both.item(1).name.lastfirst() }
-      - "child3_name_last_first": ${ children_of_both.item(2).name.lastfirst() }
-      - "confidential_address": ${ confidential_address }
-      - "child1_past_addresses_on_one_line": ${ children_of_both.item(0).previous_addresses if not confidential_address else '' } 
-      - "child2_past_addresses_on_one_line": ${ children_of_both.item(1).previous_addresses if not confidential_address else '' }
-      - "child3_past_addresses_on_one_line": ${ children_of_both.item(2).previous_addresses if not confidential_address else '' }
-      - "has_participated_custody_case": ${ has_participated_custody_case }
-      - "has_not_participated_custody_case": ${ not has_participated_custody_case }
-      - "know_of_other_custody_case": ${ know_of_other_custody_case }
-      - "do_not_know_of_other_custody_case": ${ not know_of_other_custody_case }
-      - "other_case_1_user_role": ${other_care_custody_proceedings.item(0).role() }
-      - "other_case_1_letters": ${ other_care_custody_proceedings.item(0).child_letters() }
-      - "other_case_1_court": ${ other_care_custody_proceedings.item(0).court_name }
-      - "other_case_1_docket": ${ other_care_custody_proceedings.item(0).docket_number }
-      - "other_case_1_status": ${ other_care_custody_proceedings.item(0).status() }
-      - "other_case_2_user_role": ${ other_care_custody_proceedings.item(1).role() }
-      - "other_case_2_letters": ${ other_care_custody_proceedings.item(1).child_letters() }
-      - "other_case_2_court": ${ other_care_custody_proceedings.item(1).court_name }
-      - "other_case_2_docket": ${ other_care_custody_proceedings.item(1).docket_number }
-      - "other_case_2_status": ${ other_care_custody_proceedings.item(1).status() }
-      - "other_case_3_user_role": ${ other_care_custody_proceedings.item(2).role() }
-      - "other_case_3_letters": ${ other_care_custody_proceedings.item(2).child_letters()}
-      - "other_case_3_court": ${ other_care_custody_proceedings.item(2).court_name }
-      - "other_case_3_docket": ${ other_care_custody_proceedings.item(2).docket_number }
-      - "other_case_3_status": ${ other_care_custody_proceedings.item(2).status() }
-      - "other_case_other_parties_1_letters": ${ filter_letters(others_in_proceedings.item(0).child_letters) }
-      - "other_case_other_parties_1_names": ${ others_in_proceedings.item(0) }
-      - "other_case_other_parties_1_address_on_one_line": ${ others_in_proceedings.item(0).address.on_one_line(include_unit=True) }
-      - "other_case_other_parties_2_letters": ${ filter_letters(others_in_proceedings.item(1).child_letters) }
-      - "other_case_other_parties_2_names": ${ others_in_proceedings.item(1) }
-      - "other_case_other_parties_2_address_on_one_line": ${ others_in_proceedings.item(1).address.on_one_line(include_unit=True) }
-      - "other_case_other_parties_3_names": ${ others_in_proceedings.item(2) }
-      - "other_case_other_parties_3_address_on_one_line": ${ others_in_proceedings.item(2).address.on_one_line(include_unit=True) }
-      - "other_case_other_parties_3_letters": ${ filter_letters(others_in_proceedings.item(2).child_letters) }
-      - "impound_affidavit": ${ impound_affidavit }
-      - "day": ${ day }
-      - "month": ${ month }
-      - "year": ${ year }
-      - "attorney_for_juvenile_address_on_one_line": ${ signing_attorney.address.on_one_line(include_unit=True) if needs_attorney_signature else '' }
-      - "child1_past_addresses_1": ${ children_of_both.item(0).previous_addresses.item(0).on_one_line() if confidential_address else '' }
-      - "child1_past_addresses_2": ${ children_of_both.item(0).previous_addresses.item(1).on_one_line() if confidential_address else '' }
-      - "child2_past_addresses_1": ${ children_of_both.item(1).previous_addresses.item(0).on_one_line() if confidential_address else '' }
-      - "child2_past_addresses_2": ${ children_of_both.item(1).previous_addresses.item(1).on_one_line() if confidential_address else '' }
-      - "child3_past_addresses_1": ${ children_of_both.item(2).previous_addresses.item(0).on_one_line() if confidential_address else '' }
-      - "child3_past_addresses_2": ${ children_of_both.item(2).previous_addresses.item(1).on_one_line() if confidential_address else '' }
-      - "attorney_for_children_1": ${ str(attorneys_for_children.item(0)) +  ' (' + str(attorneys_for_children.item(0).represented_children) + ')' if defined('attorneys_for_children[0]') else ''}
-      - "attorney_for_children_2": ${ str(attorneys_for_children.item(1)) +  ' (' + str(attorneys_for_children.item(1).represented_children) + ')' if defined('attorneys_for_children[1]') else ''}
-      - "attorney_for_children_3": ${ str(attorneys_for_children.item(2)) +  ' (' + str(attorneys_for_children.item(2).represented_children) + ')' if defined('attorneys_for_children[2]') else ''}
-      - "gals_investigators_1": ${ gals_investigators.item(0).status()}
-      - "gals_investigators_2": ${ gals_investigators.item(1).status()}
-      - "gals_investigators_3": ${ gals_investigators.item(2).status()}
-      - "attorneys_for_parents_1": ${ str(attorneys_for_parents.item(0)) + ' (' + str(attorneys_for_parents.item(0).represented_party) + ')' if defined('attorneys_for_parents[0]') else ''}
-      - "attorneys_for_parents_2": ${ str(attorneys_for_parents.item(1)) +  ' (' + str(attorneys_for_parents.item(1).represented_party) + ')' if defined('attorneys_for_parents[1]') else ''}
-      - "attorneys_for_parents_3": ${ str(attorneys_for_parents.item(2)) + ' (' + str(attorneys_for_parents.item(2).represented_party) + ')' if defined('attorneys_for_parents[2]') else ''}
-
 ---
 code: |
   # Trigger computed values

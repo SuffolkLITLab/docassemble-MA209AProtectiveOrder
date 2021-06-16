@@ -119,58 +119,31 @@ fields:
       variable: impound_information_ex_parte
       is: False
 ---
-progress: 100
-event: download_impoundment
-#mandatory: True
-question: |
-  Placeholder download screen
-subquestion: |
-  Placeholder
-
-  ### Next steps
-
-  1. Step 1
-  1. Step 2
-
-  Below is a preview of your form.
-
-  ${a_258e_motion_for_impoundment0019_attachment }
-attachment code: a_258e_motion_for_impoundment0019_attachment
+objects:
+  - FAHA8_motion_to_impound_attachment: ALDocument.using(filename="motion_to_impound", 
+                                          title="Motion to impound",
+                                          has_addendum=False )
+---
+code: |
+  FAHA8_motion_to_impound_attachment.enabled = asked_for_impoundment                                                
 ---
 need: a_258e_motion_for_impoundment0019
 reconsider: True
 attachment:
-    variable name: a_258e_motion_for_impoundment0019_attachment
+    variable name: FAHA8_motion_to_impound_attachment[i]
     name: Motion for Impoundment
     filename: Motion_for_Impoundment
-    # skip undefined: True
-
+    skip undefined: True
     pdf template file: 209a_258e_motion_for_impoundment.pdf
     fields: 
-      # Some of these fields should be multi-line fields
-      - "user_signature": ${ users[0].signature } # This is the right type of field!
+      - "user_signature": ${ users[0].signature_if_final(i) }
       - "signature_date": ${ signature_date }
       - "impound_personal_information": ${ impound_personal_information }
       - "impound_case_record_information": ${ impound_case_record_information }
       - "case_record_information_to_be_impounded": ${ case_record_information_to_be_impounded }
       - "impound_information_ex_parte": ${ impound_information_ex_parte }
       - "request_based_on": ${ request_based_on }
-      # todo: What do we want to do about this?
-      - "attach_additional_pages": ${ False }
-      # These are for the court to fill in and were included accidentally
-      - "motion_allowed_ex_parte": ${ '' }
-      - "motion_allowed_after_hearing": ${ '' }
-      - "motion_denied": ${ '' }
----
-comment: |
-  This question is used to introduce your interview. Please customize
-question: |
-  Draft: Do you need to keep some of the information about this case away from the public?
-subquestion: |
-  A motion may be made for impoundment of information that is currently contained in the case record. Upon receipt of such a motion, the clerk shall remove the subject material from the case record and withhold it from public dissemination pending the court's ruling on the motion. A plaintiff should use this if they want their address or other contact information kept secret.
-  
-  **Do you need to keep some information away from the public?**
-yesno: a_258e_motion_for_impoundment0019_intro
+      - "attach_additional_pages": ${ False } # We decided against addendum for this form 
 ---
 id: interview_order_a_258e_motion_for_impoundment0019
 code: |
@@ -184,91 +157,15 @@ code: |
   # allowed_courts = interview_metadata["a_258e_motion_for_impoundment0019"]["allowed courts"]
   impound_personal_information  
   # Wrong type of pdf field
-  if not impound_case_record_information:
-    case_record_information_to_be_impounded = ''
+  #if not impound_case_record_information:
+  #  case_record_information_to_be_impounded = '' # QS: we avoid setting values in interview order
   # Wrong type of pdf field
   request_based_on
   impound_information_ex_parte
   
-  # Trigger some computed values
-  # case_record_information_to_be_impounded_cutoff
-  # request_based_on_cutoff
-  addAddendum_impound
   # signature_date
-  # By default, we'll mark any un-filled fields as DAEmpty(). This helps avoid errors if you intentionally hide a logic branch or mark a question not required
-  # Comment out the line below if you don't want this behavior. 
-  # I think we can get rid of this inside the if statement:
-  # mark_unfilled_fields_empty(interview_metadata["a_258e_motion_for_impoundment0019"])
-  # a_258e_motion_for_impoundment0019_preview_question # Pre-canned preview screen
-  # basic_questions_signature_flow
-  # users[0].signature
-  # else: # If they don't need to do this at all, skip everything
-  #  # mark_unfilled_fields_empty(interview_metadata["a_258e_motion_for_impoundment0019"])
   a_258e_motion_for_impoundment0019 = True
----
-continue button field: a_258e_motion_for_impoundment0019_preview_question
-question: |
-  Placeholder preview screen
-subquestion: |
-  Here is a preview of the form you'll sign on the next page.
-
-   ${a_258e_motion_for_impoundment0019_attachment_preview}
----
-reconsider: True
-attachment:
-    variable name: a_258e_motion_for_impoundment0019_attachment_preview
-    name: Motion for Impoundment
-    filename: Motion_for_Impoundment
-    # skip undefined: True
-    editable: False
-    pdf template file: 209a_258e_motion_for_impoundment.pdf
-    fields: 
-      # Some of these fields should be multi-line fields
-      - "signature_date": ${ signature_date }
-      - "impound_personal_information": ${ impound_personal_information }
-      - "impound_case_record_information": ${ impound_case_record_information }
-      - "case_record_information_to_be_impounded": ${ case_record_information_to_be_impounded }
-      - "impound_information_ex_parte": ${ impound_information_ex_parte }
-      - "request_based_on": ${ request_based_on }
-      # todo: What do we want to do about this?
-      - "attach_additional_pages": ${ False }
-      # These are for the court to fill in and were included accidentally
-      - "motion_allowed_ex_parte": ${ '' }
-      - "motion_allowed_after_hearing": ${ '' }
-      - "motion_denied": ${ '' }
-      
----
-comment: Addenda related code. 
-code: |  
-  # txtFieldsList_impoundment = list()      
-  # Limit1 = 300
-  # sLimit1 = Limit1 - 16   
-  # need_impoundment_addendum = len(case_record_information_to_be_impounded) > Limit1
-  # if need_impoundment_addendum:    
-  #  case_record_information_to_be_impounded_cutoff = "(See Addendum.) " + case_record_information_to_be_impounded[:sLimit1] 
-  #  txtFieldsList_impoundment.append(
-  #    {'title': '1. Information in the case record to be impounded',
-  #    'value': [case_record_information_to_be_impounded]
-  #    })
-  # else:
-  #  case_record_information_to_be_impounded_cutoff = case_record_information_to_be_impounded
-    
-  # Limit2 = 700
-  # sLimit2 = Limit2 - 16   
-  # need_request_addendum = len(request_based_on) > Limit2
-  #if need_request_addendum:    
-  #  request_based_on_cutoff = "(See Addendum.) " + request_based_on[:sLimit2] 
-  #  txtFieldsList_impoundment.append(
-  #    {'title': '2. Request the Court to order impoundment',
-  #    'value': [request_based_on]
-  #    })
-  #else:
-  #  request_based_on_cutoff = request_based_on
-    
-  #addAddendum_impound = bool(txtFieldsList_impoundment)
-  addAddendum_impound = False
----
-reconsider: True
-attachment:
-  - variable name: impound_addendum
-    docx template file: 209A_impound_addendum.docx
+#---
+#attachment:
+#  - variable name: FAHA8_motion_to_impound_attachment.addendum
+#    docx template file: 209A_impound_addendum.docx

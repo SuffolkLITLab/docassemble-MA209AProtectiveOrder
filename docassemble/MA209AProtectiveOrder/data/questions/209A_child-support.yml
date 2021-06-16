@@ -369,7 +369,6 @@ code: |
   other_parties[0].defendant_parental_role
   dont_know_op_income
   defendant_pays_child_support
-  addAddendum_chdSupport
   
   # signature_date
   # By default, we'll mark any un-filled fields as DAEmpty(). This helps avoid errors if you intentionally hide a logic branch or mark a question not required
@@ -386,110 +385,20 @@ code: |
   else:
     all_support_children = children_of_both
 ---
-continue button field: Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008_preview_question
-question: |
-  Placeholder preview screen
-subquestion: |
-  Here is a preview of the form you'll sign in the next section. 
-  
-   ${ Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008_attachment_preview }
+objects:
+  - FA11_child_support_affidavit_attachment: ALDocument.using(filename="child_support_affidavit", title="Plaintiff's Child Support Affidavit", has_addendum=True, default_overflow_message="[See addendum]")
 ---
-reconsider: True
-attachment:
-    variable name: Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008_attachment_preview
-    name: Plaintiff affidavit in support of request for child support order
-    filename: Plaintiff_affidavit_in_support_of_request_for_child_support_order
-    # skip undefined: True
-    editable: False
-    pdf template file: Plaintiff_Affidavit_in_support_of_request_for_child_support_order.pdf
-    decimal places: 2    
-    fields:
-      - "user_states_above_true": ${ True } # Must be True to finish
-      - "user_name": ${ users[0] }
-      - "other_party": ${ other_parties[0] }
-      - "court_division": ${ courts.item(0).division }
-      - "user_name_print": ${ users[0] }
-      - "other_party_is_mother": ${ other_parties[0].defendant_parental_role == 'mother' }
-      - "other_party_is_father": ${ other_parties[0].defendant_parental_role == 'father' }
-      - "child_name": ${ all_support_children.item(0) }
-      - "child2_name": ${ all_support_children.item(2-1) }
-      - "child3_name": ${ all_support_children.item(3-1) }
-      - "child4_name": ${ all_support_children.item(4-1) }
-      - "other_party_occupation": ${ other_parties[0].occupation }
-      - "other_party_employer": ${ other_parties[0].employer }
-      - "other_party_employer_address": ${ other_parties[0].work_address }
-
-      # user income and expenses
-      - "user_gross_income": ${ thousands(users[0].gross_income) }
-      - "user_gross_income_is_per_week": ${ users[0].gross_income_interval == 'weekly' }
-      - "user_gross_income_is_per_month": ${ users[0].gross_income_interval == 'monthly' }
-
-      - "user_health_insurance_payment": ${ thousands(users.item(0).health_insurance) }
-      - "user_health_insurance_payment_is_per_week": ${ users.item(0).health_insurance_interval == 'weekly' }
-      - "user_health_insurance_payment_is_per_month": ${ users.item(0).health_insurance_interval == 'monthly' }
-
-      - "user_dental_vision_insurance_payment": ${ thousands(users.item(0).dental_vision_insurance) }
-      - "user_dental_vision_insurance_payment_is_per_week": ${ users.item(0).dental_vision_insurance_interval == 'weekly' }
-      - "user_dental_vision_insurance_payment_is_per_month": ${ users.item(0).dental_vision_insurance_interval == 'monthly' }
-
-      - "user_child_care_expenses": ${ thousands(users.item(0).child_care_expenses) }
-      - "user_child_care_expenses_is_per_week": ${ users.item(0).child_care_expenses_interval == 'weekly' }
-      - "user_child_care_expenses_is_per_month": ${ users.item(0).child_care_expenses_interval == 'monthly' }
-
-      - "user_child_care_other": ${ thousands(users.item(0).child_care_other) }
-      - "user_child_care_other_is_per_month": ${ users.item(0).child_care_other_interval == 'monthly' }
-      - "user_child_care_other_is_per_week": ${ users.item(0).child_care_other_interval == 'weekly' }
-
-      # other party income and expenses
-      - "other_party_gross_income": ${ thousands(yes_no_unknown('other_parties[0].gross_income', not dont_know_op_income)) }
-      - "other_party_gross_income_is_per_week": ${ other_parties[0].gross_income_interval == 'weekly' }
-      - "other_party_gross_income_is_per_month": ${ other_parties[0].gross_income_interval == 'monthly' }
-
-      - "other_party_health_insurance_payment": ${ thousands(yes_no_unknown('other_parties[0].health_insurance', other_has_health_insurance))}
-      - "other_party_health_insurance_payment_is_per_week": ${ other_parties[0].health_insurance_interval == 'weekly' }
-      - "other_party_health_insurance_payment_is_per_month": ${ other_parties[0].health_insurance_interval == 'monthly' }
-
-      - "other_party_dental_vision_insurance_payment": ${ thousands(yes_no_unknown('other_parties[0].dental_vision_insurance', other_has_dental))}
-      - "other_party_dental_vision_insurance_payment_is_per_week": ${ other_parties[0].dental_vision_insurance_interval == 'weekly' }
-      - "other_party_dental_vision_insurance_payment_is_per_month": ${ other_parties[0].dental_vision_insurance_interval == 'monthly' }
-
-      - "other_party_child_care_expenses": ${ thousands(yes_no_unknown('other_parties[0].child_care_expenses',  other_has_childcare)) }
-      - "other_party_child_care_expenses_is_per_week": ${ other_parties[0].child_care_expenses_interval == 'weekly' }
-      - "other_party_child_care_expenses_is_per_month": ${ other_parties[0].child_care_expenses_interval == 'monthly' }
-
-      - "other_party_child_care_other": ${ thousands(yes_no_unknown('other_parties[0].child_support_other', defendant_pays_child_support))}
-      - "other_party_child_care_other_is_per_month": ${ other_parties[0].other_child_support_interval == 'monthly' }
-      - "other_party_child_care_other_is_per_week": ${ other_parties[0].other_child_support_interval == 'weekly' }
-      
-      # Signature
-      - "user_name_print__2": ${ users[0] }
-      - "signature_date": ${ signature_date }
----
-progress: 100
-# mandatory: True
-event: child_support_download_screen
-question: |
-  Placeholder download screen
-subquestion: |
-  Placeholder
-  
-  ### Next steps
-  
-  1. Step 1
-  1. Step 2
-  
-  Below is a preview of your form.
-  
-  ${ Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008_attachment }
-attachment code: Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008_attachment
+code: |
+  FA11_child_support_affidavit_attachment.overflow_fields['all_support_children'].overflow_trigger = 4
+  FA11_child_support_affidavit_attachment.overflow_fields['all_support_children'].label = "I am the legal custodian of the following child(ren) (continued)"
+  FA11_child_support_affidavit_attachment.overflow_fields.gathered = True  
 ---
 need: Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008
 reconsider: True
 attachment:
-    variable name: Plaintiff_Affidavit_in_support_of_request_for_child_support_order0008_attachment
+    variable name: FA11_child_support_affidavit_attachment[i]
     name: Plaintiff 209A Child Support Affidavit
     # skip undefined: True
-
     filename: Plaintiff_209A_Child_Support_Affidavit
     pdf template file: Plaintiff_Affidavit_in_support_of_request_for_child_support_order.pdf
     decimal places: 2    
@@ -497,14 +406,14 @@ attachment:
       - "user_states_above_true": ${ True } # Must be True to finish
       - "user_name": ${ users[0] }
       - "other_party": ${ other_parties[0] }
-      - "court_division": ${ courts.item(0).division }
+      - "court_division": ${ trial_court.division }
       - "user_name_print": ${ users[0] }
       - "other_party_is_mother": ${ other_parties[0].defendant_parental_role == 'mother' }
       - "other_party_is_father": ${ other_parties[0].defendant_parental_role == 'father' }
       - "child_name": ${ all_support_children.item(0) }
-      - "child2_name": ${ all_support_children.item(2-1) }
-      - "child3_name": ${ all_support_children.item(3-1) }
-      - "child4_name": ${ all_support_children.item(4-1) }
+      - "child2_name": ${ all_support_children.item(1) }
+      - "child3_name": ${ all_support_children.item(2) }
+      - "child4_name": ${ all_support_children.item(3) }
       - "other_party_occupation": ${ other_parties[0].occupation }
       - "other_party_employer": ${ other_parties[0].employer }
       - "other_party_employer_address": ${ other_parties[0].work_address }
@@ -554,13 +463,9 @@ attachment:
       # Signature
       - "user_name_print__2": ${ users[0] }
       - "signature_date": ${ signature_date }
-      - "user_signature": ${ users[0].signature }
----
-comment: Addenda related code. 
-code: |  
-  addAddendum_chdSupport = len(all_support_children) > 4
+      - "user_signature": ${ users[0].signature_if_final(i) }
 ---
 reconsider: True
 attachment:
-  - variable name: chdSupport_addendum
+  - variable name: FA11_child_support_affidavit_attachment.addendum
     docx template file: 209A_chdSupport_addendum.docx

@@ -373,7 +373,7 @@ review:
       , ${currency(users[0].gross_income)}.
       % endif
 ---
-generic object: PeopleList
+generic object: ALPeopleList
 table: x.name_table
 rows: x
 columns:
