@@ -1,6 +1,3 @@
-#---
-#include: 
-#  - docassemble.MAVirtualCourt:basic-questions.yml
 ---
 objects:
   - exhibits: DAFileList.using(auto_gather=False, gathered=True)
@@ -75,18 +72,19 @@ subquestion: |
   ${ exhibits.table }
   
   ${exhibits.add_action() }
-continue button field: review_exhibits  
+continue button field: review_exhibits
 ---
+objects:
+  - exhibit_attachment: ALDocument.using(filename="exhibits", title="Exhibits", has_addendum=False)  
+---
+code: |
+  exhibit_attachment.enabled = has_evidence and has_evidence_ready_to_upload and len(exhibits)
+---
+reconsider: True
 attachment: 
   docx template file: 209A_exhibit_cover_page.docx
   variable name: exhibit_cover_page
 ---
 code: |
-  exhibit_attachment = pdf_concatenate(exhibit_cover_page, exhibits)
----
-# mandatory: True
-question: |
-  Your document is ready
-subquestion: |
-  ${ exhibit_attachment }
-  
+  # TODO(139): this could be a bundle, but see https://github.com/SuffolkLITLab/docassemble-AssemblyLine/issues/139 for better next step
+  exhibit_attachment[i] = pdf_concatenate(exhibit_cover_page, exhibits)

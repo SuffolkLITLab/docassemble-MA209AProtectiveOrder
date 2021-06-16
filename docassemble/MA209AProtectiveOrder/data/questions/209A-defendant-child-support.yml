@@ -4,7 +4,7 @@ question: |
 subquestion: |
   Enter the appropriate court division.
 fields:
-  - 'Court Division': courts[0]
+  - 'Court Division': trial_court
 ---
 question: |
   Your Insurance Expenses
@@ -119,6 +119,7 @@ subquestion: |
 attachment code: A_defendant_s_child_support_affidavit_ready_for_upload0004_attachment
 ---
 need: A_defendant_s_child_support_affidavit_ready_for_upload0004
+reconsider: True
 attachment:
     variable name: A_defendant_s_child_support_affidavit_ready_for_upload0004_attachment
     name: Defendant's Affidavit In Connection with Request For Child Support Order
@@ -135,7 +136,7 @@ attachment:
       - "child2_name_full": ${ str(children[2-1]) }
       - "child4_name_full": ${ str(children[4-1]) }
       - "user_name_full__2": ${ str(users[0]) }
-      - "court_division": ${ courts[0] }
+      - "court_division": ${ trial_court }
       - "is_father": ${ is_father }
       - "is_mother": ${ is_mother }
       - "user_work_job_title": ${ users[0].work_job_title }
@@ -171,7 +172,7 @@ subquestion: |
 id: interview_order_A_defendant_s_child_support_affidavit_ready_for_upload0004
 code: |
   # This is a placeholder to control logic flow in this interview
-  # It was generated from interview_generator.py as an 'interview order' type question.  basic_questions_intro_screen 
+  # It was generated from interview_generator.py as an 'interview order' type question.  al_intro_screen 
   A_defendant_s_child_support_affidavit_ready_for_upload0004_intro
   # Set the preferred/allowed courts for this interview
   # preferred_court = interview_metadata["A_defendant_s_child_support_affidavit_ready_for_upload0004"]["preferred court"]
@@ -181,7 +182,7 @@ code: |
   str(plaintiffs[0])
   str(users[0])
   str(children[1-1])
-  courts[0]
+  trial_court
   is_father
   users[0].work_job_title
   if users[0].gross_income_weekly_or_monthly is 'weekly':
@@ -249,6 +250,7 @@ subquestion: |
   
    ${A_defendant_s_child_support_affidavit_ready_for_upload0004_attachment_preview}
 ---
+reconsider: True
 attachment:
     variable name: A_defendant_s_child_support_affidavit_ready_for_upload0004_attachment_preview
     name: Defendant's Affidavit In Connection with Request For Child Support Order
@@ -265,7 +267,7 @@ attachment:
       - "child2_name_full": ${ str(children[2-1]) }
       - "child4_name_full": ${ str(children[4-1]) }
       - "user_name_full__2": ${ str(users[0]) }
-      - "court_division": ${ courts[0] }
+      - "court_division": ${ trial_court }
       - "is_father": ${ is_father }
       - "is_mother": ${ is_mother }
       - "user_work_job_title": ${ users[0].work_job_title }
