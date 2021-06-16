@@ -457,7 +457,7 @@ fields:
     datatype: noyesradio
     help: |
       You do **not** need to talk about the police. 
-      % if plaintiff_assistant_name:
+      % if plaintiff_assistant_type_obo:
       You do not need to have called the police to get a restraining order. And ${users.familiar()} does not need to have called the police. If you or ${users.familiar()} needed the police and ${ other_parties.familiar() } stopped you from calling them, this information could help the judge understand your situation.
       % else: 
       You do not need to have called the police to get a restraining order. If you needed the police and ${ other_parties.familiar() } stopped you from calling them, this information could help the judge understand your situation.

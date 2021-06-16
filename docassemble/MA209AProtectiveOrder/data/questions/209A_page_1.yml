@@ -231,15 +231,6 @@ fields:
       - My guardian is filing for me: guardian
       - I am filing on my own, with no help: self
 ---
-id: name of assistant
-question: |
-  What is your ${plaintiff_assistant_type}'s name?
-fields:
-  - ${plaintiff_assistant_type.capitalize()}'s full name: plaintiff_assistant_type_name   
----
-code: |
-  plaintiff_assistant_name = plaintiff_assistant_type_name
----
 id: helper type when user is helper
 if: who_protecting_screener == "someone else"
 question: |
@@ -286,6 +277,12 @@ code: |
      plaintiff_assistant_type_obo = True
    else:
      plaintiff_assistant_type_obo = False
+---
+id: name of assistant
+question: |
+  What is your ${plaintiff_assistant_type}'s name?
+fields:
+  - ${plaintiff_assistant_type.capitalize()}'s full name: plaintiff_assistant_name   
 ---
 # code: |
 #  if plaintiff_is_major_no:
@@ -1085,7 +1082,7 @@ attachment:
       - "plaintiff_is_major_no": ${ not plaintiff_is_major_yes }
       - "defendant_and_plaintiff_relationship_married_to_each_other": ${ relationship_to_defendant_married['now'] }
       - "defendant_and_plaintiff_relationship_formerly_married_to_each_other": ${ relationship_to_defendant_married['past'] }
-      - "plaintiff_assistant_name": ${ plaintiff_assistant_name if plaintiff_assistant_type_obo else '' }
+      - "plaintiff_assistant_name": ${ plaintiff_assistant_name if plaintiff_assistant_type in ('parent', 'guardian') or plaintiff_assistant_type_obo else '' }
       - "plaintiff_assistant_relationship_to_plaintiff": ${ advocate_filing_obo if plaintiff_assistant_type_obo else plaintiff_assistant_type }
       - "defendant_and_plaintiff_relationship_not_married_but_are_related": ${ defendant_and_plaintiff_relationship_not_married_but_are_related }
       - "defendant_relationship_to_plaintiff_is": ${ defendant_relationship_to_plaintiff_is }
@@ -1156,7 +1153,7 @@ attachment:
       - "defendant_gender_male": ${ other_parties[0].gender_male }
       - "defendant_gender_female": ${ other_parties[0].gender_female }
       - "plaintiff_is_major_yes": ${ plaintiff_is_major_yes }
-      - "plaintiff_is_major_no": ${ not plaintiff_is_major_no }
+      - "plaintiff_is_major_no": ${ not plaintiff_is_major_yes }
       - "defendant_and_plaintiff_relationship_married_to_each_other": ${ relationship_to_defendant_married['now'] }
       - "defendant_and_plaintiff_relationship_formerly_married_to_each_other": ${ relationship_to_defendant_married['past'] }
       - "plaintiff_assistant_name": ${ plaintiff_assistant_name if plaintiff_assistant_type_obo else '' }

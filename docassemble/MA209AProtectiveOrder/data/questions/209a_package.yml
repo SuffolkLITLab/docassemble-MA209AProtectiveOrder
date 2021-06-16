@@ -78,7 +78,10 @@ code: |
   #      advocate_filing_obo
   if plaintiff_assistant_type in('self', 'other'):
     refer_to_advocate
-  elif plaintiff_assistant_type in('parent', 'guardian', 'advocate'):
+  elif plaintiff_assistant_type in('parent', 'guardian'):
+    plaintiff_assistant_name
+    dcf_warning_given
+  elif plaintiff_assistant_type == 'advocate':
     dcf_warning_given
   #  else: # not protecting someone else
   #    if plaintiff_assistant_type == 'self':
@@ -352,6 +355,14 @@ id: Signing under oath
 question: |
   Signing under oath 
 subquestion: |
+
+  % if plaintiff_assistant_type in ('parent', 'guardian'):
+  ${ users.familiar() }, since you are under 18 your ${ plaintiff_assistant_type} must sign and file this complaint for you. You will need them to read and answer this question:
+  % endif
+  % if plaintiff_assistant_type in ('parent', 'guardian') or plaintiff_assistant_type_obo: 
+  ${ plaintiff_assistant_name }, since you are filing **for** ${ users.familiar() }, you must sign for ${ users.familiar() }.
+  % endif
+
   When you sign your name you are declaring, "{under penalty of perjury}” that what you put in your affidavit is {true to the best of your knowledge}.
   
   Do you swear under penalty of perjury that all your answers to the questions in this interview are true, to the best of your knowledge?

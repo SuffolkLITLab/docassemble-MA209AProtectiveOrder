@@ -241,11 +241,16 @@ id: contact information
 question: |
   Contact information
 subquestion: |
-  % if plaintiff_assistant_type_obo: 
-  ${ plaintiff_assistant_name }, since you are filing **for** ${ users.familiar() }, enter the best way for the court to contact information **you**. 
-  % endif
+  % if plaintiff_assistant_type in ('parent', 'guardian'):
+  ${ users.familiar() }, since you are under 18 the court needs to be able to contact your ${ plaintiff_assistant_type}
+  Give the court least one way to reach them.
+  % elif plaintiff_assistant_type_obo: 
+  ${ plaintiff_assistant_name }, since you are filing **for** ${ users.familiar() }, enter the best way for the court to contact **you**. 
   Give the court least one way to reach you.
-
+  % else:
+  Give the court least one way to reach you.
+  % endif
+  
   Later, you will get a chance to ask the court to keep this contact information
   private.
   
