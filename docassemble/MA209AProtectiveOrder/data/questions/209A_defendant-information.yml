@@ -51,7 +51,7 @@ fields:
     datatype: file
     show if: other_parties[0].photo_yes_can_upload
     accept: |
-      "image/*, image/png,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf,.pdf"
+      "image/png,image/jpg,image/gif,image/svg,application/pdf,.pdf"
 ---
 id: defendant appearance
 question: |
