@@ -59,7 +59,8 @@ subquestion: |
   % if not order_defendant_remain_away_plaintiff_school_yes:
   ,
   * school address
-  % endif,  and
+  % endif
+  ,  and
   * telephone numbers.
   
   The Court can keep your address from ${other_parties.familiar()} even if the judge orders ${other_parties.familiar()} to stay away from that address. Your restraining order will order ${other_parties.familiar()} to stay away from your address, "wherever that may be."
@@ -72,7 +73,7 @@ help:
   content: |
     Your home, school and work addresses: 
 
-    * are automatically kept from the public.
+    * are automatically kept from the public,
     * are automatically kept from ${ other_parties.familiar() } and
     ${ other_parties.familiar() }’s lawyer and 
     * will be available to you, your lawyer, people you give the court permission to show, and to certain persons who may need this information so they can do their job. These are prosecutors, law enforcement officers, victim-witness advocates, sexual assault counselors and domestic violence counselors.

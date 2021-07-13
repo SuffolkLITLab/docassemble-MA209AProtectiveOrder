@@ -336,6 +336,7 @@ subquestion: |
   The court needs this information to make an order that will help keep you as safe as possible.
   % else:
   The court needs this information to:
+
   * contact you about your case, and
   * make an order that will help keep you as safe as possible.
   % endif
