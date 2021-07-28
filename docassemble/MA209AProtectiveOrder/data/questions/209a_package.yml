@@ -1,4 +1,8 @@
 ---
+translations:
+  - 209a_package_es.xlsx
+
+---
 include:
  - docassemble.AssemblyLine:al_package.yml
  - docassemble.MassAccess:massaccess.yml
@@ -12,7 +16,8 @@ include:
  - 209A_review.yml
  - 209A_plaintiff-confidential.yml 
  - escape.yml
- - 209A_attach_exhibits.yml
+ - 209A_attach_exhibits.yml 
+ - translation-support.yml
 ---
 metadata:
   title: |
