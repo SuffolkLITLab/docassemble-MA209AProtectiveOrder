@@ -450,7 +450,7 @@ yesno: schools_to_stay_away_from.there_is_another
 
 #   Remember, if you ask for visitation you can only file in the Probate and
 #   Family Court. A visitation order becomes an order of the court, and if you
-#   don't follow this order exactly, you will be in contempt of court.  
+#   don't follow this order exactly, you may be in contempt of court.  
 # yesno: wants_visitation_orders
 ---
 id: visitation
@@ -481,7 +481,7 @@ subquestion: |
   
    ${other_parties.familiar()} may take you to court again and again to try to change the order.
  
-  If you do not follow the order **exactly** as it is written, you will be in contempt of court.  
+  If you do not follow the order **exactly** as it is written, you may be in contempt of court.  
  
   Read more about [Visitation](https://www.masslegalhelp.org/domestic-violence/where-can-i-get-209a#bettercourt).
 
