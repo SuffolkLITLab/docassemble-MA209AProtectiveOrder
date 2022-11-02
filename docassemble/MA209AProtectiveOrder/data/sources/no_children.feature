@@ -31,12 +31,12 @@ Feature: User has no children
       | impoundment_intro | True |  |
       | incidents_of_abuse.target_number | 1 |  |
       | incidents_of_abuse[i].description | hit me. | incidents_of_abuse[0].description |
-      | incidents_of_abuse[i].feelings | It made me feel bad. | incidents_of_abuse[0].feelings |
+      | incidents_of_abuse[i].feelings | It made me feel bad. | incidents_of_abuse[0].injuries |
       | incidents_of_abuse[i].injuries | False | incidents_of_abuse[0].injuries |
-      | incidents_of_abuse[i].medical | False | incidents_of_abuse[0].medical |
-      | incidents_of_abuse[i].pets | False | incidents_of_abuse[0].pets |
-      | incidents_of_abuse[i].police | False | incidents_of_abuse[0].police |
-      | incidents_of_abuse[i].property | False | incidents_of_abuse[0].property |
+      | incidents_of_abuse[i].medical | False | incidents_of_abuse[0].injuries |
+      | incidents_of_abuse[i].pets | False | incidents_of_abuse[0].injuries |
+      | incidents_of_abuse[i].police | False | incidents_of_abuse[0].injuries |
+      | incidents_of_abuse[i].property | False | incidents_of_abuse[0].injuries |
       | incidents_of_abuse[i].summary | hit me. It made me feel bad. | incidents_of_abuse[0].summary |
       | lives_in_domestic_violence_shelter | False |  |
       | main_209A_package_intro | True |  |
