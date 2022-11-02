@@ -1,0 +1,60 @@
+---
+modules:
+  - docassemble.AssemblyLine.language
+---
+modules:
+  - docassemble.AssemblyLine.language
+---
+code: |
+  metadata_title = "MADE: UpToCode"
+---
+initial: True
+code: |
+  process_action()
+---
+initial: True
+code: |
+  set_language(user_language)
+---
+code: |
+  if url_args.get('lang'):
+    user_language = url_args.get('lang')
+  else:
+    user_language= 'en'
+---
+event: change_language
+code: |
+  if 'lang' in action_arguments():
+    user_language = action_argument('lang')
+    set_language(user_language)
+---
+#comment: |
+#    % if get_config('debug'):
+#    `id: ${ user_info().question_id }`  
+#    `Package: ${ user_info().package } ${ package_version_number }; ${ al_version }`
+#    <div data-variable="${ encode_name(str( user_info().variable )) }" id="sought_variable" aria-hidden="true" style="display: none;"></div>
+#    % endif  
+default screen parts:
+  pre: |    
+    ${get_language_list(get_tuples(['en','es']),current=user_language)}
+---
+language: es
+sections:
+  - section_intro: Introducción
+  - section_basic: Información básica
+  - section_relationship: Tú relacion
+  - section_children: Hijos y hijas
+  - section_affidavit: Su declaración
+  - review_exhibits: Subir evidencia
+  - section_children_relief: Protección para hijos
+  - section_relief: Que necesitas
+  # - section_custody: Custody
+  - section_child_support: Manutención de los hijos
+  - section_defendant_info: Identificación del demandado
+  - section_your_info: Tu información
+  - section_privacy: Mantener su información privada
+  - section_care_custody: Casos anteriores de cuidado o custodia
+  - section_cases_with_defendant: Otros casos con el demandado
+  - section_court: selección de tribunales
+  - section_signature: Firma
+  - download_screen: Descargar    
