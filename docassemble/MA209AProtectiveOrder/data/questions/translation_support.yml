@@ -2,12 +2,6 @@
 modules:
   - docassemble.AssemblyLine.language
 ---
-modules:
-  - docassemble.AssemblyLine.language
----
-code: |
-  metadata_title = "MADE: UpToCode"
----
 initial: True
 code: |
   process_action()
