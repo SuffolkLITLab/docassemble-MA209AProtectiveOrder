@@ -77,7 +77,7 @@ Feature: User has no children
       | related_by_household['now'] | True |  |
       | relationship_to_defendant_married['now'] | True |  |
       | saw_incidents | True |  |
-      | signature_choice | this device |  |
+      | signature_choice | this_device |  |
       | signature_date | 07/06/2021 |  |
       | trial_court | all_courts[97] |  |
       | user_needs_interpreter | False |  |

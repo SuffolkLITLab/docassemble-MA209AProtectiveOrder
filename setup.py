@@ -6,6 +6,7 @@ from distutils.util import convert_path
 
 standard_exclude = ('*.pyc', '*~', '.*', '*.bak', '*.swp*')
 standard_exclude_directories = ('.*', 'CVS', '_darcs', './build', './dist', 'EGG-INFO', '*.egg-info')
+
 def find_package_data(where='.', package='', exclude=standard_exclude, exclude_directories=standard_exclude_directories):
     out = {}
     stack = [(convert_path(where), '', package)]
@@ -53,7 +54,7 @@ setup(name='docassemble.MA209AProtectiveOrder',
       url='https://docassemble.org',
       packages=find_packages(),
       namespace_packages=['docassemble'],
-      install_requires=['docassemble.ALToolbox>=0.3.6', 'docassemble.AssemblyLine>=2.8.0', 'docassemble.MACourts>=0.0.58.2', 'docassemble.MassAccess>=0.2.0'],
+      install_requires=['docassemble.ALToolbox>=0.8.2', 'docassemble.AssemblyLine>=2.23.0', 'docassemble.MACourts>=0.59.1', 'docassemble.MassAccess>=0.3.0'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/MA209AProtectiveOrder/', package='docassemble.MA209AProtectiveOrder'),
      )
