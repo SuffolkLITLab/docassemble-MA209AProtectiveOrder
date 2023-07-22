@@ -31,7 +31,7 @@ Feature: User has no children
       | impoundment_intro | True |  |
       | incidents_of_abuse.target_number | 1 |  |
       | incidents_of_abuse[i].description | hit me. | incidents_of_abuse[0].description |
-      | incidents_of_abuse[i].feelings | It made me feel bad. | incidents_of_abuse[0].injuries |
+      | incidents_of_abuse[i].feelings | It made me feel bad. | incidents_of_abuse[0].feelings |
       | incidents_of_abuse[i].injuries | False | incidents_of_abuse[0].injuries |
       | incidents_of_abuse[i].medical | False | incidents_of_abuse[0].injuries |
       | incidents_of_abuse[i].pets | False | incidents_of_abuse[0].injuries |
