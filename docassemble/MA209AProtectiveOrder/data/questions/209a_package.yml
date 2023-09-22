@@ -580,7 +580,10 @@ objects:
 attachment: 
   docx template file: 209A_next_steps_for_user.docx
   variable name: next_steps[i]
-
+---
+generic object: ALDocument
+code: |
+  x.overflow_message = " [See addendum]"
 ---
 objects:
   - al_user_bundle: ALDocumentBundle.using(elements=[
