@@ -16,8 +16,18 @@ include:
  - 209A_motion-for-impoundment.yml
  - 209A_review.yml
  - 209A_plaintiff-confidential.yml 
- - escape.yml
- - 209A_attach_exhibits.yml 
+ - docassemble.ALToolbox:escape_button.yml
+ - 209A_attach_exhibits.yml
+---
+code: |
+  al_interview_languages = ["en", "es"]
+---
+default screen parts:
+  navigation bar html: |
+    % for nav_item in al_navigation_items.values():
+    ${ nav_item }
+    % endfor
+    ${ get_language_list_dropdown(al_interview_languages,current=al_user_language ) } 
 ---
 metadata:
   title: |
@@ -527,12 +537,12 @@ fields:
     datatype: date
     default: ${today().format("yyyy-MM-dd")}
 ---
-comment: |
-  TODO: integrate a method to display form title on intro screen dynamically
 id: basic questions intro screen
 question: |
   Ask the court for a 209A Abuse Prevention Order: MassAccess Project
 subquestion: |
+  ${ get_language_list(current=al_user_language, lang_codes=al_interview_languages) }
+
   This website can help you complete and download your forms in 3 steps:
   
   Step 1. Answer questions that will fill in your forms for you.  
@@ -575,12 +585,15 @@ objects:
   - next_steps: ALDocument.using(title="Next Steps",
                                  filename="next_steps",
                                  has_addendum=False,
-                                 enabled=True)  
+                                 enabled=True)
 ---
 attachment: 
   docx template file: 209A_next_steps_for_user.docx
   variable name: next_steps[i]
-
+---
+generic object: ALDocument
+code: |
+  x.overflow_message = " [See addendum]"
 ---
 objects:
   - al_user_bundle: ALDocumentBundle.using(elements=[
