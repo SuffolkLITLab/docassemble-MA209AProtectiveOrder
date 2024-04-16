@@ -4,7 +4,7 @@ translations:
 
 ---
 include:
- - docassemble.AssemblyLine:al_package.yml
+ - docassemble.AssemblyLine:assembly_line.yml
  - docassemble.MassAccess:massaccess.yml
  - translation_support.yml
  - 209A_page_1.yml
@@ -32,6 +32,62 @@ default screen parts:
 metadata:
   title: |
     209A Domestic Violence Restraining Order
+  short title: |
+    209A Restraining Order
+  description: |
+    This interview helps you fill out up to 8 forms you need to ask the court for a 209A restraining order. 
+    A 209A order is a court order that can protect you from someone who has abused you.
+    The order can make the abuser stay away from you, your home, and your children. The order can also make the abuser pay you money.
+    This interview is free to file and takes most people about 1 and 1/2 hours to complete.
+  can_I_use_this_form: |
+    This interview is the right one to use if someone abused you and the abuser is:
+
+    * someone you live with
+    * an intimate partner
+    * a family member, or
+    * someone you have a child with.
+
+    If you do not have one of these relationships with the abuser, you may need to get a [258E harassment prevention order](https://www.masslegalhelp.org/domestic-abuse-crime-victims/harassment-prevention-orders/harassment-prevention-258e-orders) instead.
+
+    If you are under 18, an adult must help you fill out this form.
+  before_you_start: |
+    This interview will ask you questions about the abuser, your relationship, and what you need to be safe. It will also
+    ask for information about how to find and identify the abuser, including date of birth, address, and a description.
+
+    If it is safe to do so, it may help to gather some facts before you start. But in most cases you can start without all of the information
+    and get it to the court later.
+  maturity: production
+  estimated_completion_minutes: 60
+  estimated_completion_delta: 30
+  languages:
+    - en
+    - es
+  help_page_url: https://www.masslegalhelp.org/domestic-abuse-crime-victims/209a-restraining-orders
+  help_page_title: 209A Restraining Orders
+  LIST_topics: # Preferred
+    - FA-07-00-00-00
+  tags: # Should be used if LIST_topics not populated
+    - FA-07-00-00-00
+  original_form: https://www.mass.gov/lists/restraining-orderabuse-prevention-order-court-forms
+  original_form_published_on: 2020-04-23
+  review_date: 2024-01-01
+  form_titles:
+    - 209A Complaint Page 1
+    - 209A Complaint Page 2
+    - 209A Affidavit
+    - Affidavit Disclosing Care or Custody Proceedings
+    - Plaintiff Confidential Information
+    - Defendant Information
+    - Child Support Affidavit
+    - Motion for Impoundment
+  form_numbers: # Not all forms have an assigned number
+    - OCAJ-1 TRC IV (07/95)
+    - FA/HA-8 (5/10)
+    - FA-11 (1/12)
+  fees:
+    - Filing fee: 0.00
+  update_notes: |
+    Interview drafted in 2020 with minor updates thereafter. Reviewed in 2024 and no form or law changes require updates.
 ---
 modules:
   - docassemble.ALToolbox.misc
