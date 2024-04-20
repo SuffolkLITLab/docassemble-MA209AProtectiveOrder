@@ -64,6 +64,8 @@ metadata:
     - es
   help_page_url: https://www.masslegalhelp.org/domestic-abuse-crime-victims/209a-restraining-orders
   help_page_title: 209A Restraining Orders
+  # Use SALI/LMSS jurisdiction codes
+  jurisdiction: NAM-US-US+MA
   LIST_topics: # Preferred
     - FA-07-00-00-00
   tags: # Should be used if LIST_topics not populated
