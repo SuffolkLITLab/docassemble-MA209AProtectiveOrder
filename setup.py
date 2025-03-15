@@ -1,6 +1,6 @@
 import os
 import sys
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 from fnmatch import fnmatchcase
 from distutils.util import convert_path
 
@@ -46,15 +46,14 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
 setup(name='docassemble.MA209AProtectiveOrder',
       version='2.2.0',
       description=(''),
-      long_description='# docassemble.MA209AProtectiveOrder\r\n\r\nGuided interview that helps a domestic violence survivor complete forms related to restraining order. Including custody, impoundment, etc.\r\n\r\n\r\n\r\n## Author\r\n\r\nQuinten Steenhuis\r\nCaroline Robinson\r\nKate Barry\r\nPlocket\r\nLily Yang\r\nMatthew Brooks\r\nLance Godard\r\nMaeve MacGlinchey\r\nKendall Garner\r\nDavid Colarusso\r\n',
+      long_description='# A Docassemble interview for a Massachusetts 209A Protection from Abuse Order\r\n\r\nThis is a Docassemble interview to complete the Massachusetts 209A Protection from Abuse Order forms online. The live interview can be found at [https://www.courtformsonline.org/dv/#209A](https://www.courtformsonline.org/dv/#209A).\r\n',
       long_description_content_type='text/markdown',
       author='Quinten Steenhuis',
       author_email='qsteenhuis@suffolk.edu',
       license='MIT',
       url='https://docassemble.org',
-      packages=find_packages(),
-      namespace_packages=['docassemble'],
-      install_requires=['docassemble.ALToolbox>=0.8.2', 'docassemble.AssemblyLine>=2.26.0', 'docassemble.MACourts>=0.59.1', 'docassemble.MassAccess>=0.3.0'],
+      packages=find_namespace_packages(),
+      install_requires=['docassemble.ALToolbox>=0.11.1', 'docassemble.AssemblyLine>=3.2.0', 'docassemble.MACourts>=0.59.5', 'docassemble.MassAccess>=0.4.1'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/MA209AProtectiveOrder/', package='docassemble.MA209AProtectiveOrder'),
      )
