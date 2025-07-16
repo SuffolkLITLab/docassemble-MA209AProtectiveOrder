@@ -191,6 +191,21 @@ code: |
 #    required: False
 #  - "What is the name ${other_parties.familiar()}'s mailbox? Type 'None' if there is no name.": other_parties[0].name_door_mailbox
 ---
+id: defendant_military_affiliation
+question: |
+  What is your military affiliation?
+subquestion: |
+  Choose all that apply. If you are not sure, select **None / Do Not Know**.
+fields:
+  - Military affiliation: defendant_military_affiliation
+    datatype: checkboxes
+    choices:
+      - Active Duty: military_affiliation_active_duty
+      - Guard or Reserves: military_affiliation_guard_reserves
+      - Veteran: military_affiliation_veteran
+      - Family Member: military_affiliation_family_member
+      - None / Do Not Know: military_affiliation_non_dnk
+---
 id: defendant work information
 question: |
   ${other_parties.familiar()}'s work information
@@ -461,6 +476,19 @@ code: |
     other_parties[0].birthdate
   other_parties[0].height
   other_parties[0].photo_yes
+
+  if not (
+    military_affiliation_active_duty or
+    military_affiliation_guard_reserves or
+    military_affiliation_veteran or
+    military_affiliation_family_member or
+    military_affiliation_non_dnk
+  ):
+    military_affiliation_active_duty = False
+    military_affiliation_guard_reserves = False
+    military_affiliation_veteran = False
+    military_affiliation_family_member = False
+    military_affiliation_non_dnk = True
 
   defendant_has_guns["gun"] # trigger our DADict question
   # can't use defendant_has_guns.any_true() since it does not handle None values

@@ -91,6 +91,21 @@ yesno: users[0].apartment_yes
 subquestion: |
   Do you live in an apartment building or multi-family home?
 ---
+id: plaintiff_military_affiliation
+question: |
+  What is your military affiliation?
+subquestion: |
+  Choose all that apply. If you're not sure, check **None / Do Not Know**.
+fields:
+  - no label: plaintiff_military_affiliation
+    datatype: checkboxes
+    choices:
+      - Active Duty: military_affiliation_active_duty
+      - Guard/Reserves: military_affiliation_guard_reserves
+      - Veteran: military_affiliation_veteran
+      - Family Member: military_affiliation_family_member
+      - None / Do Not Know: military_affiliation_non_dnk
+---
 id: has school address
 question: |
   Do you currently attend school?

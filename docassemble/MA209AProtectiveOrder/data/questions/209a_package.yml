@@ -219,10 +219,12 @@ code: |
   defendant_has_alias # redundant to def. information section
   
   defendantinformation209A0008
+  defendant_military_affiliation
 
   ########################## Plaintiff info
   nav.set_section('section_your_info')
   A_Plaintiff_Confidential_Information0011
+  plaintiff_military_affiliation
   
   nav.set_section('section_privacy')
   impoundment_intro
