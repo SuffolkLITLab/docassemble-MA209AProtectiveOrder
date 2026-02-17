@@ -54,7 +54,7 @@ setup(name='docassemble.MA209AProtectiveOrder',
       url='https://docassemble.org',
       packages=find_packages(),
       namespace_packages=['docassemble'],
-      install_requires=['docassemble.ALToolbox>=0.8.2', 'docassemble.AssemblyLine>=2.26.0', 'docassemble.MACourts>=0.59.1', 'docassemble.MassAccess>=0.3.0'],
+      install_requires=['docassemble.ALToolbox>=0.8.2', 'docassemble.AssemblyLine>=2.26.0', 'docassemble.MACourts>=0.59.1', 'docassemble.MassAccess>=0.3.0', 'docassemble.income'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/MA209AProtectiveOrder/', package='docassemble.MA209AProtectiveOrder'),
      )
