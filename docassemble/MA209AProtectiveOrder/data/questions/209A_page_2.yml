@@ -607,7 +607,7 @@ subquestion: |
 
   It may be worth it to get a child support order. All parents should support their children. But if you believe that asking for child support is dangerous, you might be better off not asking for it. Child support might not be worth risking your health and safety, or the health and safety of your ${children.as_noun()}. 
   
-  You can always talk with a domestic violence advocate for help. [Safelink](https://www.casamyrna.org/get-support/safelink): ${tel("1-877-785-2020")}
+  You can always talk with a domestic violence advocate for help. [Safelink](https://casamyrna.org/get-support/safelink/): ${tel("1-877-785-2020")}
   Learn more: Read [Is filing for child support safe?](https://www.masslegalhelp.org/domestic-violence/child-support/is-filing-safe) on MassLegalHelp.org
     
   **Note:** The judge will not order ${other_parties.familiar()} to pay you anything until the 10 day hearing. At that hearing ${other_parties.familiar()} will know you have a restraining order and if you have asked for child support, ${other_parties.familiar()} will know that also.
