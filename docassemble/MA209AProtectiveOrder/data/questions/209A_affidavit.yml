@@ -7,7 +7,7 @@ code: |
     'title': '209A Complaint Affidavit',
     'short title': '209A Complaint Affidavit',
     'description': '209A Complaint Affidavit',
-    'original_form': 'https://www.mass.gov/doc/gl-c-209a-abuse-prevention-orderrestraining-order-application-forms/download#page=5',
+    'original_form': 'https://www.mass.gov/lists/restraining-orderabuse-prevention-order-court-forms',
     'allowed courts': [
       'Boston Municipal Court',
       'District Court',
