@@ -7,7 +7,7 @@ code: |
     'title': '209A Complaint Affidavit',
     'short title': '209A Complaint Affidavit',
     'description': '209A Complaint Affidavit',
-    'original_form': 'https://www.mass.gov/doc/209a-affidavit/download',
+    'original_form': 'https://www.mass.gov/lists/restraining-orderabuse-prevention-order-court-forms',
     'allowed courts': [
       'Boston Municipal Court',
       'District Court',
@@ -153,7 +153,7 @@ question: |
 subquestion: |
   Writing your affidavit can be hard for all kinds of reasons. 
   % if plaintiff_assistant_type not in('advocate'):
-  Remember you can always call a domestic violence advocate for help. [Safelink](https://www.casamyrna.org/get-support/safelink): ${tel("1-877-785-2020")}.
+  Remember you can always call a domestic violence advocate for help. [Safelink](https://casamyrna.org/get-support/safelink/): ${tel("1-877-785-2020")}.
   % endif
   Finally, as you write your affidavit, keep in mind that when you sign your name at the end of this guide, you are declaring, “{under penalty of perjury}” that your answers to all these questions are {true to the best of your knowledge}.
 
