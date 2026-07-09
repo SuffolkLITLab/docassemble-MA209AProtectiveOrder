@@ -1,0 +1,32 @@
+[build-system]
+requires = [
+    "setuptools>=80.9.0",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "docassemble.MA209AProtectiveOrder"
+version = "2.2.0"
+description = ""
+readme = "README.md"
+authors = [
+    { name = "Quinten Steenhuis", email = "qsteenhuis@suffolk.edu" },
+]
+dependencies = [
+    "docassemble.ALToolbox @ git+https://github.com/SuffolkLITLab/docassemble-ALToolbox.git@main",
+    "docassemble.AssemblyLine @ git+https://github.com/SuffolkLITLab/docassemble-AssemblyLine.git@main",
+    "docassemble.MACourts @ git+https://github.com/SuffolkLITLab/docassemble-MACourts.git@main",
+    "docassemble.MassAccess @ git+https://github.com/SuffolkLITLab/docassemble-MassAccess.git@main",
+]
+license = "MIT"
+license-files = [
+    "LICENSE",
+]
+
+[project.urls]
+Homepage = "https://docassemble.org"
+
+[tool.setuptools.packages.find]
+where = [
+    ".",
+]

@@ -53,8 +53,7 @@ setup(name='docassemble.MA209AProtectiveOrder',
       license='MIT',
       url='https://docassemble.org',
       packages=find_namespace_packages(),
-      install_requires=['docassemble.ALToolbox>=0.11.1', 'docassemble.AssemblyLine>=3.2.0', 'docassemble.MACourts>=0.59.5', 'docassemble.MassAccess>=0.4.1'],
+      install_requires=['docassemble.ALToolbox @ git+https://github.com/SuffolkLITLab/docassemble-ALToolbox.git@main', 'docassemble.AssemblyLine @ git+https://github.com/SuffolkLITLab/docassemble-AssemblyLine.git@main', 'docassemble.MACourts @ git+https://github.com/SuffolkLITLab/docassemble-MACourts.git@main', 'docassemble.MassAccess @ git+https://github.com/SuffolkLITLab/docassemble-MassAccess.git@main'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/MA209AProtectiveOrder/', package='docassemble.MA209AProtectiveOrder'),
      )
-
