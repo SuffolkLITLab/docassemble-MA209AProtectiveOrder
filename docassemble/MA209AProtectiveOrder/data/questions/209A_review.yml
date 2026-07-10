@@ -803,7 +803,6 @@ review:
   - Edit contact information: users[0].mobile_number
     button: |
       ${users[0].mobile_number}  
-      ${users[0].phone_number}  
       ${users[0].email}  
       ${users[0].other_contact_method}  
   - Edit military affiliation:
