@@ -806,4 +806,25 @@ review:
       ${users[0].phone_number}  
       ${users[0].email}  
       ${users[0].other_contact_method}  
+  - Edit military affiliation:
+      - military_affiliation_active_duty
+      - military_affiliation_guard_reserves
+      - military_affiliation_veteran
+      - military_affiliation_family_member
+      - military_affiliation_non_dnk
+    button: |
+      % if military_affiliation_non_dnk:
+      None
+      % else:
+      ${comma_and_list([
+        label
+        for selected, label in [
+          (military_affiliation_active_duty, "Active Duty"),
+          (military_affiliation_guard_reserves, "Guard/Reserves"),
+          (military_affiliation_veteran, "Veteran"),
+          (military_affiliation_family_member, "Family Member")
+        ]
+        if selected
+      ])}
+      % endif
       

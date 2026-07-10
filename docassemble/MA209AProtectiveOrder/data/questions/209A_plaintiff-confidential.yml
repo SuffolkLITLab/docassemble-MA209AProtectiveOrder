@@ -158,6 +158,46 @@ fields:
 #     address autocomplete: True
 #     required: False
 ---
+id: plaintiff military affiliation
+question: |
+  Military service
+subquestion: |
+  Tell the court about your relation to militrary service. Check all that apply to you.
+
+fields:
+  - Active Duty: military_affiliation_active_duty
+    datatype: yesno
+
+  - Guard/Reserves: military_affiliation_guard_reserves
+    datatype: yesno
+
+  - Veteran: military_affiliation_veteran
+    datatype: yesno
+
+  - Family Member: military_affiliation_family_member
+    datatype: yesno
+
+  - None: military_affiliation_non_dnk
+    datatype: yesno
+    uncheck others:
+      - military_affiliation_active_duty
+      - military_affiliation_guard_reserves
+      - military_affiliation_veteran
+      - military_affiliation_family_member
+
+validation code: |
+  if not any([
+      military_affiliation_active_duty,
+      military_affiliation_guard_reserves,
+      military_affiliation_veteran,
+      military_affiliation_family_member,
+      military_affiliation_non_dnk,
+  ]):
+    validation_error(
+      word("Select at least one option."),
+      field="military_affiliation_non_dnk"
+    )
+---
 id: authorized viewers
 continue button field: Who_is_allowed_to_see_this_form
 question: |
@@ -235,9 +275,9 @@ subquestion: |
   Give the court least one way to reach them.
   % elif plaintiff_assistant_type_obo: 
   ${ plaintiff_assistant_name }, since you are filing **for** ${ users.familiar() }, enter the best way for the court to contact **you**. 
-  Give the court least one way to reach you.
+  Give the court at least one way to reach you.
   % else:
-  Give the court least one way to reach you.
+  Give the court at least one way to reach you.
   % endif
   
   Later, you will get a chance to ask the court to keep this contact information
@@ -247,9 +287,9 @@ fields:
   - Mobile number: users[0].mobile_number
     maxlength: 14
     required: False
-  - Other phone number: users[0].phone_number
-    maxlength: 14
-    required: False
+  #- Other phone number: users[0].phone_number
+  #  maxlength: 14
+  #  required: False
   - Email address: users[0].email    
     datatype: email
     required: False
@@ -302,7 +342,7 @@ attachment:
       - "plaintiff_birthdate": ${ users[0].birthdate.format() }
       - "plaintiff_name": ${ str(users[0]) }
       - "plaintiff_phone": ${ users[0].mobile_number }
-      - "plaintiff_phone_home": ${users[0].phone_number }
+      #- "plaintiff_phone_home": ${users[0].phone_number }
       - "signature_date": ${ signature_date }
       - "plaintiff_address_residential": ${ users[0].address.on_one_line(include_unit=True) }
       - "plaintiff_email": ${ users[0].email }
@@ -313,6 +353,11 @@ attachment:
       - "plaintiff_workplace_phone": ${ users[0].workplaces.item(0).phone }
       - "plaintiff_school_name": ${ users[0].schools.item(0).name }
       - "plaintiff_school_address": ${ users[0].schools.item(0).school_address }
+      - "military_affiliation_active_duty": ${ military_affiliation_active_duty }
+      - "military_affiliation_guard_reserves": ${ military_affiliation_guard_reserves }
+      - "military_affiliation_veteran": ${ military_affiliation_veteran }
+      - "military_affiliation_family_member": ${ military_affiliation_family_member }
+      - "military_affiliation_non_dnk": ${ military_affiliation_non_dnk }
       - "persons_authorized_confidential_information": ${ GL209A_plaintiff_confidential_info_attachment.safe_value('persons_authorized_confidential_information') }
       - "plaintiff_needs_interpreter": ${user_needs_interpreter}
       - "plaintiff_preferred_language": ${user_preferred_language if user_needs_interpreter else ''} 
@@ -379,6 +424,7 @@ code: |
   users[0].schools.gather()
   # users[0].not_working
   # users[0].not_in_school
+  military_affiliation_active_duty
   
   Who_is_allowed_to_see_this_form
   user_needs_interpreter
