@@ -161,7 +161,7 @@ fields:
       - Acne: Acne
   - note: |
       Using your own words, briefly describe anything that would help the police identify ${other_parties.familiar()} that we haven't covered
-  - no label: other_parties[0].physical_other_details
+  - "${other_parties.familiar()}'s physical appearance": other_parties[0].physical_other_details
     hint: e.g., details about tattoo, unusual walk, etc.
     required: False
 validation code: |

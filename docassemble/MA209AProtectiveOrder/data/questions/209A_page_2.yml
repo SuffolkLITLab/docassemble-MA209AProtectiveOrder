@@ -149,6 +149,7 @@ objects:
 comment: |
   This screen is used to introduce your interview. Please customize.
 continue button field: A_complaint_for_protection_from_abuse_probation_copy0005_intro
+id: "protecting your children"
 question: |
   Protecting your Children
 subquestion: |
@@ -283,7 +284,7 @@ sets:
 comment: |
   Changed code to list only first names of children in question, but then choices for children_of_both in q. id: custody_children became their full names instead of only first names even after I added '.familiar()' to the end.
 # `ordinal()` says 'first', even if there's only one :(
-id: children user is parent of
+id: "children user is parent of 2"
 question: |
   % if children.target_number == 1:
   Your child
@@ -419,7 +420,9 @@ fields:
 id: plaintiff_wants_defendant_to_stay_away_from_schools_daycares
 question: |
   Do you need the court to tell ${other_parties.familiar()} to stay away from your ${children.as_noun()}'s school or daycare?
-yesno: schools_to_stay_away_from.there_are_any
+fields:
+  - no label: schools_to_stay_away_from.there_are_any
+    datatype: yesnoradio
 ---
 # For listing for each child (if we choose to do that), see
 # 209A_affidavit_disclosing_care_or_custody_proceedings.yml on its branch
@@ -439,7 +442,9 @@ fields:
 id: schools and daycares has another
 question: |
   Is there another school or daycare you need ${ other_parties.familiar() } to stay away from?
-yesno: schools_to_stay_away_from.there_is_another
+fields:
+  - no label: schools_to_stay_away_from.there_is_another
+    datatype: yesnoradio
 # ---
 # id: wants_to_request_visitation_details
 # question: |
@@ -486,7 +491,9 @@ subquestion: |
   Read more about [Visitation](https://www.masslegalhelp.org/domestic-violence/where-can-i-get-209a#bettercourt).
 
   Do you need the 209A restraining order to include an order about "visitation"?
-yesno: wants_visitation_orders
+fields:
+  - no label: wants_visitation_orders
+    datatype: yesnoradio
 ---
 Comment: |
   The [doc that was linked](https://docs.google.com/document/d/1WyQrjTCzpZEoFlQZeS0h-JudAFvvefKcvmqNNqJUIH0/edit?usp=sharing) in the pg. 2 doc
@@ -630,7 +637,9 @@ subquestion: |
   Sometimes, the court will also order child support for 
   any children you share with ${other_parties.familiar()} who are 18-22.
 
-yesno: wants_child_support_yes
+fields:
+  - no label: wants_child_support_yes
+    datatype: yesnoradio
 ---
 comment: |
   for some reason, after this question interview asks id: reasons_no_contact. I cannot figure even if I have said that other_parties.familiar() can contact my child.
@@ -645,7 +654,9 @@ subquestion: |
   See [Child Support for Children 18-22](https://www.masslegalhelp.org/children-and-families/child-support-over-18) on MassLegalHelp.
 
   Do you and ${other_parties.familiar()} have any children between 18 and 22 who you need child support for?
-yesno: majors_needing_support.there_are_any
+fields:
+  - no label: majors_needing_support.there_are_any
+    datatype: yesnoradio
 ---
 code: |
   need_help_for_majors = majors_needing_support.there_are_any
@@ -665,14 +676,18 @@ fields:
 id: another major needing support
 question: |
   Do you have any other children between 18 and 22?
-yesno: majors_needing_support.there_is_another
+fields:
+  - no label: majors_needing_support.there_is_another
+    datatype: yesnoradio
 ---
 id: do you already have a child support order
 question: |
   Do you already have a child support order?
 subquestion: |
   Has the court already ordered child support for ${comma_and_list(children_of_both.familiar(), and_string=word("or"))}, or any other children you have with ${other_parties.familiar()}?
-yesno: existing_order
+fields:
+  - no label: existing_order
+    datatype: yesnoradio
 ---
 id: explain no child support
 question: |
@@ -719,7 +734,9 @@ question: |
 subquestion: |
   Are there any current or closed cases that involve both you and
   ${other_parties.familiar()} that have to do with paternity of a child?
-yesno: ask_had_paternity_case
+fields:
+  - no label: ask_had_paternity_case
+    datatype: yesnoradio
 ---
 objects:
   - GL209A_page2_attachment: ALDocument.using(filename="209A_page2", title="209A Petition (Page 2)", has_addendum=True, default_overflow_message=" [See addendum]")

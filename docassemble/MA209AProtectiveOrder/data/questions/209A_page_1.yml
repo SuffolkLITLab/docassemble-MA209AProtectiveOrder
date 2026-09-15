@@ -144,7 +144,9 @@ subquestion: |
   % endfor
 
   Do you want to add another case?
-yesno: other_cases.there_is_another
+fields:
+  - no label: other_cases.there_is_another
+    datatype: yesnoradio
 ---
 code: |
   plaintiff_has_children_parent_of
@@ -156,7 +158,9 @@ question: |
   Other cases with ${other_parties.familiar()}
 subquestion: |
   Have you ever had any other cases with ${other_parties.familiar()} for divorce, annulment, separate support, or abuse prevention?
-yesno: plaintiff_and_defendant_other_case_yes
+fields:
+  - no label: plaintiff_and_defendant_other_case_yes
+    datatype: yesnoradio
 ---
 
 # question: |
@@ -274,7 +278,7 @@ question: |
 subquestion: |
   For example, a last name used before marriage, a nickname, or any name other than ${other_parties[0]}.
 fields:
-  - no label: defendant_has_alias
+  - "Has ${other_parties.familiar()} ever used another name?": defendant_has_alias
     datatype: yesnoradio
 #   help: |
 #    For example, a last name used before marriage, a nickname, or other
@@ -628,7 +632,9 @@ continue button field: user_saw_relationship
 id: 209A page 1 relationship kids
 question: |
   Do you and ${ other_parties.familiar() } have any children together?
-yesno: defendant_and_plaintiff_are_parents_of_child
+fields:
+  - no label: defendant_and_plaintiff_are_parents_of_child
+    datatype: yesnoradio
 ---
 id: 209A page 1 relationship household
 question: |
@@ -780,7 +786,7 @@ code: |
   if not defendant_abuse_caused_sexual_assault_force and not defendant_abuse_caused_sexual_assault_make:
     defendant_abuse_caused_sexual_assault = False
 ---
-id: other cases
+id: "other cases 2"
 question: |
   Other Cases
 subquestion: |

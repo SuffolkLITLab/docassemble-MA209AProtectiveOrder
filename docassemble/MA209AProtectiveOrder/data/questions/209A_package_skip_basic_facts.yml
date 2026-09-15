@@ -4,6 +4,7 @@ comment: |
 objects:
   - placeholder_signature: DAStaticFile.using(filename='mass_icon.png')
 ---
+id: "which sections should we skip"
 question: |
   Which sections should we skip?
 subquestion: |

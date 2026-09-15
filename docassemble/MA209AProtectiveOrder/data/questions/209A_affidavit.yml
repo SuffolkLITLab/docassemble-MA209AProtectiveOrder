@@ -626,7 +626,9 @@ question: |
   % else:
   Can you describe another time ${ other_parties.familiar() } abused you?
   % endif
-yesno: incidents_of_abuse.there_is_another
+fields:
+  - no label: incidents_of_abuse.there_is_another
+    datatype: yesnoradio
 ---
 id: pattern of abuse
 question: |
@@ -646,7 +648,7 @@ subquestion: |
   * stop you from doing things you want or need to do?
   % endif
 fields:
-  - no label: pattern
+  - "Can you tell the judge about any \"patterns of abuse\"?": pattern
     datatype: yesnoradio
   - What does ${ other_parties.familiar() } do?: pattern_description
     input type: area
@@ -746,7 +748,7 @@ code: |
   }
   # incidents_of_abuse[i].description_placeholder = comma_and_list([var_map[key] for key in incidents_of_abuse[i].abuse.true_values()])
 ---
-id: 209A Incident Summary
+id: "209A Incident Summary 2"
 question: |
   % if incidents_of_abuse[i] == incidents_of_abuse[0]:
   The most recent abuse
