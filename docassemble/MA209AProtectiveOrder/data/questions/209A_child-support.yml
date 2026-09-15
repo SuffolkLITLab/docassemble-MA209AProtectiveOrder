@@ -42,7 +42,7 @@ subquestion: |
 fields:
   - note: |
       **Does ${other_parties.familiar()} pay for health insurance?**
-  - no label: other_has_health_insurance
+  - "${other_parties.familiar()}'s insurance expenses": other_has_health_insurance
     datatype: yesnomaybe
   - note: |
       How much does ${other_parties.familiar()} pay for health insurance?
@@ -80,7 +80,7 @@ question: |
 fields:
   - note: |
       **Does ${other_parties.familiar()} pay for childcare expenses for the children you share?**
-  - no label: other_has_childcare
+  - "${other_parties.familiar()}'s childcare expenses": other_has_childcare
     datatype: yesnomaybe
   - note: |
       How much does ${other_parties.familiar()} pay for those expenses?
@@ -174,7 +174,7 @@ question: |
 fields:
   - note: |
       **Do you pay for health insurance?**
-  - no label: user_has_health_insurance
+  - "Your insurance expenses": user_has_health_insurance
     datatype: yesnoradio
   - note: |
       How much do you pay for health insurance?
@@ -214,7 +214,7 @@ subquestion: |
 fields:
   - note: |
       **Do you pay for childcare for the children you share with ${ other_parties.familiar()}?**
-  - no label: user_has_child_care_expenses
+  - "Your childcare expenses": user_has_child_care_expenses
     datatype: yesnoradio
   - note: |
       How much do you pay for those childcare expenses?
@@ -236,7 +236,7 @@ question: |
 fields:
   - note: |
       **Do you have to pay child support for any children other than ${all_support_children}?**
-  - no label: pays_child_support
+  - "Child support": pays_child_support
     datatype: yesnoradio
   - note: |
       How much do you pay in child support?
@@ -260,7 +260,7 @@ subquestion: |
 fields:
   - note: |
       **Do you have income?**
-  - no label: user_has_income
+  - "Your Income": user_has_income
     datatype: yesnoradio
   - note: |
       What is your gross income (before taxes)?

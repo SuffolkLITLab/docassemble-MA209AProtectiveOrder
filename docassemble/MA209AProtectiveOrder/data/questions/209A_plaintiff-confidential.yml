@@ -30,7 +30,9 @@ question: |
   Former addresses
 subquestion: |
  Did you ever move because ${other_parties.familiar()} was so abusive?
-yesno: abuser_caused_plaintiff_to_leave_home
+fields:
+  - no label: abuser_caused_plaintiff_to_leave_home
+    datatype: yesnoradio
 help:
   label: Does this matter?
   heading: You can keep ${other_parties.familiar()} from learning where you are living  now.
@@ -44,7 +46,9 @@ help:
 id: staying in dv shelter
 question: |
   Are you staying in a domestic violence shelter right now?  
-yesno: lives_in_domestic_violence_shelter
+fields:
+  - no label: lives_in_domestic_violence_shelter
+    datatype: yesnoradio
 ---
 id: warn dv shelter
 question: |
@@ -76,7 +80,9 @@ subquestion: |
   So far you have told us about ${ users[0].previous_addresses.complete_elements() }.
   
   Is there any other previous address you need to tell the court about?
-yesno: users[0].previous_addresses.there_is_another
+fields:
+  - no label: "users[0].previous_addresses.there_is_another"
+    datatype: yesnoradio
 ---
 # question: |
 #  When were you born?
@@ -87,7 +93,9 @@ yesno: users[0].previous_addresses.there_is_another
 id: address is apartment
 question: |
   Apartment building or multi-family home
-yesno: users[0].apartment_yes 
+fields:
+  - no label: "users[0].apartment_yes"
+    datatype: yesnoradio
 subquestion: |
   Do you live in an apartment building or multi-family home?
 ---
@@ -95,7 +103,7 @@ id: has school address
 question: |
   Do you currently attend school?
 fields:
-  - no label: users[0].schools.there_are_any
+  - "Do you currently attend school?": users[0].schools.there_are_any
     datatype: yesnoradio
   - How many schools are you attending right now?: users[0].schools.target_number
     datatype: integer
@@ -121,7 +129,7 @@ id: has work address
 question: |
   Do you currently work outside of your home?
 fields:
-  - no label: users[0].workplaces.there_are_any
+  - "Do you currently work outside of your home?": users[0].workplaces.there_are_any
     datatype: yesnoradio
   - How many places do you work right now?: users[0].workplaces.target_number
     datatype: integer
@@ -224,7 +232,9 @@ subquestion: |
   % if len(users[0].other_addresses.complete_elements()):
   as well as ${users[0].other_addresses.complete_elements()}
   % endif
-yesno: users[0].other_addresses.there_is_another  
+fields:
+  - no label: "users[0].other_addresses.there_is_another"
+    datatype: yesnoradio
 ---
 id: contact information
 question: |

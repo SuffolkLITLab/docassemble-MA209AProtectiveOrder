@@ -770,6 +770,7 @@ edit:
 ---
 event: section_your_info
 need: users[0].previous_addresses.table
+id: "information about you"
 question: |
   Information about you
 review:

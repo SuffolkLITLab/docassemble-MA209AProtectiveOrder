@@ -111,7 +111,7 @@ subquestion: |
   We need to include this information together with the other information
   about other care or custody cases.
 fields:
-  - no label: children_address_screener
+  - "Where do ${children_of_both.familiar()} live right now?": children_address_screener
     datatype: radio
     choices:
       - They all live with me: me
@@ -131,7 +131,7 @@ fields:
 ---
 comment: |
   Post MVP I think we can skip subquestion here, it seems a bit wordy, unnecesary?
-id: where children live
+id: "where children live 2"
 if: len(children_of_both) <= 1 # Don't think we can ever get to this question w/o children, but just in case!
 question: |
   Where does ${children_of_both.familiar()} live right now?
@@ -139,7 +139,7 @@ subquestion: |
   We need to include this information together with the other information
   about other care or custody cases.
 fields:
-  - no label: children_address_screener
+  - "Where does ${children_of_both.familiar()} live right now?": children_address_screener
     datatype: radio
     choices:
       - With me: me
@@ -160,7 +160,9 @@ fields:
 id: children have past addresses
 question: |
   Have any of your children lived anywhere else in the last 2 years?
-yesno: children_lived_elsewhere
+fields:
+  - no label: children_lived_elsewhere
+    datatype: yesnoradio
 ---
 scan for variables: False
 sets: evaluate_child_addresses
@@ -202,7 +204,9 @@ continue button field: explain_addresses_of_children
 id: child has past address
 question: |
   Has ${children[i]} lived anywhere else in the last 2 years?
-yesno: children[i].previous_addresses.there_are_any  
+fields:
+  - no label: "children[i].previous_addresses.there_are_any"
+    datatype: yesnoradio
 ---
 id: child past addresses
 question: |
@@ -241,7 +245,9 @@ question: |
   Has ${children[i]} lived anywhere else in the last 2 years?
 subquestion: |
   So far you have told us about ${comma_and_list(children[i].previous_addresses.elements)}
-yesno: children[i].previous_addresses.there_is_another  
+fields:
+  - no label: "children[i].previous_addresses.there_is_another"
+    datatype: yesnoradio
 ---
 reconsider: True
 code: |
@@ -300,6 +306,7 @@ code: |
 code: |
   user_role = 'plaintiff'
 ---
+id: "confidential address"
 question: |
   Confidential Address
 subquestion: |
@@ -382,7 +389,9 @@ subquestion: |
   adoption is not a public record.
   
   Would you like to keep this form private?
-yesno: ask_impound_affidavit
+fields:
+  - no label: ask_impound_affidavit
+    datatype: yesnoradio
 ---
 # TODO: I think this is unused
 id: any gal attorney investigator
@@ -395,7 +404,9 @@ subquestion: |
 
   Were there any attorneys, guardians ad litem, or investigators
   involved in this case?
-yesno: x.attorneys.there_are_any
+fields:
+  - no label: x.attorneys.there_are_any
+    datatype: yesnoradio
 # ---
 # generic object: OtherProceeding
 # question: |
@@ -682,7 +693,9 @@ subquestion: |
   % if len(other_care_custody_proceedings[i].other_parties.complete_elements()):
   You have already told us about ${comma_and_list(other_care_custody_proceedings[i].other_parties.complete_elements())}
   % endif
-yesno: other_care_custody_proceedings[i].other_parties.there_is_another
+fields:
+  - no label: "other_care_custody_proceedings[i].other_parties.there_is_another"
+    datatype: yesnoradio
 ---
 # TODO: this way of uniquely gathering the parties is not the best
 # approach. May be smarter to make a method on ALPeopleList
@@ -744,7 +757,7 @@ fields:
   - Name of ${other_care_custody_proceedings[i].children}'s lawyer: other_care_custody_proceedings[i].atty_for_children_name
     show if: other_care_custody_proceedings[i].atty_for_children
 ---
-id: lawyers in case
+id: "lawyers in case 2"
 if: len(other_care_custody_proceedings[i].children) > 1
 question: |
   Information about lawyers
@@ -820,7 +833,7 @@ question: |
 subquestion: |
   Did the judge appoint a GAL or investigator on this case?
 fields:
-  - no label: other_care_custody_proceedings[i].has_gal
+  - "Information about Guardians ad Litem (GALs)": other_care_custody_proceedings[i].has_gal
     datatype: yesnoradio
   - How many did they appoint?: other_care_custody_proceedings[i].gals.target_number
     datatype: integer
@@ -883,7 +896,9 @@ subquestion: |
   ${len(other_care_custody_proceedings.elements)} case: 
   % endif
   ${comma_and_list(other_care_custody_proceedings.elements)}.
-yesno: other_care_custody_proceedings.there_is_another
+fields:
+  - no label: other_care_custody_proceedings.there_is_another
+    datatype: yesnoradio
 ---
 reconsider: True
 code: |

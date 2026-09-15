@@ -1,4 +1,5 @@
 ---
+id: "what court division are you filing in"
 question: |
   What court division are you filing in?
 subquestion: |
@@ -6,6 +7,7 @@ subquestion: |
 fields:
   - 'Court Division': trial_court
 ---
+id: "your insurance expenses"
 question: |
   Your Insurance Expenses
 subquestion: |
@@ -26,6 +28,7 @@ fields:
       - "Weekly": weekly
       - "Monthly": monthly
 ---
+id: "expenses related to your children"
 question: |
   Expenses related to your children
 subquestion: |
@@ -41,12 +44,13 @@ fields:
       - "Weekly": weekly
       - "Monthly": monthly
 ---
+id: "child support"
 question: |
   Child support
 subquestion: |
   Are you ordered to pay child support for  any children other than [TK child(ren) from list of children tagged for this interview]
 fields:
-  - "": pays_child_support
+  - "Child support": pays_child_support
     datatype: yesnoradio
   - 'How much do you pay in child support obligations?': users[0].child_care_other
     datatype: currency
@@ -63,6 +67,7 @@ fields:
       - "Monthly": monthly
 ---
 
+id: "your income"
 question: |
   Your Income
 subquestion: |
@@ -78,6 +83,7 @@ fields:
       - "Weekly": weekly
       - "Monthly": monthly
 ---
+id: "who are you"
 question: |
   Who are you?
 subquestion: |
@@ -89,6 +95,7 @@ fields:
     datatype: yesno
 ---
 ---
+id: "your work"
 question: |
   Your work
 subquestion: |
@@ -103,6 +110,7 @@ fields:
 ---
 progress: 100
 # mandatory: True
+id: "placeholder download screen"
 question: |
   Placeholder download screen
 subquestion: |
@@ -164,6 +172,7 @@ attachment:
 comment: |
   This question is used to introduce your interview. Please customize
 continue button field: A_defendant_s_child_support_affidavit_ready_for_upload0004_intro
+id: "defendants affidavit in connection with request for child support order"
 question: |
   Defendant's Affidavit In Connection with Request For Child Support Order
 subquestion: |
@@ -226,6 +235,7 @@ code: |
   #users[0].signature
   A_defendant_s_child_support_affidavit_ready_for_upload0004 = True
 ---
+id: "signing under oath"
 question: |
   Signing Under Oath
 subquestion: |
@@ -243,6 +253,7 @@ fields:
 
 ---
 continue button field: A_defendant_s_child_support_affidavit_ready_for_upload0004_preview_question
+id: "placeholder preview screen"
 question: |
   Placeholder preview screen
 subquestion: |
