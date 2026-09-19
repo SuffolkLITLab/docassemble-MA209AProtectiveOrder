@@ -416,8 +416,8 @@ code: |
   users[0].schools.gather()
   # users[0].not_working
   # users[0].not_in_school
-  military_affiliation_active_duty
-  
+  military_affiliation['active_duty']
+
   Who_is_allowed_to_see_this_form
   user_needs_interpreter
   
