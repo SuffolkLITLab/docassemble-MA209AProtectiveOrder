@@ -170,41 +170,23 @@ id: plaintiff military affiliation
 question: |
   Military service
 subquestion: |
-  Tell the court about your relation to militrary service. Check all that apply to you.
-
+  Tell the court about your relation to military service. Check all that apply to you.
 fields:
-  - Active Duty: military_affiliation_active_duty
-    datatype: yesno
-
-  - Guard/Reserves: military_affiliation_guard_reserves
-    datatype: yesno
-
-  - Veteran: military_affiliation_veteran
-    datatype: yesno
-
-  - Family Member: military_affiliation_family_member
-    datatype: yesno
-
-  - None: military_affiliation_non_dnk
-    datatype: yesno
-    uncheck others:
-      - military_affiliation_active_duty
-      - military_affiliation_guard_reserves
-      - military_affiliation_veteran
-      - military_affiliation_family_member
-
-validation code: |
-  if not any([
-      military_affiliation_active_duty,
-      military_affiliation_guard_reserves,
-      military_affiliation_veteran,
-      military_affiliation_family_member,
-      military_affiliation_non_dnk,
-  ]):
-    validation_error(
-      word("Select at least one option."),
-      field="military_affiliation_non_dnk"
-    )
+  - Military service: military_affiliation
+    datatype: checkboxes
+    none of the above: "None"
+    choices:
+      - Active Duty: active_duty
+      - Guard/Reserves: guard_reserves
+      - Veteran: veteran
+      - Family Member: family_member
+---
+code: |
+  military_affiliation_active_duty = military_affiliation['active_duty']
+  military_affiliation_guard_reserves = military_affiliation['guard_reserves']
+  military_affiliation_veteran = military_affiliation['veteran']
+  military_affiliation_family_member = military_affiliation['family_member']
+  military_affiliation_non_dnk = not military_affiliation.any_true('active_duty', 'guard_reserves', 'veteran', 'family_member')
 ---
 id: authorized viewers
 continue button field: Who_is_allowed_to_see_this_form

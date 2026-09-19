@@ -50,7 +50,7 @@ question: |
 subquestion: |
   Are you ordered to pay child support for  any children other than [TK child(ren) from list of children tagged for this interview]
 fields:
-  - "Child support": pays_child_support
+  - no label: pays_child_support
     datatype: yesnoradio
   - 'How much do you pay in child support obligations?': users[0].child_care_other
     datatype: currency
