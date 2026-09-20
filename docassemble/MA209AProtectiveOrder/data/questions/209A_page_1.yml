@@ -46,7 +46,7 @@ terms:
  - all the forms: |
     See the checklists on MassLegalHelp for a list of the forms you need to ask the court for protection:
     * [Asking for a 209A restraining order](https://www.masslegalhelp.org/domestic-violence/209a-forms-checklist), or
-    * [Asking for a 209A restraining order if you have children under 18](https://www.masslegalhelp.org/domestic-violence/209a-w-children-forms-checklist)
+    * [Asking for a 209A restraining order if you have children under 18](https://www.masslegalhelp.org/domestic-abuse-crime-victims/209a-restraining-orders/court-forms-209a-restraining-orders)
  - safe place: |
      Please be sure you are on a safe computer, that you cannot be interrupted and you will be ok to spend about an hour answering questions.
   
@@ -778,7 +778,7 @@ help:
     
     **Threatening, making or forcing you to have sex** also includes forced contact with intimate body parts.
 
-    More - See [Writing Your 209A Affidavit on MassLegalHelp](https://www.masslegalhelp.org/domestic-violence/209a-writing-affidavit)
+    More - See [Writing Your 209A Affidavit on MassLegalHelp](https://www.masslegalhelp.org/domestic-abuse-crime-victims/209a-restraining-orders/writing-your-209a-affidavit)
 ---
 code: |
   if defendant_abuse_caused_sexual_assault_force or defendant_abuse_caused_sexual_assault_make:
@@ -819,7 +819,7 @@ subquestion: |
   (877) 785-2020. 
   They have a 24-hour hotline. 
   
-  To learn more about  [getting a restraining order while you are under 18](https://www.masslegalhelp.org/domestic-violence/abuse-prevention-orders/under-18), see MassLegalHelp. 
+  To learn more about  [getting a restraining order while you are under 18](https://www.masslegalhelp.org/domestic-abuse-crime-victims/209a-restraining-orders/can-i-get-209a-restraining-order-if-i-am-under-18), see MassLegalHelp. 
 buttons:
   - Exit: exit
   - Restart: restart
@@ -830,7 +830,7 @@ buttons:
 # subquestion: |
 #  Unfortunately, this tool is not currently available to plaintiffs under 18 filing unless they are filing with a parent or guardian.  You may still be able to file directly by calling your local courthouse or police station when the courts are closed, but it could be complicated.
 # under: |
-#  Since you are under 18, the Department of Children and Families may get involved if you file a restraining order. You can read more about getting a restraining order while you are under 18 at https://www.masslegalhelp.org/domestic-violence/abuse-prevention-orders/under-18.  You can also contact a 24/7 domestic violence hotline at (877) 785-2020 to talk to someone about what's going on.  # Someone at Children's Law Center is getting me some additional child appropriate resources here. 
+#  Since you are under 18, the Department of Children and Families may get involved if you file a restraining order. You can read more about getting a restraining order while you are under 18 at https://www.masslegalhelp.org/domestic-abuse-crime-victims/209a-restraining-orders/can-i-get-209a-restraining-order-if-i-am-under-18.  You can also contact a 24/7 domestic violence hotline at (877) 785-2020 to talk to someone about what's going on.  # Someone at Children's Law Center is getting me some additional child appropriate resources here. 
 # buttons:
 #  - Exit: exit
 #  - Restart: restart
@@ -848,6 +848,9 @@ comment: |
   interview_order
 # TODO: this should not depend on `scan for variables: False`
 # REFACTOR to remove all of the assignment happening here
+# no-dayc-block: EG308 -- defendant_relationship_to_plaintiff_is is computed here for
+# relationship scenarios (e.g. past marriage, parents-only) that fall outside the
+# `show if: related_by_marriage`/`related_by_blood` question fields, not read unguarded
 scan for variables: False
 sets: complaint_209A_labeled_page10003
 id: complaint_209A_labeled_page10003

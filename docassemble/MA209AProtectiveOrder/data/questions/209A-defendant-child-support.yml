@@ -50,7 +50,7 @@ question: |
 subquestion: |
   Are you ordered to pay child support for  any children other than [TK child(ren) from list of children tagged for this interview]
 fields:
-  - no label: pays_child_support
+  - "Child support": pays_child_support
     datatype: yesnoradio
   - 'How much do you pay in child support obligations?': users[0].child_care_other
     datatype: currency
@@ -59,9 +59,7 @@ fields:
       variable: pays_child_support
       is: True
   - "Weekly or monthly": users[0].child_care_other_weekly_or_monthly
-    show if:
-      variable: pays_child_support
-      is: True
+    show if: pays_child_support
     choices:
       - "Weekly": weekly
       - "Monthly": monthly

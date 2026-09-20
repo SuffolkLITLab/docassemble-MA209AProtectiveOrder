@@ -7,7 +7,7 @@ code: |
     'title': '209A Complaint Affidavit',
     'short title': '209A Complaint Affidavit',
     'description': '209A Complaint Affidavit',
-    'original_form': 'https://www.mass.gov/doc/209a-affidavit/download',
+    'original_form': 'https://www.mass.gov/lists/restraining-orderabuse-prevention-order-court-forms',
     'allowed courts': [
       'Boston Municipal Court',
       'District Court',
@@ -274,7 +274,7 @@ help:
   label: How descriptive should I be?
   heading: How descriptive should I be?
   content: |
-    See [Writing Your 209A Affidavit](https://www.masslegalhelp.org/domestic-violence/209a-writing-affidavit) on MassLegalHelp.org for help.
+    See [Writing Your 209A Affidavit](https://www.masslegalhelp.org/domestic-abuse-crime-victims/209a-restraining-orders/writing-your-209a-affidavit) on MassLegalHelp.org for help.
 ---
 id: 209A affidavit reminders
 comment: |
@@ -716,7 +716,7 @@ help:
     
     For children under 18, it can mean any sexual contact.
 
-    More - See [Writing Your 209A Affidavit on MassLegalHelp](https://www.masslegalhelp.org/domestic-violence/209a-writing-affidavit)
+    More - See [Writing Your 209A Affidavit on MassLegalHelp](https://www.masslegalhelp.org/domestic-abuse-crime-victims/209a-restraining-orders/writing-your-209a-affidavit)
 
 ---
 comment: |

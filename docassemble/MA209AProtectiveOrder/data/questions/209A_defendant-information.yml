@@ -451,7 +451,7 @@ code: |
   al_intro_screen 
   defendantinformation209A0008_intro
   if other_parties[0].understands_english:
-    other_parties[0].language_other = ''
+    other_parties[0].language_other = ''  # no-dayc: EG308 -- placeholder for the hidden field, not an unguarded read
   other_parties[0].photo_yes
   other_parties[0].race
   other_parties[0].eye_color # Needed if in the skip_sections code
@@ -474,12 +474,12 @@ code: |
   
   if not other_parties[0].drug_alcohol_yes:
     other_parties[0].drug_alcohol_no = True
-    other_parties[0].drug_alcohol_abuse = ''
+    other_parties[0].drug_alcohol_abuse = ''  # no-dayc: EG308 -- placeholder for the hidden field, not an unguarded read
   if not other_parties[0].gun_license_carry_possess_yes:
     other_parties[0].gun_license_carry_possess = ''
   if not other_parties[0].psychiatric_emotional_problems_yes:
     other_parties[0].psychiatric_emotional_problems_no = True
-    other_parties[0].psychiatric_emotional_problems = ''
+    other_parties[0].psychiatric_emotional_problems = ''  # no-dayc: EG308 -- placeholder for the hidden field, not an unguarded read
 
   other_parties[0].address.address
   # other_parties[0].address_floor  
