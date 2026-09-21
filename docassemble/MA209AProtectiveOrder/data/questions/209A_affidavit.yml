@@ -695,7 +695,7 @@ subquestion: |
    
    We have to check at least one box to get a restraining order.
    
-   Use the green button to help you decide the boxes you need to check.
+   Use the "Can you give me some examples?" button to help you decide the boxes you need to check.
 fields:
   - no label: incidents_of_abuse[i].abuse
     choices:

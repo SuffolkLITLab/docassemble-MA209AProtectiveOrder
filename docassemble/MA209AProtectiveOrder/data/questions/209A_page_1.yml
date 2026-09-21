@@ -675,7 +675,7 @@ question: |
 subquestion: |
    ${ users.familiar() }, check the boxes next to any of the relationships you have with ${ other_parties.familiar() }.
 fields:
-  - no label: related_as_couple
+  - "<span class='visually-hidden'>Relationships as a couple</span>": related_as_couple
     datatype: checkboxes
     choices:
       - 'I am dating ${ other_parties.familiar() }.': dating
@@ -686,7 +686,7 @@ fields:
     required: False
   - note: |
       ### Were you ever married to ${other_parties.familiar()}?
-  - no label: relationship_to_defendant_married
+  - "<span class='visually-hidden'>Marriage relationship</span>": relationship_to_defendant_married
     datatype: checkboxes
     choices:
       - 'We are married now.': now
