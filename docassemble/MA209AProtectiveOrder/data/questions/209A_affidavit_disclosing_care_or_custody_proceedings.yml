@@ -120,7 +120,7 @@ fields:
     show if:
       code: |
         users[0].address.on_one_line(include_unit=True) != other_parties[0].address.on_one_line(include_unit=True)
-  - no label: children_address_screener
+  - "Where do ${children_of_both.familiar()} live right now?": children_address_screener
     datatype: radio
     choices:
       - They all live with me: me
@@ -148,7 +148,7 @@ fields:
     show if:
       code: |
         users[0].address.on_one_line(include_unit=True) != other_parties[0].address.on_one_line(include_unit=True)
-  - no label: children_address_screener
+  - "Where does ${children_of_both.familiar()} live right now?": children_address_screener
     datatype: radio
     choices:
       - With me: me

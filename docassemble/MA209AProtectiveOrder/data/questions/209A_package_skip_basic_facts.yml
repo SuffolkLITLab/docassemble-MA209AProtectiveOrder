@@ -72,7 +72,7 @@ code: |
     skip_sections[ 'skip_affidavit_care_or_custody' ] = True
     skip_sections[ 'skip_signature' ] = True
   
-  for section in [section for section in skip_sections if skip_sections[section]]:
+  for section in [section for section in skip_sections if skip_sections[section]]:  # no-dayc: EG308 -- skip_sections is always defined by this point: either built above or answered via its own show-if-guarded field
     value(section)
 ---
 include:

@@ -153,7 +153,7 @@ question: |
 subquestion: |
   Writing your affidavit can be hard for all kinds of reasons. 
   % if plaintiff_assistant_type not in('advocate'):
-  Remember you can always call a domestic violence advocate for help. [Safelink](https://casamyrna.org/get-support/safelink/): ${tel("1-877-785-2020")}.
+  Remember you can always call a domestic violence advocate for help. [Safelink](https://www.casamyrna.org/get-support/safelink): ${tel("1-877-785-2020")}.
   % endif
   Finally, as you write your affidavit, keep in mind that when you sign your name at the end of this guide, you are declaring, “{under penalty of perjury}” that your answers to all these questions are {true to the best of your knowledge}.
 
@@ -274,7 +274,7 @@ help:
   label: How descriptive should I be?
   heading: How descriptive should I be?
   content: |
-    See [Writing Your 209A Affidavit](https://www.masslegalhelp.org/domestic-violence/209a-writing-affidavit) on MassLegalHelp.org for help.
+    See [Writing Your 209A Affidavit](https://www.masslegalhelp.org/domestic-abuse-crime-victims/209a-restraining-orders/writing-your-209a-affidavit) on MassLegalHelp.org for help.
 ---
 id: 209A affidavit reminders
 comment: |
@@ -695,7 +695,7 @@ subquestion: |
    
    We have to check at least one box to get a restraining order.
    
-   Use the green button to help you decide the boxes you need to check.
+   Use the "Can you give me some examples?" button to help you decide the boxes you need to check.
 fields:
   - no label: incidents_of_abuse[i].abuse
     choices:
@@ -716,7 +716,7 @@ help:
     
     For children under 18, it can mean any sexual contact.
 
-    More - See [Writing Your 209A Affidavit on MassLegalHelp](https://www.masslegalhelp.org/domestic-violence/209a-writing-affidavit)
+    More - See [Writing Your 209A Affidavit on MassLegalHelp](https://www.masslegalhelp.org/domestic-abuse-crime-victims/209a-restraining-orders/writing-your-209a-affidavit)
 
 ---
 comment: |

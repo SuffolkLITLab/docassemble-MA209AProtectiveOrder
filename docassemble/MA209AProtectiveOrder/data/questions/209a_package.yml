@@ -608,7 +608,7 @@ subquestion: |
   Step 2. Preview the completed forms.  
   Step 3. Email the forms to yourself or download them so you can send the forms to the court or keep them as part of your safety plan.
 
-  Tap the {green words} in any screen for a definition or more information.
+  Tap the {underlined words} in any screen for a definition or more information.
 
   This form can take up to 1 and 1/2 hours
   to complete, depending on your specific situation.
@@ -630,8 +630,8 @@ fields:
         You cannot continue unless you agree to the terms of use.        
 continue button field: al_intro_screen
 terms:
-  green words: |
-    Green words are legal terms or a short way of referring to something that needs more explanation. The definition or explanation pops up when you tap the green words.
+  underlined words: |
+    Underlined words are legal terms or a short way of referring to something that needs more explanation. The definition or explanation pops up when you tap the underlined words.
 right: |
   % if user_has_saved_answers:
   ${fa_icon("bell", color="primary", size="sm")}

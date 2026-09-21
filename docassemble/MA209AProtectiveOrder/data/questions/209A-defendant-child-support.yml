@@ -16,14 +16,14 @@ fields:
   - 'How much in total do you pay for health insurance?': users[0].health_insurance_payment
     datatype: currency
     min: 0
-  - "Weekly or monthly": users[0].health_insurance_payment_weekly_or_monthly
+  - "Weekly or monthly <span class='visually-hidden'>for health insurance</span>": users[0].health_insurance_payment_weekly_or_monthly
     choices:
       - "Weekly": weekly
       - "Monthly": monthly
   - 'How much do you pay for dental and/or vision insurance?': users[0].dental_vision_insurance_payment
     datatype: currency
     min: 0
-  - "Weekly or monthly": users[0].dental_vision_insurance_payment_weekly_or_monthly
+  - "Weekly or monthly <span class='visually-hidden'>for dental and vision insurance</span>": users[0].dental_vision_insurance_payment_weekly_or_monthly
     choices:
       - "Weekly": weekly
       - "Monthly": monthly
@@ -59,9 +59,7 @@ fields:
       variable: pays_child_support
       is: True
   - "Weekly or monthly": users[0].child_care_other_weekly_or_monthly
-    show if:
-      variable: pays_child_support
-      is: True
+    show if: pays_child_support
     choices:
       - "Weekly": weekly
       - "Monthly": monthly

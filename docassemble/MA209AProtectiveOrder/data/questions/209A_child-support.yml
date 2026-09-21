@@ -47,7 +47,7 @@ fields:
   - note: |
       How much does ${other_parties.familiar()} pay for health insurance?
     show if: other_has_health_insurance
-  - no label: other_parties[0].health_insurance
+  - Amount: other_parties[0].health_insurance
     datatype: currency
     min: 0
     show if: other_has_health_insurance
@@ -59,12 +59,12 @@ fields:
   - note: |
       <hr/>
       **Does ${other_parties.familiar()} pay for dental and/or vision insurance?**
-  - no label: other_has_dental
+  - "${other_parties.familiar()}'s dental and vision insurance expenses": other_has_dental
     datatype: yesnomaybe
   - note: |
       How much does ${other_parties.familiar()} pay for dental and/or vision insurance?
     show if: other_has_dental
-  - no label: other_parties[0].dental_vision_insurance
+  - Amount: other_parties[0].dental_vision_insurance
     datatype: currency
     min: 0
     show if: other_has_dental
@@ -85,7 +85,7 @@ fields:
   - note: |
       How much does ${other_parties.familiar()} pay for those expenses?
     show if: other_has_childcare
-  - no label: other_parties[0].child_care_expenses
+  - Amount: other_parties[0].child_care_expenses
     datatype: currency
     min: 0
     show if: other_has_childcare
@@ -97,12 +97,12 @@ fields:
   - note: |
       <hr/>
       **Does ${other_parties.familiar()} pay child support?**
-  - no label: defendant_pays_child_support
+  - "${other_parties.familiar()}'s child support for other children": defendant_pays_child_support
     datatype: yesnomaybe
   - note: |
       How much child support does ${other_parties.familiar()} pay for other children? 
     show if: defendant_pays_child_support
-  - no label: other_parties[0].child_support_other
+  - Amount: other_parties[0].child_support_other
     datatype: currency
     min: 0
     show if: defendant_pays_child_support
@@ -179,7 +179,7 @@ fields:
   - note: |
       How much do you pay for health insurance?
     show if: user_has_health_insurance
-  - no label: users[0].health_insurance
+  - Amount: users[0].health_insurance
     datatype: currency
     min: 0
     show if: user_has_health_insurance
@@ -191,12 +191,12 @@ fields:
   - note: |
       <hr/>
       **Do you pay for dental or vision insurance, or both?**
-  - no label: user_has_dental_insurance
+  - Your dental and vision insurance expenses: user_has_dental_insurance
     datatype: yesnoradio
   - note: |
       How much do you pay for dental or vision insurance or both?
     show if: user_has_dental_insurance
-  - no label: users[0].dental_vision_insurance
+  - Amount: users[0].dental_vision_insurance
     datatype: currency
     min: 0
     show if: user_has_dental_insurance
@@ -219,7 +219,7 @@ fields:
   - note: |
       How much do you pay for those childcare expenses?
     show if: user_has_child_care_expenses
-  - no label: users[0].child_care_expenses
+  - Amount: users[0].child_care_expenses
     datatype: currency
     min: 0
     show if: user_has_child_care_expenses
@@ -241,7 +241,7 @@ fields:
   - note: |
       How much do you pay in child support?
     show if: pays_child_support
-  - no label: users[0].child_care_other
+  - Amount: users[0].child_care_other
     datatype: currency
     min: 0
     show if: pays_child_support
@@ -265,7 +265,7 @@ fields:
   - note: |
       What is your gross income (before taxes)?
     show if: user_has_income
-  - no label: users[0].gross_income
+  - Amount: users[0].gross_income
     datatype: currency
     min: 0
     show if: user_has_income
@@ -345,8 +345,8 @@ code: |
   
   # Always ask about income
   if dont_know_op_income:
-    other_parties[0].gross_income = "Unknown"
-    other_parties[0].gross_income_interval = DAEmpty()
+    other_parties[0].gross_income = "Unknown"  # no-dayc: EG308 -- placeholder for the hidden field, not an unguarded read
+    other_parties[0].gross_income_interval = DAEmpty()  # no-dayc: EG308 -- placeholder for the hidden field, not an unguarded read
   else:
     other_parties[0].gross_income
 
