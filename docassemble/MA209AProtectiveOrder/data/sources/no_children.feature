@@ -98,6 +98,10 @@ Feature: User has no children
       | users[0].signature |  | users[0].signature |
       | users[0].states_above_true['I swear that my answers on this form are the truth under penalties of perjury.'] | True |  |
       | users[0].workplaces.there_are_any | False |  |
+      | military_affiliation['active_duty'] | True |  |
+      | military_affiliation['guard_reserves'] | False |  |
+      | military_affiliation['veteran'] | False |  |
+      | military_affiliation['family_member'] | False |  |
       | who_protecting_screener | me |  |
     # Give some time for the document to appear on the page
     And I wait 3 seconds
