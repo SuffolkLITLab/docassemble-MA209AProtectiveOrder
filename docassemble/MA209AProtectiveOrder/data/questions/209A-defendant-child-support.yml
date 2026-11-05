@@ -178,6 +178,8 @@ question: |
 subquestion: |
   This form is for the defendant to fill out basic information about his or her work, income and expenses, if the plaintiff asks for child support.
 ---
+# The optional interval is only read inside if pays_child_support below.
+# no-dayc-block: EG308
 id: interview_order_A_defendant_s_child_support_affidavit_ready_for_upload0004
 code: |
   # This is a placeholder to control logic flow in this interview
@@ -194,32 +196,32 @@ code: |
   trial_court
   is_father
   users[0].work_job_title
-  if users[0].gross_income_weekly_or_monthly is 'weekly':
+  if users[0].gross_income_weekly_or_monthly == 'weekly':
      users[0].weekly_gross_income = True
      users[0].monthly_gross_income = False
   else:
      users[0].weekly_gross_income = False
      users[0].monthly_gross_income = True
-  if users[0].health_insurance_payment_weekly_or_monthly is 'weekly':
+  if users[0].health_insurance_payment_weekly_or_monthly == 'weekly':
     users[0].weekly_health_insurance = True
     users[0].monthly_health_insurance = False
   else:
     users[0].weekly_health_insurance = False
     users[0].monthly_health_insurance = True
-  if users[0].dental_vision_insurance_payment_weekly_or_monthly is 'weekly':
+  if users[0].dental_vision_insurance_payment_weekly_or_monthly == 'weekly':
     users[0].weekly_health_insurance = True
     users[0].monthly_health_insurance = False
   else:
     users[0].weekly_health_insurance = False
     users[0].monthly_health_insurance = True
-  if users[0].child_care_expenses_weekly_or_monthly is 'weekly':
+  if users[0].child_care_expenses_weekly_or_monthly == 'weekly':
     users[0].weekly_child_care = True
     users[0].monthly_child_care = False
   else:
     users[0].weekly_child_care = False
     users[0].monthly_child_care = True
   if pays_child_support:
-    if users[0].child_care_other_weekly_or_monthly is 'weekly':
+    if users[0].child_care_other_weekly_or_monthly == 'weekly':
       users[0].weekly_child_care_other = True
       users[0].monthly_child_care_other = False
     else:

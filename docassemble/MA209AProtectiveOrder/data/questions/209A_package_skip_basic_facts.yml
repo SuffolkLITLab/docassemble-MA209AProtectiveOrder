@@ -72,7 +72,8 @@ code: |
     skip_sections[ 'skip_affidavit_care_or_custody' ] = True
     skip_sections[ 'skip_signature' ] = True
   
-  for section in [section for section in skip_sections if skip_sections[section]]:
+  # skip_sections is assigned above when its question is hidden.
+  for section in [section for section in skip_sections if skip_sections[section]]:  # no-dayc: EG308
     value(section)
 ---
 include:

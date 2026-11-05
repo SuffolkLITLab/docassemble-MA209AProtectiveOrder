@@ -844,6 +844,8 @@ code: |
     not related_by_marriage and \
     not related_by_blood
 ---
+# The relationship string is assigned in both branches before concatenation.
+# no-dayc-block: EG308
 comment: |
   interview_order
 # TODO: this should not depend on `scan for variables: False`
@@ -865,7 +867,7 @@ code: |
       defendant_relationship_to_plaintiff_is = "child's other parent and "
     else:
       defendant_relationship_to_plaintiff_is = ''
-    defendant_relationship_to_plaintiff_is += "ex-spouse." 
+    defendant_relationship_to_plaintiff_is += "ex-spouse."  # no-dayc: EG308 -- assigned in both branches immediately above
   if relationship_to_defendant_married['now']:
     defendant_and_plaintiff_relationship_not_married_but_are_related = False
     defendant_relationship_to_plaintiff_is = ''
