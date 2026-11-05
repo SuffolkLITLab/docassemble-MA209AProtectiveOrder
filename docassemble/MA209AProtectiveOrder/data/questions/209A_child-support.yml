@@ -42,12 +42,12 @@ subquestion: |
 fields:
   - note: |
       **Does ${other_parties.familiar()} pay for health insurance?**
-  - no label: other_has_health_insurance
+  - "${other_parties.familiar()}'s insurance expenses": other_has_health_insurance
     datatype: yesnomaybe
   - note: |
       How much does ${other_parties.familiar()} pay for health insurance?
     show if: other_has_health_insurance
-  - no label: other_parties[0].health_insurance
+  - "Health insurance amount": other_parties[0].health_insurance
     datatype: currency
     min: 0
     show if: other_has_health_insurance
@@ -59,12 +59,12 @@ fields:
   - note: |
       <hr/>
       **Does ${other_parties.familiar()} pay for dental and/or vision insurance?**
-  - no label: other_has_dental
+  - "Does the other party pay for dental or vision insurance?": other_has_dental
     datatype: yesnomaybe
   - note: |
       How much does ${other_parties.familiar()} pay for dental and/or vision insurance?
     show if: other_has_dental
-  - no label: other_parties[0].dental_vision_insurance
+  - "Dental or vision insurance amount": other_parties[0].dental_vision_insurance
     datatype: currency
     min: 0
     show if: other_has_dental
@@ -80,12 +80,12 @@ question: |
 fields:
   - note: |
       **Does ${other_parties.familiar()} pay for childcare expenses for the children you share?**
-  - no label: other_has_childcare
+  - "${other_parties.familiar()}'s childcare expenses": other_has_childcare
     datatype: yesnomaybe
   - note: |
       How much does ${other_parties.familiar()} pay for those expenses?
     show if: other_has_childcare
-  - no label: other_parties[0].child_care_expenses
+  - "Childcare amount": other_parties[0].child_care_expenses
     datatype: currency
     min: 0
     show if: other_has_childcare
@@ -97,12 +97,12 @@ fields:
   - note: |
       <hr/>
       **Does ${other_parties.familiar()} pay child support?**
-  - no label: defendant_pays_child_support
+  - "Does the other party pay child support?": defendant_pays_child_support
     datatype: yesnomaybe
   - note: |
       How much child support does ${other_parties.familiar()} pay for other children? 
     show if: defendant_pays_child_support
-  - no label: other_parties[0].child_support_other
+  - "Child support amount for other children": other_parties[0].child_support_other
     datatype: currency
     min: 0
     show if: defendant_pays_child_support
@@ -174,12 +174,12 @@ question: |
 fields:
   - note: |
       **Do you pay for health insurance?**
-  - no label: user_has_health_insurance
+  - "Your insurance expenses": user_has_health_insurance
     datatype: yesnoradio
   - note: |
       How much do you pay for health insurance?
     show if: user_has_health_insurance
-  - no label: users[0].health_insurance
+  - "Health insurance amount": users[0].health_insurance
     datatype: currency
     min: 0
     show if: user_has_health_insurance
@@ -191,12 +191,12 @@ fields:
   - note: |
       <hr/>
       **Do you pay for dental or vision insurance, or both?**
-  - no label: user_has_dental_insurance
+  - "Do you pay for dental or vision insurance?": user_has_dental_insurance
     datatype: yesnoradio
   - note: |
       How much do you pay for dental or vision insurance or both?
     show if: user_has_dental_insurance
-  - no label: users[0].dental_vision_insurance
+  - "Dental or vision insurance amount": users[0].dental_vision_insurance
     datatype: currency
     min: 0
     show if: user_has_dental_insurance
@@ -214,12 +214,12 @@ subquestion: |
 fields:
   - note: |
       **Do you pay for childcare for the children you share with ${ other_parties.familiar()}?**
-  - no label: user_has_child_care_expenses
+  - "Your childcare expenses": user_has_child_care_expenses
     datatype: yesnoradio
   - note: |
       How much do you pay for those childcare expenses?
     show if: user_has_child_care_expenses
-  - no label: users[0].child_care_expenses
+  - "Childcare amount": users[0].child_care_expenses
     datatype: currency
     min: 0
     show if: user_has_child_care_expenses
@@ -236,12 +236,12 @@ question: |
 fields:
   - note: |
       **Do you have to pay child support for any children other than ${all_support_children}?**
-  - no label: pays_child_support
+  - "Child support": pays_child_support
     datatype: yesnoradio
   - note: |
       How much do you pay in child support?
     show if: pays_child_support
-  - no label: users[0].child_care_other
+  - "Child support amount": users[0].child_care_other
     datatype: currency
     min: 0
     show if: pays_child_support
@@ -260,12 +260,12 @@ subquestion: |
 fields:
   - note: |
       **Do you have income?**
-  - no label: user_has_income
+  - "Your Income": user_has_income
     datatype: yesnoradio
   - note: |
       What is your gross income (before taxes)?
     show if: user_has_income
-  - no label: users[0].gross_income
+  - "Gross income amount": users[0].gross_income
     datatype: currency
     min: 0
     show if: user_has_income

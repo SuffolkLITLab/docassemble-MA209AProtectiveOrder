@@ -84,15 +84,21 @@ Scenario: Generated scenario
     | x.address.zip | 02108 |
     | x.address.unit | Sample answer |
     | x.address.country | US |
-    | x.other_addresses.there_are_any | Sample answer |
-    | x.other_addresses[0].address | Sample answer |
-    | x.other_addresses[0].city | Sample answer |
+    | x.other_addresses.there_are_any | True |
+    | x.other_addresses[0].address | 24 Beacon St |
+    | x.other_addresses[0].city | Boston |
+    | x.other_addresses[0].state | MA |
+    | x.other_addresses[0].zip | 02133 |
+    | x.other_addresses.there_is_another | False |
     | x.previous_addresses.there_are_any | Sample answer |
     | x.previous_addresses[0].address | Sample answer |
     | x.previous_addresses[0].city | Sample answer |
-    | users[0].other_addresses.there_are_any | Sample answer |
-    | users[0].other_addresses[0].address | Sample answer |
-    | users[0].other_addresses[0].city | Sample answer |
+    | users[0].other_addresses.there_are_any | True |
+    | users[0].other_addresses[0].address | 24 Beacon St |
+    | users[0].other_addresses[0].city | Boston |
+    | users[0].other_addresses[0].state | MA |
+    | users[0].other_addresses[0].zip | 02133 |
+    | users[0].other_addresses.there_is_another | False |
     | users[0].previous_addresses.there_are_any | Sample answer |
     | users[0].previous_addresses[0].address | Sample answer |
     | users[0].previous_addresses[0].city | Sample answer |
